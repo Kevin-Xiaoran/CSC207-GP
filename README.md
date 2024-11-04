@@ -194,6 +194,7 @@ Your team should spend the rest of the lab working on your project blueprint.
 
 # Project Blueprint
 
+
 See Quercus for details about the project blueprint! By the end of the week,
 the goal is for your team to have a fully drafted blueprint so that your team
 will be ready to get started on your project after Reading Week.
