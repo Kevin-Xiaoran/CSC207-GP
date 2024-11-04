@@ -38,7 +38,7 @@ public class LogoutPresenter implements LogoutOutputBoundary {
         // 1. get the LoggedInState out of the appropriate View Model,
         // 2. set the username in the state to the empty string
         // 3. set the state in the LoggedInViewModel to the updated state
-        // 4. firePropertyChanged so that the View that is listening is updated.
+        // 4. firePropertyChanged so that the View that is listening is updated. Test commit.
         final LoggedInState loggedInState = loggedInViewModel.getState();
         loggedInState.setUsername("");
         this.loggedInViewModel.setState(loggedInState);
