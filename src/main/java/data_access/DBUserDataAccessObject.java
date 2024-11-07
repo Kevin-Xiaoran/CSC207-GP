@@ -2,6 +2,8 @@ package data_access;
 
 import java.io.IOException;
 
+import entity.Stock;
+import entity.StockFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,6 +15,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
+import use_case.home_view.HomeDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
@@ -23,8 +26,16 @@ import use_case.signup.SignupUserDataAccessInterface;
 public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         LoginUserDataAccessInterface,
         ChangePasswordUserDataAccessInterface,
-        LogoutUserDataAccessInterface {
+        LogoutUserDataAccessInterface,
+        HomeDataAccessInterface {
     private static final int SUCCESS_CODE = 200;
+
+    private static final int CLOSE = 138;
+    private static final int OPEN = 132;
+    private static final int VOLUME = 100502000;
+    private static final int HIGH = 140;
+    private static final int LOW = 125;
+
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";
     private static final String STATUS_CODE_LABEL = "status_code";
@@ -32,9 +43,11 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private static final String PASSWORD = "password";
     private static final String MESSAGE = "message";
     private final UserFactory userFactory;
+    private final StockFactory stockFactory;
 
-    public DBUserDataAccessObject(UserFactory userFactory) {
+    public DBUserDataAccessObject(UserFactory userFactory, StockFactory stockFactory) {
         this.userFactory = userFactory;
+        this.stockFactory = stockFactory;
         // No need to do anything to reinitialize a user list! The data is the cloud that may be miles away.
     }
 
@@ -156,6 +169,11 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         catch (IOException | JSONException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    @Override
+    public Stock getStock(String symbol) {
+        return stockFactory.create("NVDA", OPEN, CLOSE, VOLUME, HIGH, LOW);
     }
 
     @Override

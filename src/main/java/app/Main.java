@@ -12,13 +12,13 @@ public class Main {
      */
     public static void main(String[] args) {
         final AppBuilder appBuilder = new AppBuilder();
-        System.out.println("hi");
-        System.out.println("hi");
         // TODO: add the Logout Use Case to the app using the appBuilder
         final JFrame application = appBuilder
+                                            .addHomeView()
                                             .addLoginView()
                                             .addSignupView()
                                             .addLoggedInView()
+                                            .addHomeUseCase()
                                             .addSignupUseCase()
                                             .addLoginUseCase()
                                             .addChangePasswordUseCase()
