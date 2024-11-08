@@ -27,6 +27,7 @@ import interface_adapter.logout.LogoutPresenter;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.watchlist_view.WatchListViewModel;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
@@ -73,6 +74,8 @@ public class AppBuilder {
     private LoggedInViewModel loggedInViewModel;
     private LoggedInView loggedInView;
     private LoginView loginView;
+    private WatchListView watchListView;
+    private WatchListViewModel watchListViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -119,6 +122,13 @@ public class AppBuilder {
         loggedInViewModel = new LoggedInViewModel();
         loggedInView = new LoggedInView(loggedInViewModel);
         cardPanel.add(loggedInView, loggedInView.getViewName());
+        return this;
+    }
+
+    public AppBuilder addWatchListView() {
+        watchListViewModel = new WatchListViewModel();
+        watchListView = new WatchListView(watchListViewModel);
+        cardPanel.add(watchListView, watchListView.getViewName());
         return this;
     }
 

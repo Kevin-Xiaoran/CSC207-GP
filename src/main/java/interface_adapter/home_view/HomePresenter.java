@@ -4,6 +4,7 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginViewModel;
 import use_case.home_view.HomeOutputBoundary;
 import use_case.home_view.HomeOutputData;
+import view.WatchListView;
 
 /**
  * The Presenter for the Search Use Case.
@@ -13,6 +14,8 @@ public class HomePresenter implements HomeOutputBoundary {
     private final HomeViewModel homeViewModel;
     private final LoginViewModel loginViewModel;
     private final ViewManagerModel viewManagerModel;
+
+    private static final String WATCHLIST_VIEW_NAME = "WatchListView";
 
     public HomePresenter(HomeViewModel homeViewModel,
                          LoginViewModel loginViewModel,
@@ -41,7 +44,8 @@ public class HomePresenter implements HomeOutputBoundary {
 
     @Override
     public void switchToWatchList() {
-        System.out.println("Show watchlist view");
+        viewManagerModel.setState("WatchListView");
+        viewManagerModel.firePropertyChanged();
     }
 
     @Override
