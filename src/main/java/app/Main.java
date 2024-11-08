@@ -15,6 +15,7 @@ public class Main {
         // TODO: add the Logout Use Case to the app using the appBuilder
         final JFrame application = appBuilder
                                             .addHomeView()
+                                            .addWatchListView()
                                             .addLoginView()
                                             .addSignupView()
                                             .addLoggedInView()
