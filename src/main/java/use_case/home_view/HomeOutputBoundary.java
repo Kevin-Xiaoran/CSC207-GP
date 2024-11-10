@@ -31,4 +31,9 @@ public interface HomeOutputBoundary {
      * Switches to the Login View.
      */
     void switchToLoginView();
+
+    /**
+     * Switches to the Signup View.
+     */
+    void switchToSignupView();
 }

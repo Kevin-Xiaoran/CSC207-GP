@@ -39,4 +39,9 @@ public class HomeInteractor implements HomeInputBoundary {
     public void switchToLoginView() {
         homePresenter.switchToLoginView();
     }
+
+    @Override
+    public void switchToSignupView() {
+        homePresenter.switchToSignupView();
+    }
 }
