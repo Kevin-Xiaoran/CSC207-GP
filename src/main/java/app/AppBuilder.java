@@ -138,7 +138,7 @@ public class AppBuilder {
      */
     public AppBuilder addHomeUseCase() {
         final HomeOutputBoundary homeOutputBoundary = new HomePresenter(homeViewModel,
-                loginViewModel, viewManagerModel);
+                loginViewModel, signupViewModel, viewManagerModel);
         final HomeInputBoundary homeInteractor = new HomeInteractor(userDataAccessObject, homeOutputBoundary);
 
         final HomeController controller = new HomeController(homeInteractor);

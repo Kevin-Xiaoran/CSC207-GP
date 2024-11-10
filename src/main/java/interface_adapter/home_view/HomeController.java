@@ -43,4 +43,11 @@ public class HomeController {
     public void switchToLoginView() {
         homeUseCaseInteractor.switchToLoginView();
     }
+
+    /**
+     * Executes the "switch to SignupView" Use Case.
+     */
+    public void switchToSignupView() {
+        homeUseCaseInteractor.switchToSignupView();
+    }
 }

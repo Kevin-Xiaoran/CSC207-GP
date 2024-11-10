@@ -45,6 +45,7 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
 
     // Login/Logout component
     private final JButton loginButton = new JButton("Login");
+    private final JButton signupButton = new JButton("Sign up");
 
     public HomeView(HomeViewModel homeViewModel) {
         this.homeViewModel = homeViewModel;
@@ -99,6 +100,17 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
             }
         });
 
+        // Config signup components style
+        signupButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        final JPanel signupPanel = new JPanel();
+        signupPanel.setLayout(new BoxLayout(signupPanel, BoxLayout.LINE_AXIS));
+        signupPanel.add(signupButton);
+        signupButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                homeController.switchToSignupView();
+            }
+        });
+
         // Config frame style
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -108,6 +120,7 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
         this.add(portfolioPanel);
         this.add(watchListPanel);
         this.add(loginPanel);
+        this.add(signupPanel);
     }
 
     /**
