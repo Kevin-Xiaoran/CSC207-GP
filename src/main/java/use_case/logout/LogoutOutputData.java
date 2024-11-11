@@ -21,3 +21,4 @@ public class LogoutOutputData {
         return useCaseFailed;
     }
 }
+
