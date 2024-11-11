@@ -31,8 +31,8 @@ public class HomePresenter implements HomeOutputBoundary {
 
     @Override
     public void prepareSuccessView(HomeOutputData searchOutputData) {
-        // Present stock view
-        System.out.println("Show stock view after searching stock");
+        viewManagerModel.setState("StockView");
+        viewManagerModel.firePropertyChanged();
     }
 
     @Override
@@ -61,6 +61,11 @@ public class HomePresenter implements HomeOutputBoundary {
     @Override
     public void switchToSignupView() {
         viewManagerModel.setState(loginViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
+    }
+
+    public void switchToStockView() {
+        viewManagerModel.setState("StockView");
         viewManagerModel.firePropertyChanged();
     }
 }
