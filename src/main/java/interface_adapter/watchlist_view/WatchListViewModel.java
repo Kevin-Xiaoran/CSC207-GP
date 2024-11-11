@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The View Model for the Home View.
+ * The View Model for the WatchList View.
  */
 public class WatchListViewModel {
     private List<String[]> stockList;
