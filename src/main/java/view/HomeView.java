@@ -14,7 +14,7 @@ import javax.swing.*;
 /**
  * The View for the Home Page.
  */
-public class HomeView extends JPanel implements ActionListener, PropertyChangeListener {
+public class HomeView extends AbstractViewWithBackButton implements ActionListener, PropertyChangeListener {
 
     private static final String RIGHTARROW = "->";
 
@@ -134,6 +134,11 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
+    }
+
+    @Override
+    void backButtonAction() {
+        System.out.println("Back button clicked");
     }
 
     public String getViewName() {
