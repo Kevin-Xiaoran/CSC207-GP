@@ -24,12 +24,10 @@ public class StockView extends AbstractViewWithBackButton {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        // 创建内容面板并添加股票信息
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(Color.WHITE);
 
-        // 初始化组件并更新股票信息
         initializeComponents(contentPanel);
         updateStock(stock);
 
@@ -50,7 +48,6 @@ public class StockView extends AbstractViewWithBackButton {
         contentPanel.add(stockInfoPanel);
         contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        // 详细信息标签
         openPriceLabel = createLabel("", 16, Font.PLAIN);
         closePriceLabel = createLabel("", 16, Font.PLAIN);
         lowPriceLabel = createLabel("", 16, Font.PLAIN);
@@ -79,6 +76,7 @@ public class StockView extends AbstractViewWithBackButton {
         label.setFont(new Font("SansSerif", fontStyle, fontSize));
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
+
     }
 
     @Override
