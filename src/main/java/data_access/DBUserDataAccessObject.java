@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import entity.Stock;
 import entity.StockFactory;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -173,7 +174,30 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
     @Override
     public Stock getStock(String symbol) {
-        return stockFactory.create("NVDA", OPEN, CLOSE, VOLUME, HIGH, LOW);
+        final OkHttpClient client = new OkHttpClient().newBuilder().build();
+        final Request request = new Request.Builder()
+                .url(String.format("https://api.marketstack.com/v1/eod?access_key=3847d86b56ca461a0da759024332c06a&symbols=%s", symbol))
+                .get()
+                .build();
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) throw new RuntimeException("Request Failed: " + response);
+
+            final String responseBody = response.body().string();
+            final JSONObject json = new JSONObject(responseBody);
+            final JSONArray dataArray = json.getJSONArray("data");
+            final JSONObject stockData = dataArray.getJSONObject(0);
+
+            final double open = stockData.getDouble("open");
+            final double high = stockData.getDouble("high");
+            final double low = stockData.getDouble("low");
+            final double close = stockData.getDouble("close");
+            final double volume = stockData.getDouble("volume");
+
+            return stockFactory.create(symbol, open, close, volume, high, low);
+        }
+        catch (IOException | JSONException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     @Override
