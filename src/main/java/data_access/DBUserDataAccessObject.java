@@ -1,6 +1,7 @@
 package data_access;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import entity.Stock;
 import entity.StockFactory;
@@ -68,8 +69,11 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                 final JSONObject userJSONObject = responseBody.getJSONObject("user");
                 final String name = userJSONObject.getString(USERNAME);
                 final String password = userJSONObject.getString(PASSWORD);
+                final ArrayList<String> emptyWatchList = new ArrayList<>();
+                final ArrayList<Stock> emptyStockList = new ArrayList<>();
+                final User user = userFactory.create(name, password, emptyWatchList, emptyStockList);
 
-                return userFactory.create(name, password);
+                return user;
             }
             else {
                 throw new RuntimeException(responseBody.getString(MESSAGE));

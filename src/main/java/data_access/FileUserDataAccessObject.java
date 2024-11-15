@@ -6,10 +6,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import entity.Stock;
 import entity.User;
 import entity.UserFactory;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
@@ -53,7 +55,9 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
                     final String[] col = row.split(",");
                     final String username = String.valueOf(col[headers.get("username")]);
                     final String password = String.valueOf(col[headers.get("password")]);
-                    final User user = userFactory.create(username, password);
+                    final ArrayList<String> emptyWatchList = new ArrayList<>();
+                    final ArrayList<Stock> emptyStockList = new ArrayList<>();
+                    final User user = userFactory.create(username, password, emptyWatchList, emptyStockList);
                     accounts.put(username, user);
                 }
             }
