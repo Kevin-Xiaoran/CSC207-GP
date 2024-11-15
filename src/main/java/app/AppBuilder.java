@@ -119,15 +119,19 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addLoggedInView() {
-        loggedInViewModel = new LoggedInViewModel();
+        loggedInViewModel =  new LoggedInViewModel();
         loggedInView = new LoggedInView(loggedInViewModel);
         cardPanel.add(loggedInView, loggedInView.getViewName());
         return this;
     }
 
+    /**
+     * Adds the WatchList View to the application.
+     * @return this builder
+     */
     public AppBuilder addWatchListView() {
         watchListViewModel = new WatchListViewModel();
-        watchListView = new WatchListView(watchListViewModel,viewManagerModel);
+        watchListView = new WatchListView(watchListViewModel, viewManagerModel);
         cardPanel.add(watchListView, watchListView.getViewName());
         return this;
     }

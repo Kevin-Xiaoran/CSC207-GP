@@ -15,5 +15,5 @@ public interface StockFactory {
      * @param low the lowest price of the stock
      * @return the new user
      */
-    Stock create(String symbol, int openPrice, int closePrice, int volume, int high, int low);
+    Stock create(String symbol, double openPrice, double closePrice, double volume, double high, double low);
 }

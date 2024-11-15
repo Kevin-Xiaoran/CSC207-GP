@@ -19,11 +19,11 @@ public class WatchListView extends JPanel {
         setBackground(Color.WHITE);
 
         // return button
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        final JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         topPanel.setBackground(Color.WHITE);
 
         // create return button
-        JButton backButton = new JButton("←");
+        final JButton backButton = new JButton("←");
         backButton.setFont(new Font("SansSerif", Font.PLAIN, 20));
         backButton.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         backButton.setFocusPainted(false);
@@ -42,7 +42,7 @@ public class WatchListView extends JPanel {
         add(topPanel, BorderLayout.NORTH);
 
         // stock information
-        JPanel contentPanel = new JPanel();
+        final JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(Color.WHITE);
 
