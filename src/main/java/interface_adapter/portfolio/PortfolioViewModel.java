@@ -1,5 +1,8 @@
 package interface_adapter.portfolio;
 
+import interface_adapter.ViewModel;
+import interface_adapter.signup.SignupState;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,19 +10,9 @@ import java.util.List;
  * The View Model for the Portfolio View.
  */
 
-public class PortfolioViewModel {
-    private List<String[]> stockList;
-
+public class PortfolioViewModel extends ViewModel<PortfolioState> {
     public PortfolioViewModel() {
-        this.stockList = new ArrayList<>();
+        super("porfolio view");
+        setState(new PortfolioState());
     }
-
-    public List<String[]> getStockList() {
-        return stockList;
-    }
-
-    public void setStockList(List<String[]> stockList) {
-        this.stockList = stockList;
-    }
-
 }

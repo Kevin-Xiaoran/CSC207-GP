@@ -1,7 +1,9 @@
 package view;
 
 import interface_adapter.home_view.HomeController;
+import interface_adapter.home_view.HomeState;
 import interface_adapter.home_view.HomeViewModel;
+import interface_adapter.login.LoginState;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,6 +12,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  * The View for the Home Page.
@@ -52,9 +56,33 @@ public class HomeView extends AbstractViewWithBackButton implements ActionListen
         this.homeViewModel.addPropertyChangeListener(this);
 
         // Config search components style
-        searchTextField.setText("Search");
+        searchTextField.setText("AAPL");
         final JPanel searchPanel = new JPanel(new FlowLayout());
         searchPanel.add(searchTextField);
+        // Add textField listener
+        searchTextField.getDocument().addDocumentListener(new DocumentListener() {
+
+            private void documentListenerHelper() {
+                final HomeState currentState = homeViewModel.getState();
+                currentState.setSymbol(new String(searchTextField.getText()));
+                homeViewModel.setState(currentState);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+        });
 
         // Config stock view components style
         final JPanel stockViewPanel = new JPanel();
@@ -63,7 +91,12 @@ public class HomeView extends AbstractViewWithBackButton implements ActionListen
         stockViewPanel.add(stockButton);
         stockButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                homeController.search("NVDA");
+                if (evt.getSource().equals(stockButton)) {
+                    final HomeState currentState = homeViewModel.getState();
+                    currentState.setSymbol("AAPL");
+
+                    homeController.search(currentState.getSymbol());
+                }
             }
         });
 
