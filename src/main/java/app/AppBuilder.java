@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import data_access.DBUserDataAccessObject;
+import data_access.FileUserDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
 import entity.CommonStockFactory;
 import entity.CommonUserFactory;
@@ -89,6 +90,7 @@ public class AppBuilder {
         homeViewModel = new HomeViewModel();
         homeView = new HomeView(homeViewModel);
         cardPanel.add(homeView, homeView.getViewName());
+
         return this;
     }
 

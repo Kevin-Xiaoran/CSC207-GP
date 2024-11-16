@@ -11,9 +11,9 @@ public class CommonUser implements User {
     private final String name;
     private final String password;
     private final ArrayList<String> watchList;
-    private final ArrayList<Stock> portfolioList;
+    private final ArrayList<SimulatedHolding> portfolioList;
 
-    public CommonUser(String name, String password, ArrayList<String> watchList, ArrayList<Stock> portfolioList) {
+    public CommonUser(String name, String password, ArrayList<String> watchList, ArrayList<SimulatedHolding> portfolioList) {
         this.name = name;
         this.password = password;
         this.watchList = watchList;
@@ -36,7 +36,7 @@ public class CommonUser implements User {
     }
 
     @Override
-    public ArrayList<Stock> getPortfolioList() {
+    public ArrayList<SimulatedHolding> getPortfolioList() {
         return portfolioList;
     }
 }

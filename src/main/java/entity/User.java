@@ -29,6 +29,6 @@ public interface User {
      * Returns the portfolio of the user.
      * @return the portfolio of the user.
      */
-    ArrayList<Stock> getPortfolioList();
+    ArrayList<SimulatedHolding> getPortfolioList();
 
 }

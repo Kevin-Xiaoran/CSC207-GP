@@ -43,6 +43,7 @@ public class HomePresenter implements HomeOutputBoundary {
 
     @Override
     public void switchToPortfolio() {
+        // Present stock view
         System.out.println("Show portfolio view");
     }
 
