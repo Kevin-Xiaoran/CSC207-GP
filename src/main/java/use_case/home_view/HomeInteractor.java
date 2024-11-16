@@ -44,4 +44,5 @@ public class HomeInteractor implements HomeInputBoundary {
     public void switchToSignupView() {
         homePresenter.switchToSignupView();
     }
+
 }

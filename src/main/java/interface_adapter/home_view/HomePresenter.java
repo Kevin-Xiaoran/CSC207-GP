@@ -2,6 +2,7 @@ package interface_adapter.home_view;
 
 import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.portfolio.PortfolioViewModel;
 import interface_adapter.signup.SignupViewModel;
 import use_case.home_view.HomeOutputBoundary;
 import use_case.home_view.HomeOutputData;
@@ -16,23 +17,26 @@ public class HomePresenter implements HomeOutputBoundary {
     private final LoginViewModel loginViewModel;
     private final SignupViewModel signupViewModel;
     private final ViewManagerModel viewManagerModel;
+    private final PortfolioViewModel portfolioViewModel;
 
     private static final String WATCHLIST_VIEW_NAME = "WatchListView";
 
     public HomePresenter(HomeViewModel homeViewModel,
                          LoginViewModel loginViewModel,
                          SignupViewModel signupViewModel,
-                         ViewManagerModel viewManagerModel) {
+                         ViewManagerModel viewManagerModel,
+                         PortfolioViewModel portfolioViewModel) {
         this.homeViewModel = homeViewModel;
         this.loginViewModel = loginViewModel;
         this.signupViewModel = signupViewModel;
         this.viewManagerModel = viewManagerModel;
+        this.portfolioViewModel = portfolioViewModel;
     }
 
     @Override
     public void prepareSuccessView(HomeOutputData searchOutputData) {
-        // Present stock view
-        System.out.println("Show stock view after searching stock");
+        viewManagerModel.setState("StockView");
+        viewManagerModel.firePropertyChanged();
     }
 
     @Override
@@ -43,8 +47,8 @@ public class HomePresenter implements HomeOutputBoundary {
 
     @Override
     public void switchToPortfolio() {
-        // Present stock view
-        System.out.println("Show portfolio view");
+        viewManagerModel.setState("PortfolioView");
+        viewManagerModel.firePropertyChanged();
     }
 
     @Override
