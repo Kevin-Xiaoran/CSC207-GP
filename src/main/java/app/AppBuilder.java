@@ -24,10 +24,12 @@ import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logout.LogoutController;
 import interface_adapter.logout.LogoutPresenter;
+import interface_adapter.portfolio.PortfolioViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.watchlist_view.WatchListViewModel;
+import interface_adapter.portfolio.PortfolioViewModel;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
@@ -77,6 +79,8 @@ public class AppBuilder {
     private StockView stockView;
     private WatchListView watchListView;
     private WatchListViewModel watchListViewModel;
+    private PortfolioView portfolioView;
+    private PortfolioViewModel portfolioViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -138,12 +142,23 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the Portfolio View to the application.
+     * @return this builder
+     */
+    public AppBuilder addPortfolioView() {
+        portfolioViewModel = new PortfolioViewModel();
+        portfolioView = new PortfolioView(portfolioViewModel, viewManagerModel);
+        cardPanel.add(portfolioView, portfolioView.getViewName());
+        return this;
+    }
+
+    /**
      * Adds the Home Use Case to the application.
      * @return this builder
      */
     public AppBuilder addHomeUseCase() {
         final HomeOutputBoundary homeOutputBoundary = new HomePresenter(homeViewModel,
-                loginViewModel, signupViewModel, viewManagerModel);
+                loginViewModel, signupViewModel, viewManagerModel, portfolioViewModel);
         final HomeInputBoundary homeInteractor = new HomeInteractor(userDataAccessObject, homeOutputBoundary);
 
         final HomeController controller = new HomeController(homeInteractor);

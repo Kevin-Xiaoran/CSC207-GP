@@ -24,7 +24,7 @@ public class HomeController {
     }
 
     /**
-     * Executes the "switch to LoginView" Use Case.
+     * Executes the "switch to Portfolio" Use Case.
      */
     public void switchToPortfolio() {
         homeUseCaseInteractor.switchToPortfolio();
