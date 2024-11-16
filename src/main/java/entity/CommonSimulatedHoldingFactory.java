@@ -1,4 +1,11 @@
 package entity;
 
-public class CommonSimulatedHoldingFactory {
+/**
+ * Factory for creating CommonUser objects.
+ */
+public class CommonSimulatedHoldingFactory implements SimulatedHoldingFactory {
+    @Override
+    public SimulatedHolding create(String symbol, double price, int amount) {
+        return new CommonSimulatedHolding(symbol, price, amount);
+    }
 }

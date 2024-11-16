@@ -15,6 +15,6 @@ public interface UserFactory {
      * @return the new user
      */
     User create(String name, String password,
-                ArrayList<String> watchList, ArrayList<Stock> portfolioList);
+                ArrayList<String> watchList, ArrayList<SimulatedHolding> portfolioList);
 
 }

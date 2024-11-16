@@ -68,9 +68,4 @@ public class HomePresenter implements HomeOutputBoundary {
         viewManagerModel.setState(loginViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
-
-    public void switchToStockView() {
-        viewManagerModel.setState("StockView");
-        viewManagerModel.firePropertyChanged();
-    }
 }

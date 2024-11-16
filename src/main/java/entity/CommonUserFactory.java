@@ -11,7 +11,7 @@ public class CommonUserFactory implements UserFactory {
     public User create(String name,
                        String password,
                        ArrayList<String> watchList,
-                       ArrayList<Stock> portfolioList) {
+                       ArrayList<SimulatedHolding> portfolioList) {
         return new CommonUser(name, password, watchList, portfolioList);
     }
 }
