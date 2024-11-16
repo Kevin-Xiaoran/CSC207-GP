@@ -26,10 +26,6 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         LogoutUserDataAccessInterface {
 
     private final Map<String, User> users = new HashMap<>();
-    private final ArrayList<String> watchList = new ArrayList<>();
-    private final ArrayList<Stock> portfolioList = new ArrayList<Stock>();
-
-    private final String watchListFilePath = "watchlist.txt";
 
     private String currentUsername;
 
@@ -62,22 +58,5 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     @Override
     public String getCurrentUsername() {
         return this.currentUsername;
-    }
-
-    // Watch list related APIs
-    public void getWatchList() {
-//        // Using FileReader and BufferedReader to read the file line by line
-//        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                System.out.println(line);
-//            }
-//        }
-//        catch (IOException e) {
-//            e.printStackTrace();
-//        }
-    }
-    public void addToWatchList(String stock) {
-        watchList.add(stock);
     }
 }

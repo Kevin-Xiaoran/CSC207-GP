@@ -3,14 +3,11 @@ package data_access;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import entity.Stock;
-import entity.StockFactory;
+import entity.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import entity.User;
-import entity.UserFactory;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -31,12 +28,6 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         LogoutUserDataAccessInterface,
         HomeDataAccessInterface {
     private static final int SUCCESS_CODE = 200;
-
-    private static final int CLOSE = 138;
-    private static final int OPEN = 132;
-    private static final int VOLUME = 100502000;
-    private static final int HIGH = 140;
-    private static final int LOW = 125;
 
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";
@@ -71,7 +62,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                 final String name = userJSONObject.getString(USERNAME);
                 final String password = userJSONObject.getString(PASSWORD);
                 final ArrayList<String> emptyWatchList = new ArrayList<>();
-                final ArrayList<Stock> emptyStockList = new ArrayList<>();
+                final ArrayList<SimulatedHolding> emptyStockList = new ArrayList<>();
                 final User user = userFactory.create(name, password, emptyWatchList, emptyStockList);
 
                 return user;
