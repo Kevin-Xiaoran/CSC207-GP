@@ -1,7 +1,11 @@
 package view;
 
+import entity.CommonStockFactory;
 import entity.Stock;
+import entity.StockFactory;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.stock_view.StockViewModel;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -19,17 +23,20 @@ public class StockView extends AbstractViewWithBackButton {
     private JLabel highPriceLabel;
     private JLabel volumeLabel;
 
-    public StockView(Stock stock, ViewManagerModel viewManagerModel) {
+    public StockView(ViewManagerModel viewManagerModel) {
         this.viewManagerModel = viewManagerModel;
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        JPanel contentPanel = new JPanel();
+        final JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(Color.WHITE);
 
         initializeComponents(contentPanel);
-        updateStock(stock);
+        final StockFactory stockFactory = new CommonStockFactory();
+        final Stock stock = stockFactory.create("NVDA", 132.2, 130.5,
+                100000000, 140.32, 128.9);
+        updateStockData(stock);
 
         add(contentPanel, BorderLayout.CENTER);
     }
@@ -39,7 +46,7 @@ public class StockView extends AbstractViewWithBackButton {
         stockSymbolLabel = createLabel("", 24, Font.BOLD);
         stockPriceLabel = createLabel("", 18, Font.PLAIN);
 
-        JPanel stockInfoPanel = new JPanel();
+        final JPanel stockInfoPanel = new JPanel();
         stockInfoPanel.setLayout(new BoxLayout(stockInfoPanel, BoxLayout.Y_AXIS));
         stockInfoPanel.setBackground(Color.WHITE);
         stockInfoPanel.add(stockSymbolLabel);
@@ -61,7 +68,7 @@ public class StockView extends AbstractViewWithBackButton {
         contentPanel.add(volumeLabel);
     }
 
-    public void updateStock(Stock stock) {
+    public void updateStockData(Stock stock) {
         stockSymbolLabel.setText(stock.getSymbol());
         stockPriceLabel.setText("Current Price: $" + stock.getClosePrice());
         openPriceLabel.setText("Open Price: $" + stock.getOpenPrice());
@@ -72,11 +79,15 @@ public class StockView extends AbstractViewWithBackButton {
     }
 
     private JLabel createLabel(String text, int fontSize, int fontStyle) {
-        JLabel label = new JLabel(text);
+        final JLabel label = new JLabel(text);
         label.setFont(new Font("SansSerif", fontStyle, fontSize));
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
 
+    }
+
+    public String getViewName() {
+        return "StockView";
     }
 
     @Override

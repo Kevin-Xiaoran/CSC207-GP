@@ -166,6 +166,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         }
     }
 
+    // Stock related APIs
     @Override
     public Stock getStock(String symbol) {
         final OkHttpClient client = new OkHttpClient().newBuilder().build();

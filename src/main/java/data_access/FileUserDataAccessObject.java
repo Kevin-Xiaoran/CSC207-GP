@@ -30,7 +30,7 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
     private final StockFactory stockFactory;
     private final SimulatedHoldingFactory simulatedHoldingFactory;
 
-    public FileUserDataAccessObject(StockFactory stockFactory, SimulatedHoldingFactory simulatedHoldingFactory) throws IOException {
+    public FileUserDataAccessObject(StockFactory stockFactory, SimulatedHoldingFactory simulatedHoldingFactory) {
         this.stockFactory = stockFactory;
         this.simulatedHoldingFactory = simulatedHoldingFactory;
     }
