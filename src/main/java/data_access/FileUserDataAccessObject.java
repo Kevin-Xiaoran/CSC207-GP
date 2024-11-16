@@ -48,6 +48,7 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
             return watchList;
         }
         catch (IOException ex) {
+            // Normally, this means the file doesn't exist
             throw new RuntimeException(ex);
         }
     }
