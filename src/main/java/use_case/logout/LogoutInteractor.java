@@ -9,14 +9,12 @@ public class LogoutInteractor implements LogoutInputBoundary {
 
     public LogoutInteractor(LogoutUserDataAccessInterface userDataAccessInterface,
                             LogoutOutputBoundary logoutOutputBoundary) {
-
         this.userDataAccessObject = userDataAccessInterface;
         this.logoutPresenter = logoutOutputBoundary;
     }
 
     @Override
     public void execute(LogoutInputData logoutInputData) {
-
         final String username = logoutInputData.getUsername();
         userDataAccessObject.setCurrentUsername(null);
         final LogoutOutputData logoutOutputData = new LogoutOutputData(username, false);

@@ -1,7 +1,9 @@
 package view;
 
 import interface_adapter.home_view.HomeController;
+import interface_adapter.home_view.HomeState;
 import interface_adapter.home_view.HomeViewModel;
+import interface_adapter.login.LoginState;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,11 +12,13 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  * The View for the Home Page.
  */
-public class HomeView extends JPanel implements ActionListener, PropertyChangeListener {
+public class HomeView extends AbstractViewWithBackButton implements ActionListener, PropertyChangeListener {
 
     private static final String RIGHTARROW = "->";
 
@@ -45,15 +49,40 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
 
     // Login/Logout component
     private final JButton loginButton = new JButton("Login");
+    private final JButton signupButton = new JButton("Sign up");
 
     public HomeView(HomeViewModel homeViewModel) {
         this.homeViewModel = homeViewModel;
         this.homeViewModel.addPropertyChangeListener(this);
 
         // Config search components style
-        searchTextField.setText("Search");
+        searchTextField.setText("AAPL");
         final JPanel searchPanel = new JPanel(new FlowLayout());
         searchPanel.add(searchTextField);
+        // Add textField listener
+        searchTextField.getDocument().addDocumentListener(new DocumentListener() {
+
+            private void documentListenerHelper() {
+                final HomeState currentState = homeViewModel.getState();
+                currentState.setSymbol(new String(searchTextField.getText()));
+                homeViewModel.setState(currentState);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+        });
 
         // Config stock view components style
         final JPanel stockViewPanel = new JPanel();
@@ -62,7 +91,12 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
         stockViewPanel.add(stockButton);
         stockButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                homeController.search("NVDA");
+                if (evt.getSource().equals(stockButton)) {
+                    final HomeState currentState = homeViewModel.getState();
+                    currentState.setSymbol("AAPL");
+
+                    homeController.search(currentState.getSymbol());
+                }
             }
         });
 
@@ -99,6 +133,17 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
             }
         });
 
+        // Config signup components style
+        signupButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        final JPanel signupPanel = new JPanel();
+        signupPanel.setLayout(new BoxLayout(signupPanel, BoxLayout.LINE_AXIS));
+        signupPanel.add(signupButton);
+        signupButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                homeController.switchToSignupView();
+            }
+        });
+
         // Config frame style
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -108,6 +153,7 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
         this.add(portfolioPanel);
         this.add(watchListPanel);
         this.add(loginPanel);
+        this.add(signupPanel);
     }
 
     /**
@@ -121,6 +167,11 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
+    }
+
+    @Override
+    void backButtonAction() {
+        System.out.println("Back button clicked");
     }
 
     public String getViewName() {

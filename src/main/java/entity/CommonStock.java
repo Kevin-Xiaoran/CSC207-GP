@@ -6,13 +6,13 @@ package entity;
 public class CommonStock implements Stock {
 
     private final String symbol;
-    private final int openPrice;
-    private final int closePrice;
-    private final int volume;
-    private final int high;
-    private final int low;
+    private final double openPrice;
+    private final double closePrice;
+    private final double volume;
+    private final double high;
+    private final double low;
 
-    public CommonStock(String symbol, int openPrice, int closePrice, int volume, int high, int low) {
+    public CommonStock(String symbol, double openPrice, double closePrice, double volume, double high, double low) {
         this.symbol = symbol;
         this.openPrice = openPrice;
         this.closePrice = closePrice;
@@ -27,27 +27,27 @@ public class CommonStock implements Stock {
     }
 
     @Override
-    public int getOpenPrice() {
+    public double getOpenPrice() {
         return openPrice;
     }
 
     @Override
-    public int getClosePrice() {
+    public double getClosePrice() {
         return closePrice;
     }
 
     @Override
-    public int getVolume() {
+    public double getVolume() {
         return volume;
     }
 
     @Override
-    public int getHigh() {
+    public double getHigh() {
         return high;
     }
 
     @Override
-    public int getLow() {
+    public double getLow() {
         return low;
     }
 }

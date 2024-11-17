@@ -7,11 +7,9 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import data_access.DBUserDataAccessObject;
+import data_access.FileUserDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
-import entity.CommonStockFactory;
-import entity.CommonUserFactory;
-import entity.StockFactory;
-import entity.UserFactory;
+import entity.*;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
@@ -24,10 +22,13 @@ import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logout.LogoutController;
 import interface_adapter.logout.LogoutPresenter;
+import interface_adapter.portfolio.PortfolioViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.stock_view.StockViewModel;
 import interface_adapter.watchlist_view.WatchListViewModel;
+import interface_adapter.portfolio.PortfolioViewModel;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
@@ -60,11 +61,13 @@ public class AppBuilder {
     // thought question: is the hard dependency below a problem?
     private final UserFactory userFactory = new CommonUserFactory();
     private final StockFactory stockFactory = new CommonStockFactory();
+    private final SimulatedHoldingFactory simulatedHoldingFactory = new CommonSimulatedHoldingFactory();
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
     // thought question: is the hard dependency below a problem?
-    private final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(userFactory, stockFactory);
+    private final DBUserDataAccessObject dbUserDataAccessObject = new DBUserDataAccessObject(userFactory, stockFactory);
+    private final FileUserDataAccessObject fileUserDataAccessObject = new FileUserDataAccessObject(stockFactory, simulatedHoldingFactory);
 
     private HomeView homeView;
     private HomeViewModel homeViewModel;
@@ -76,6 +79,10 @@ public class AppBuilder {
     private LoginView loginView;
     private WatchListView watchListView;
     private WatchListViewModel watchListViewModel;
+    private PortfolioView portfolioView;
+    private PortfolioViewModel portfolioViewModel;
+    private StockView stockView;
+    private StockViewModel stockViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -89,6 +96,7 @@ public class AppBuilder {
         homeViewModel = new HomeViewModel();
         homeView = new HomeView(homeViewModel);
         cardPanel.add(homeView, homeView.getViewName());
+
         return this;
     }
 
@@ -98,7 +106,7 @@ public class AppBuilder {
      */
     public AppBuilder addSignupView() {
         signupViewModel = new SignupViewModel();
-        signupView = new SignupView(signupViewModel);
+        signupView = new SignupView(signupViewModel,viewManagerModel);
         cardPanel.add(signupView, signupView.getViewName());
         return this;
     }
@@ -109,7 +117,7 @@ public class AppBuilder {
      */
     public AppBuilder addLoginView() {
         loginViewModel = new LoginViewModel();
-        loginView = new LoginView(loginViewModel);
+        loginView = new LoginView(loginViewModel, viewManagerModel);
         cardPanel.add(loginView, loginView.getViewName());
         return this;
     }
@@ -119,16 +127,42 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addLoggedInView() {
-        loggedInViewModel = new LoggedInViewModel();
+        loggedInViewModel =  new LoggedInViewModel();
         loggedInView = new LoggedInView(loggedInViewModel);
         cardPanel.add(loggedInView, loggedInView.getViewName());
         return this;
     }
 
+    /**
+     * Adds the WatchList View to the application.
+     * @return this builder
+     */
     public AppBuilder addWatchListView() {
         watchListViewModel = new WatchListViewModel();
-        watchListView = new WatchListView(watchListViewModel,viewManagerModel);
+        watchListView = new WatchListView(watchListViewModel, viewManagerModel);
         cardPanel.add(watchListView, watchListView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Portfolio View to the application.
+     * @return this builder
+     */
+    public AppBuilder addPortfolioView() {
+        portfolioViewModel = new PortfolioViewModel();
+        portfolioView = new PortfolioView(portfolioViewModel, viewManagerModel);
+        cardPanel.add(portfolioView, portfolioView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Stock View to the application.
+     * @return this builder
+     */
+    public AppBuilder addStockView() {
+        stockViewModel = new StockViewModel();
+        stockView = new StockView(viewManagerModel);
+        cardPanel.add(stockView, stockView.getViewName());
         return this;
     }
 
@@ -138,8 +172,8 @@ public class AppBuilder {
      */
     public AppBuilder addHomeUseCase() {
         final HomeOutputBoundary homeOutputBoundary = new HomePresenter(homeViewModel,
-                loginViewModel, viewManagerModel);
-        final HomeInputBoundary homeInteractor = new HomeInteractor(userDataAccessObject, homeOutputBoundary);
+                loginViewModel, signupViewModel, viewManagerModel, portfolioViewModel, stockViewModel);
+        final HomeInputBoundary homeInteractor = new HomeInteractor(dbUserDataAccessObject, homeOutputBoundary);
 
         final HomeController controller = new HomeController(homeInteractor);
         homeView.setHomeController(controller);
@@ -154,7 +188,7 @@ public class AppBuilder {
         final SignupOutputBoundary signupOutputBoundary = new SignupPresenter(viewManagerModel,
                 signupViewModel, loginViewModel);
         final SignupInputBoundary userSignupInteractor = new SignupInteractor(
-                userDataAccessObject, signupOutputBoundary, userFactory);
+                dbUserDataAccessObject, signupOutputBoundary, userFactory);
 
         final SignupController controller = new SignupController(userSignupInteractor);
         signupView.setSignupController(controller);
@@ -169,7 +203,7 @@ public class AppBuilder {
         final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel,
                 loggedInViewModel, loginViewModel, signupViewModel);
         final LoginInputBoundary loginInteractor = new LoginInteractor(
-                userDataAccessObject, loginOutputBoundary);
+                dbUserDataAccessObject, loginOutputBoundary);
 
         final LoginController loginController = new LoginController(loginInteractor);
         loginView.setLoginController(loginController);
@@ -185,7 +219,7 @@ public class AppBuilder {
                 new ChangePasswordPresenter(loggedInViewModel);
 
         final ChangePasswordInputBoundary changePasswordInteractor =
-                new ChangePasswordInteractor(userDataAccessObject, changePasswordOutputBoundary, userFactory);
+                new ChangePasswordInteractor(dbUserDataAccessObject, changePasswordOutputBoundary, userFactory);
 
         final ChangePasswordController changePasswordController =
                 new ChangePasswordController(changePasswordInteractor);
@@ -202,7 +236,7 @@ public class AppBuilder {
                 loggedInViewModel, loginViewModel);
 
         final LogoutInputBoundary logoutInteractor =
-                new LogoutInteractor(userDataAccessObject, logoutOutputBoundary);
+                new LogoutInteractor(dbUserDataAccessObject, logoutOutputBoundary);
 
         final LogoutController logoutController = new LogoutController(logoutInteractor);
         loggedInView.setLogoutController(logoutController);

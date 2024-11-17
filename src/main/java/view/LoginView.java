@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
@@ -37,11 +38,12 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
     private final JButton signUp;
     private final JButton logIn;
     private final JButton cancel;
+    private final ViewManagerModel viewManagerModel;
     private LoginController loginController;
     private SignupController signupController;
 
-    public LoginView(LoginViewModel loginViewModel) {
-
+    public LoginView(LoginViewModel loginViewModel, ViewManagerModel viewManagerModel) {
+        this.viewManagerModel = viewManagerModel;
         this.loginViewModel = loginViewModel;
         this.loginViewModel.addPropertyChangeListener(this);
 
@@ -77,7 +79,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                     }
                 }
         );
-
+      
         signUp.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
@@ -85,8 +87,6 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                     }
                 }
         );
-
-        cancel.addActionListener(this);
 
         usernameInputField.getDocument().addDocumentListener(new DocumentListener() {
 

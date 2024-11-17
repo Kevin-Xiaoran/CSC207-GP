@@ -18,7 +18,7 @@ public interface HomeOutputBoundary {
     void prepareFailView(String errorMessage);
 
     /**
-     * Switches to the portfolio View.
+     * Switches to the watch list View.
      */
     void switchToPortfolio();
 
@@ -31,4 +31,10 @@ public interface HomeOutputBoundary {
      * Switches to the Login View.
      */
     void switchToLoginView();
+
+    /**
+     * Switches to the Signup View.
+     */
+    void switchToSignupView();
+
 }
