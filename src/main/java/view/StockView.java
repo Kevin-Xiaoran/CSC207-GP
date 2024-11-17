@@ -4,7 +4,6 @@ import entity.CommonStockFactory;
 import entity.Stock;
 import entity.StockFactory;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.stock_view.StockViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +24,8 @@ public class StockView extends AbstractViewWithBackButton {
 
     public StockView(ViewManagerModel viewManagerModel) {
         this.viewManagerModel = viewManagerModel;
-        setLayout(new BorderLayout());
+
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.WHITE);
 
         final JPanel contentPanel = new JPanel();
@@ -33,12 +33,15 @@ public class StockView extends AbstractViewWithBackButton {
         contentPanel.setBackground(Color.WHITE);
 
         initializeComponents(contentPanel);
+
         final StockFactory stockFactory = new CommonStockFactory();
         final Stock stock = stockFactory.create("NVDA", 132.2, 130.5,
                 100000000, 140.32, 128.9);
         updateStockData(stock);
 
-        add(contentPanel, BorderLayout.CENTER);
+        add(Box.createVerticalGlue());
+        add(contentPanel);
+        add(Box.createVerticalGlue());
     }
 
     private void initializeComponents(JPanel contentPanel) {
@@ -52,20 +55,23 @@ public class StockView extends AbstractViewWithBackButton {
         stockInfoPanel.add(stockSymbolLabel);
         stockInfoPanel.add(stockPriceLabel);
 
-        contentPanel.add(stockInfoPanel);
-        contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-
+        // 股票详细信息
         openPriceLabel = createLabel("", 16, Font.PLAIN);
         closePriceLabel = createLabel("", 16, Font.PLAIN);
         lowPriceLabel = createLabel("", 16, Font.PLAIN);
         highPriceLabel = createLabel("", 16, Font.PLAIN);
         volumeLabel = createLabel("", 16, Font.PLAIN);
 
+        contentPanel.add(stockInfoPanel);
+        contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         contentPanel.add(openPriceLabel);
         contentPanel.add(closePriceLabel);
         contentPanel.add(lowPriceLabel);
         contentPanel.add(highPriceLabel);
         contentPanel.add(volumeLabel);
+
+        contentPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        stockInfoPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
     }
 
     public void updateStockData(Stock stock) {
@@ -76,6 +82,15 @@ public class StockView extends AbstractViewWithBackButton {
         lowPriceLabel.setText("Low: $" + stock.getLow());
         highPriceLabel.setText("High: $" + stock.getHigh());
         volumeLabel.setText("Volume: " + stock.getVolume() + " M");
+
+        double volume = stock.getVolume();
+        if (volume >= 1_000_000) {
+            volumeLabel.setText("Volume: " + (volume / 1_000_000) + " M");
+        } else if (volume >= 1_000) {
+            volumeLabel.setText("Volume: " + (volume / 1_000) + " K");
+        } else {
+            volumeLabel.setText("Volume: " + volume);
+        }
     }
 
     private JLabel createLabel(String text, int fontSize, int fontStyle) {
@@ -83,7 +98,6 @@ public class StockView extends AbstractViewWithBackButton {
         label.setFont(new Font("SansSerif", fontStyle, fontSize));
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
-
     }
 
     public String getViewName() {
