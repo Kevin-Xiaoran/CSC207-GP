@@ -7,6 +7,7 @@ import entity.UserFactory;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -76,7 +77,7 @@ class SignupInteractorTest {
 
         // Add Paul to the repo so that when we check later they already exist
         UserFactory factory = new CommonUserFactory();
-        User user = factory.create("Paul", "pwd");
+        User user = factory.create("Paul", "pwd", new ArrayList<>(), new ArrayList<>());
         userRepository.save(user);
 
         // This creates a presenter that tests whether the test case is as we expect.
