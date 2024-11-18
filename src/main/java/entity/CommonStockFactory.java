@@ -6,7 +6,7 @@ package entity;
 public class CommonStockFactory implements StockFactory {
 
     @Override
-    public Stock create(String symbol, int openPrice, int closePrice, int volume, int high, int low) {
+    public Stock create(String symbol, double openPrice, double closePrice, double volume, double high, double low) {
         return new CommonStock(symbol, openPrice, closePrice, volume, high, low);
     }
 }

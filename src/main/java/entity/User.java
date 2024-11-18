@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.ArrayList;
+
 /**
  * The representation of a user in our program.
  */
@@ -16,5 +18,17 @@ public interface User {
      * @return the password of the user.
      */
     String getPassword();
+
+    /**
+     * Returns the watch list of the user.
+     * @return the watch list of the user.
+     */
+    ArrayList<String> getWatchList();
+
+    /**
+     * Returns the portfolio of the user.
+     * @return the portfolio of the user.
+     */
+    ArrayList<SimulatedHolding> getPortfolioList();
 
 }

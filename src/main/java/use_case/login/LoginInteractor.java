@@ -1,6 +1,7 @@
 package use_case.login;
 
 import entity.User;
+import interface_adapter.change_password.IsLoggedIn;
 
 /**
  * The Login Interactor.
@@ -36,5 +37,10 @@ public class LoginInteractor implements LoginInputBoundary {
                 loginPresenter.prepareSuccessView(loginOutputData);
             }
         }
+    }
+
+    @Override
+    public void switchToSignUpView() {
+        loginPresenter.switchToSignUpView();
     }
 }
