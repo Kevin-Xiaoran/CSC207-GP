@@ -3,11 +3,11 @@ package use_case.home_view;
 /**
  * The Input Data for the Search Use Case.
  */
-public class HomeInputData {
+public class SearchInputData {
 
     private final String stockSymbol;
 
-    public HomeInputData(String stockSymbol) {
+    public SearchInputData(String stockSymbol) {
         this.stockSymbol = stockSymbol;
     }
 

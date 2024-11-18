@@ -5,12 +5,12 @@ import entity.Stock;
 /**
  * Output Data for the Search Use Case.
  */
-public class HomeOutputData {
+public class SearchOutputData {
 
     private final Stock stock;
     private final boolean useCaseFailed;
 
-    public HomeOutputData(Stock stock, boolean useCaseFailed) {
+    public SearchOutputData(Stock stock, boolean useCaseFailed) {
         this.stock = stock;
         this.useCaseFailed = useCaseFailed;
     }

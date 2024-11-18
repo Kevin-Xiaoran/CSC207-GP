@@ -1,10 +1,8 @@
 package use_case.home_view;
 
-import data_access.DBUserDataAccessObject;
-import data_access.InMemoryUserDataAccessObject;
+import data_access.FileUserDataAccessObject;
 import entity.*;
 import org.junit.Test;
-import use_case.login.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -37,15 +35,15 @@ public class HomeViewInteratorTest {
 //        LoginInputBoundary interactor = new LoginInteractor(userRepository, successPresenter);
 //        interactor.execute(inputData);
 
-        final HomeInputData inputData = new HomeInputData("NVDA");
-        final UserFactory userFactory = new CommonUserFactory();
+        final SearchInputData inputData = new SearchInputData("NVDA");
         final StockFactory stockFactory = new CommonStockFactory();
-        final HomeDataAccessInterface homeData = new DBUserDataAccessObject(userFactory, stockFactory);
+        final SimulatedHoldingFactory simulatedHoldingFactory = new CommonSimulatedHoldingFactory();
+        final FileUserDataAccessObject homeData = new FileUserDataAccessObject(stockFactory, simulatedHoldingFactory);
 
         // This creates a successPresenter that tests whether the test case is as we expect.
         HomeOutputBoundary successPresenter = new HomeOutputBoundary() {
             @Override
-            public void prepareSuccessView(HomeOutputData searchOutputData) {
+            public void prepareSuccessView(SearchOutputData searchOutputData) {
                 assertEquals("NVDA", searchOutputData.getStock().getSymbol());
             }
 

@@ -1,5 +1,6 @@
 package interface_adapter.home_view;
 
+import entity.Stock;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.portfolio.PortfolioViewModel;
@@ -7,8 +8,9 @@ import interface_adapter.signup.SignupViewModel;
 import interface_adapter.stock_view.StockViewModel;
 import interface_adapter.stock_view.StockViewState;
 import use_case.home_view.HomeOutputBoundary;
-import use_case.home_view.HomeOutputData;
-import view.WatchListView;
+import use_case.home_view.SearchOutputData;
+
+import java.util.ArrayList;
 
 /**
  * The Presenter for the Search Use Case.
@@ -38,7 +40,7 @@ public class HomePresenter implements HomeOutputBoundary {
     }
 
     @Override
-    public void prepareSuccessView(HomeOutputData searchOutputData) {
+    public void prepareSuccessView(SearchOutputData searchOutputData) {
         final StockViewState stockViewState = new StockViewState();
         stockViewState.setStock(searchOutputData.getStock());
         this.stockViewModel.setState(stockViewState);
@@ -76,5 +78,13 @@ public class HomePresenter implements HomeOutputBoundary {
     public void switchToSignupView() {
         viewManagerModel.setState(loginViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
+    }
+
+    @Override
+    public void getWatchListData(ArrayList<Stock> watchList) {
+        final HomeState homeState = new HomeState();
+        homeState.setWatchList(watchList);
+        this.homeViewModel.setState(homeState);
+        this.homeViewModel.firePropertyChanged();
     }
 }

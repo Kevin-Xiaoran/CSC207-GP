@@ -1,15 +1,18 @@
 package view;
 
+import entity.Stock;
 import interface_adapter.change_password.IsLoggedIn;
 import interface_adapter.home_view.HomeController;
 import interface_adapter.home_view.HomeState;
 import interface_adapter.home_view.HomeViewModel;
+import interface_adapter.login.LoginState;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -18,7 +21,7 @@ import javax.swing.event.DocumentListener;
 /**
  * The View for the Home Page.
  */
-public class HomeView extends JPanel implements ActionListener, PropertyChangeListener {
+public class HomeView extends JPanel implements PropertyChangeListener {
 
     private static final String RIGHTARROW = "->";
 
@@ -40,24 +43,12 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
     // Watch list components
     private final JLabel watchListLabel = new JLabel("Watchlist");
     private final JButton watchListButton = new JButton(RIGHTARROW);
-    private final JLabel firstStockLabel = new JLabel(" - AAPL");
-    private final JButton firstStockButton = new JButton(RIGHTARROW);
-    private final JLabel secondStockLabel = new JLabel(" - NVDA");
-    private final JButton secondStockButton = new JButton(RIGHTARROW);
-    private final JLabel thirdStockLabel = new JLabel(" - META");
-    private final JButton thirdStockButton = new JButton(RIGHTARROW);
+    private final JPanel watchListContentPanel = new JPanel();
 
     // Login/Logout component
     private JButton loginButton = new JButton();
-    private final JButton signupButton = new JButton("Sign Up");
 
     public HomeView(HomeViewModel homeViewModel) {
-        if (IsLoggedIn.isLoggedIn()) {
-            loginButton.setText("Log Out");
-        }
-        else {
-            loginButton.setText("Log In");
-        }
         this.homeViewModel = homeViewModel;
         this.homeViewModel.addPropertyChangeListener(this);
 
@@ -123,20 +114,26 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
                 homeController.switchToWatchList();
             }
         });
+        // Watch list stock information
+        watchListContentPanel.setLayout(new BoxLayout(watchListContentPanel, BoxLayout.Y_AXIS));
+        watchListContentPanel.setBackground(Color.WHITE);
 
         // Config login components style
         loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         final JPanel loginPanel = new JPanel();
         loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.LINE_AXIS));
         loginPanel.add(loginButton);
+        loginButton.setText("Log Out");
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                if (IsLoggedIn.isLoggedIn()) {
-                    IsLoggedIn.setLoggedIn(false);
-                }
-                else {
-                    homeController.switchToLoginView();
-                }
+//                if (IsLoggedIn.isLoggedIn()) {
+//                    showLogoutDialog();
+//                }
+//                else {
+//                    homeController.switchToLoginView();
+//                }
+                // Preload watchList data
+                homeController.getWatchList();
             }
         });
 
@@ -147,20 +144,70 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
         this.add(searchPanel);
         this.add(portfolioPanel);
         this.add(watchListPanel);
+        this.add(watchListContentPanel);
         this.add(loginPanel);
-    }
-
-    /**
-     * React to a button click that results in evt.
-     * @param evt the ActionEvent to react to
-     */
-    public void actionPerformed(ActionEvent evt) {
-        System.out.println("Click " + evt.getActionCommand());
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        final HomeState state = (HomeState) evt.getNewValue();
+        final ArrayList<Stock> watchList = state.getWatchList();
+        watchListContentPanel.removeAll();
+        updateWatchListComponents(watchList);
+        watchListContentPanel.revalidate();
+        watchListContentPanel.repaint();
+    }
 
+    public void updateWatchListComponents(ArrayList<Stock> watchList) {
+        for (Stock stock : watchList) {
+            this.addWatchListItem(watchListContentPanel, stock.getSymbol(), String.valueOf(stock.getClosePrice()));
+        }
+    }
+
+    private void addWatchListItem(JPanel contentPanel, String code, String price) {
+        final JPanel stockPanel = new JPanel(new BorderLayout());
+        stockPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+        stockPanel.setBackground(Color.WHITE);
+
+        // Left part: Stock code and price
+        final JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.setBackground(Color.WHITE);
+
+        final JLabel stockCodeLabel = new JLabel(code);
+        stockCodeLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+        final JLabel stockPriceLabel = new JLabel(price);
+        stockPriceLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
+
+        leftPanel.add(stockCodeLabel);
+        leftPanel.add(stockPriceLabel);
+
+        // Right part: up and down information
+        final JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        rightPanel.setBackground(Color.WHITE);
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 10));
+
+        final JButton viewStockButton = new JButton(RIGHTARROW);
+        viewStockButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                if (evt.getSource().equals(viewStockButton)) {
+                    final HomeState currentState = homeViewModel.getState();
+                    currentState.setSymbol(code);
+
+                    homeController.search(currentState.getSymbol());
+                }
+            }
+        });
+
+        rightPanel.add(viewStockButton);
+
+        // Add all to stockPanel
+        stockPanel.add(leftPanel, BorderLayout.WEST);
+        stockPanel.add(rightPanel, BorderLayout.EAST);
+
+        // Add all information
+        contentPanel.add(stockPanel);
     }
 
     public String getViewName() {
@@ -169,5 +216,26 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
 
     public void setHomeController(HomeController homeController) {
         this.homeController = homeController;
+
+        // Preload watchList data
+        homeController.getWatchList();
+    }
+
+    public void changeLoginButtonText() {
+        if (IsLoggedIn.isLoggedIn()) {
+            loginButton.setText("Log Out");
+        }
+        else {
+            loginButton.setText("Log In");
+        }
+    }
+
+    public void showLogoutDialog() {
+        final int response = JOptionPane.showConfirmDialog(this, "Do you want to logout?", "Confirm", JOptionPane.YES_NO_OPTION);
+
+        if (response == JOptionPane.YES_OPTION) {
+            IsLoggedIn.setLoggedIn(false);
+            changeLoginButtonText();
+        }
     }
 }
