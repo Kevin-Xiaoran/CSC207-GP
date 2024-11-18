@@ -173,7 +173,7 @@ public class AppBuilder {
     public AppBuilder addHomeUseCase() {
         final HomeOutputBoundary homeOutputBoundary = new HomePresenter(homeViewModel,
                 loginViewModel, signupViewModel, viewManagerModel, portfolioViewModel, stockViewModel);
-        final HomeInputBoundary homeInteractor = new HomeInteractor(dbUserDataAccessObject, homeOutputBoundary);
+        final HomeInputBoundary homeInteractor = new HomeInteractor(dbUserDataAccessObject, fileUserDataAccessObject, homeOutputBoundary);
 
         final HomeController controller = new HomeController(homeInteractor);
         homeView.setHomeController(controller);

@@ -1,12 +1,16 @@
 package use_case.home_view;
 
+import entity.Stock;
+
+import java.util.ArrayList;
+
 public interface HomeInputBoundary {
 
     /**
      * Executes the search use case.
      * @param searchInputData the input data
      */
-    void search(HomeInputData searchInputData);
+    void search(SearchInputData searchInputData);
 
     /**
      * Executes the switch to portfolio view use case.
@@ -28,4 +32,8 @@ public interface HomeInputBoundary {
      */
     void switchToSignupView();
 
+    /**
+     * Executes the switch to Signup view use case.
+     */
+    void getWatchListData();
 }

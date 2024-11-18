@@ -1,7 +1,10 @@
 package interface_adapter.home_view;
 
+import entity.Stock;
 import use_case.home_view.HomeInputBoundary;
-import use_case.home_view.HomeInputData;
+import use_case.home_view.SearchInputData;
+
+import java.util.ArrayList;
 
 /**
  * The controller for the Login Use Case.
@@ -19,7 +22,7 @@ public class HomeController {
      * @param symbol the username of the user logging in
      */
     public void search(String symbol) {
-        final HomeInputData searchInputData = new HomeInputData(symbol);
+        final SearchInputData searchInputData = new SearchInputData(symbol);
         homeUseCaseInteractor.search(searchInputData);
     }
 
@@ -49,5 +52,12 @@ public class HomeController {
      */
     public void switchToSignupView() {
         homeUseCaseInteractor.switchToSignupView();
+    }
+
+    /**
+     * Load watch list data.
+     */
+    public void getWatchList() {
+        homeUseCaseInteractor.getWatchListData();
     }
 }
