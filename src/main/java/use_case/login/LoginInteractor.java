@@ -1,6 +1,7 @@
 package use_case.login;
 
 import entity.User;
+import interface_adapter.change_password.IsLoggedIn;
 
 /**
  * The Login Interactor.
