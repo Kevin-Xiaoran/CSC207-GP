@@ -133,17 +133,6 @@ public class HomeView extends AbstractViewWithBackButton implements ActionListen
             }
         });
 
-        // Config signup components style
-        signupButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        final JPanel signupPanel = new JPanel();
-        signupPanel.setLayout(new BoxLayout(signupPanel, BoxLayout.LINE_AXIS));
-        signupPanel.add(signupButton);
-        signupButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                homeController.switchToSignupView();
-            }
-        });
-
         // Config frame style
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -153,7 +142,6 @@ public class HomeView extends AbstractViewWithBackButton implements ActionListen
         this.add(portfolioPanel);
         this.add(watchListPanel);
         this.add(loginPanel);
-        this.add(signupPanel);
     }
 
     /**
