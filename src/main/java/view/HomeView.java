@@ -3,7 +3,6 @@ package view;
 import interface_adapter.home_view.HomeController;
 import interface_adapter.home_view.HomeState;
 import interface_adapter.home_view.HomeViewModel;
-import interface_adapter.login.LoginState;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,7 +17,7 @@ import javax.swing.event.DocumentListener;
 /**
  * The View for the Home Page.
  */
-public class HomeView extends AbstractViewWithBackButton implements ActionListener, PropertyChangeListener {
+public class HomeView extends JPanel implements ActionListener, PropertyChangeListener {
 
     private static final String RIGHTARROW = "->";
 
@@ -27,11 +26,11 @@ public class HomeView extends AbstractViewWithBackButton implements ActionListen
     private HomeController homeController;
 
     // Search components
-    private final JTextField searchTextField = new JTextField(30);
+    private final JTextField searchTextField = new JTextField(20);
 
     // Stock view components
     private final JLabel stockLabel = new JLabel("Stock View");
-    private final JButton stockButton = new JButton(RIGHTARROW);
+    private final JButton searchButton = new JButton(RIGHTARROW);
 
     // Portfolio components
     private final JLabel portfolioLabel = new JLabel("Portfolio");
@@ -56,9 +55,21 @@ public class HomeView extends AbstractViewWithBackButton implements ActionListen
         this.homeViewModel.addPropertyChangeListener(this);
 
         // Config search components style
-        searchTextField.setText("AAPL");
-        final JPanel searchPanel = new JPanel(new FlowLayout());
+        searchTextField.setText("NVDA");
+        final JPanel searchPanel = new JPanel();
         searchPanel.add(searchTextField);
+        searchPanel.add(searchButton);
+        // Add search stock button listener
+        searchButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                if (evt.getSource().equals(searchButton)) {
+                    final HomeState currentState = homeViewModel.getState();
+                    currentState.setSymbol("NVDA");
+
+                    homeController.search(currentState.getSymbol());
+                }
+            }
+        });
         // Add textField listener
         searchTextField.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -81,22 +92,6 @@ public class HomeView extends AbstractViewWithBackButton implements ActionListen
             @Override
             public void changedUpdate(DocumentEvent e) {
                 documentListenerHelper();
-            }
-        });
-
-        // Config stock view components style
-        final JPanel stockViewPanel = new JPanel();
-        stockViewPanel.setLayout(new BoxLayout(stockViewPanel, BoxLayout.LINE_AXIS));
-        stockViewPanel.add(stockLabel);
-        stockViewPanel.add(stockButton);
-        stockButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                if (evt.getSource().equals(stockButton)) {
-                    final HomeState currentState = homeViewModel.getState();
-                    currentState.setSymbol("AAPL");
-
-                    homeController.search(currentState.getSymbol());
-                }
             }
         });
 
@@ -138,7 +133,6 @@ public class HomeView extends AbstractViewWithBackButton implements ActionListen
 
         // Add all components
         this.add(searchPanel);
-        this.add(stockViewPanel);
         this.add(portfolioPanel);
         this.add(watchListPanel);
         this.add(loginPanel);
@@ -155,11 +149,6 @@ public class HomeView extends AbstractViewWithBackButton implements ActionListen
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
-    }
-
-    @Override
-    void backButtonAction() {
-        System.out.println("Back button clicked");
     }
 
     public String getViewName() {
