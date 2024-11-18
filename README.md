@@ -43,3 +43,31 @@ Introducing our Stock Marketplace Application, a user-friendly platform designed
 
 `access_key`: 3847d86b56ca461a0da759024332c06a
 
+## Project Blueprint
+<img width="608" alt="image" src="https://github.com/user-attachments/assets/75412420-525b-4fe8-a10f-3af5050c23f7">
+<img width="615" alt="image" src="https://github.com/user-attachments/assets/ba9ca85d-26af-459e-ab74-78589e492665">
+<img width="616" alt="image" src="https://github.com/user-attachments/assets/21524f80-0551-479e-b4c2-cf6b4931dfeb">
+<img width="627" alt="image" src="https://github.com/user-attachments/assets/0de461eb-0d80-4fea-be2c-ca984dc633ef">
+<img width="681" alt="image" src="https://github.com/user-attachments/assets/2e19935d-d932-47de-83b0-42a14ded0a93">
+
+## Week 2 Progress
+`Home Page`
+<img width="340" alt="image" src="https://github.com/user-attachments/assets/cd0a81bd-30e3-4be4-9406-4b1f978c88ca">
+
+`Stock View`
+<img width="340" alt="image" src="https://github.com/user-attachments/assets/42a6abe9-b8f2-4973-bf81-9422a6b49d85">
+
+`Portfolio`
+<img width="340" alt="image" src="https://github.com/user-attachments/assets/ccbf28cd-9192-4c75-a00d-ad7ec0d45395">
+
+`Watchlist`
+<img width="340" alt="image" src="https://github.com/user-attachments/assets/aa932f8c-9820-49d0-a0d8-dcbb53094d30">
+
+
+
+
+
+
+
+
+
