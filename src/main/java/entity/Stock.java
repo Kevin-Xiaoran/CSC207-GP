@@ -15,29 +15,41 @@ public interface Stock {
      * Returns the stock open price of the stock.
      * @return the stock open price of the stock.
      */
-    int getOpenPrice();
+    double getOpenPrice();
 
     /**
      * Returns the stock close price of the stock.
      * @return the stock close price of the stock.
      */
-    int getClosePrice();
+    double getClosePrice();
 
     /**
      * Returns the stock volume of the stock.
      * @return the stock volume of the stock.
      */
-    int getVolume();
+    double getVolume();
 
     /**
      * Returns the stock highest price of the stock.
      * @return the stock highest price of the stock.
      */
-    int getHigh();
+    double getHigh();
 
     /**
      * Returns the stock lowest price of the stock.
      * @return the stock lowest price of the stock.
      */
-    int getLow();
+    double getLow();
+
+    /**
+     * Returns the stock dailyChange price of the stock.
+     * @return the stock dailyChange price of the stock.
+     */
+    double getDailyChange();
+
+    /**
+     * Returns the stock dailyPercentage of  price of the stock.
+     * @return the stock dailyPercentage of  price of the stock.
+     */
+    double getDailyPercentage();
 }
