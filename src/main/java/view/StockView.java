@@ -25,11 +25,9 @@ public class StockView extends AbstractViewWithBackButton {
     public StockView(ViewManagerModel viewManagerModel) {
         this.viewManagerModel = viewManagerModel;
 
-        // 设置垂直布局
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.WHITE);
 
-        // 内容面板
         final JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(Color.WHITE);
@@ -41,14 +39,14 @@ public class StockView extends AbstractViewWithBackButton {
                 100000000, 140.32, 128.9);
         updateStockData(stock);
 
-        // 添加内容面板
         add(Box.createVerticalGlue());
         add(contentPanel);
+        add(Box.createRigidArea(new Dimension(0, 20)));
+        add(createActionButtonsPanel());
         add(Box.createVerticalGlue());
     }
 
     private void initializeComponents(JPanel contentPanel) {
-        // 股票基础信息
         stockSymbolLabel = createLabel("", 24, Font.BOLD);
         stockPriceLabel = createLabel("", 18, Font.PLAIN);
 
@@ -58,14 +56,12 @@ public class StockView extends AbstractViewWithBackButton {
         stockInfoPanel.add(stockSymbolLabel);
         stockInfoPanel.add(stockPriceLabel);
 
-        // 股票详细信息
         openPriceLabel = createLabel("", 16, Font.PLAIN);
         closePriceLabel = createLabel("", 16, Font.PLAIN);
         lowPriceLabel = createLabel("", 16, Font.PLAIN);
         highPriceLabel = createLabel("", 16, Font.PLAIN);
         volumeLabel = createLabel("", 16, Font.PLAIN);
 
-        // 添加到内容面板
         contentPanel.add(stockInfoPanel);
         contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         contentPanel.add(openPriceLabel);
@@ -74,9 +70,41 @@ public class StockView extends AbstractViewWithBackButton {
         contentPanel.add(highPriceLabel);
         contentPanel.add(volumeLabel);
 
-        // 设置左对齐，消除空白
         contentPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         stockInfoPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    }
+
+    private JPanel createActionButtonsPanel() {
+        JPanel actionPanel = new JPanel();
+        actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.X_AXIS));
+        actionPanel.setBackground(Color.WHITE);
+        actionPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JButton buyButton = new JButton("BUY");
+        buyButton.setFont(new Font("SansSerif", Font.BOLD, 18));
+        buyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buyButton.setFocusPainted(false);
+
+        buyButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Buy action triggered!");
+        });
+
+        JButton favoriteButton = new JButton("★");
+        favoriteButton.setFont(new Font("SansSerif", Font.BOLD, 18));
+        favoriteButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        favoriteButton.setFocusPainted(false);
+
+        favoriteButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Added to favorites!");
+        });
+
+        actionPanel.add(Box.createHorizontalGlue());
+        actionPanel.add(buyButton);
+        actionPanel.add(Box.createRigidArea(new Dimension(20, 0))); // 两个按钮间距
+        actionPanel.add(favoriteButton);
+        actionPanel.add(Box.createHorizontalGlue());
+
+        return actionPanel;
     }
 
     public void updateStockData(Stock stock) {
