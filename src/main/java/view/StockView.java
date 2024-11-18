@@ -1,19 +1,21 @@
 package view;
 
-import entity.CommonStockFactory;
 import entity.Stock;
-import entity.StockFactory;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.stock_view.StockViewModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * The View for displaying detailed information about a single stock.
  */
-public class StockView extends AbstractViewWithBackButton {
+public class StockView extends AbstractViewWithBackButton implements PropertyChangeListener {
 
     private final ViewManagerModel viewManagerModel;
+    private final StockViewModel stockViewModel;
     private JLabel stockSymbolLabel;
     private JLabel stockPriceLabel;
     private JLabel openPriceLabel;
@@ -22,8 +24,11 @@ public class StockView extends AbstractViewWithBackButton {
     private JLabel highPriceLabel;
     private JLabel volumeLabel;
 
-    public StockView(ViewManagerModel viewManagerModel) {
+    public StockView(StockViewModel stockViewModel, ViewManagerModel viewManagerModel) {
         this.viewManagerModel = viewManagerModel;
+        this.stockViewModel = stockViewModel;
+
+        this.stockViewModel.addPropertyChangeListener(this);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.WHITE);
@@ -33,11 +38,6 @@ public class StockView extends AbstractViewWithBackButton {
         contentPanel.setBackground(Color.WHITE);
 
         initializeComponents(contentPanel);
-
-        final StockFactory stockFactory = new CommonStockFactory();
-        final Stock stock = stockFactory.create("NVDA", 132.2, 130.5,
-                100000000, 140.32, 128.9);
-        updateStockData(stock);
 
         add(Box.createVerticalGlue());
         add(contentPanel);
@@ -82,25 +82,17 @@ public class StockView extends AbstractViewWithBackButton {
 
         JButton buyButton = new JButton("BUY");
         buyButton.setFont(new Font("SansSerif", Font.BOLD, 18));
-        buyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         buyButton.setFocusPainted(false);
-
-        buyButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Buy action triggered!");
-        });
+        buyButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Buy action triggered!"));
 
         JButton favoriteButton = new JButton("★");
         favoriteButton.setFont(new Font("SansSerif", Font.BOLD, 18));
-        favoriteButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         favoriteButton.setFocusPainted(false);
-
-        favoriteButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Added to favorites!");
-        });
+        favoriteButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Added to favorites!"));
 
         actionPanel.add(Box.createHorizontalGlue());
         actionPanel.add(buyButton);
-        actionPanel.add(Box.createRigidArea(new Dimension(20, 0))); // 两个按钮间距
+        actionPanel.add(Box.createRigidArea(new Dimension(20, 0)));
         actionPanel.add(favoriteButton);
         actionPanel.add(Box.createHorizontalGlue());
 
@@ -114,16 +106,12 @@ public class StockView extends AbstractViewWithBackButton {
         closePriceLabel.setText("Close Price: $" + stock.getClosePrice());
         lowPriceLabel.setText("Low: $" + stock.getLow());
         highPriceLabel.setText("High: $" + stock.getHigh());
-        volumeLabel.setText("Volume: " + stock.getVolume() + " M");
 
         double volume = stock.getVolume();
-        if (volume >= 1_000_000) {
-            volumeLabel.setText("Volume: " + (volume / 1_000_000) + " M");
-        } else if (volume >= 1_000) {
-            volumeLabel.setText("Volume: " + (volume / 1_000) + " K");
-        } else {
-            volumeLabel.setText("Volume: " + volume);
-        }
+        String volumeText = (volume >= 1_000_000) ? (volume / 1_000_000) + " M" :
+                (volume >= 1_000) ? (volume / 1_000) + " K" :
+                        String.valueOf(volume);
+        volumeLabel.setText("Volume: " + volumeText);
     }
 
     private JLabel createLabel(String text, int fontSize, int fontStyle) {
@@ -141,5 +129,16 @@ public class StockView extends AbstractViewWithBackButton {
     void backButtonAction() {
         viewManagerModel.setState("home view");
         viewManagerModel.firePropertyChanged();
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        // React to StockViewModel's state changes
+        if ("state".equals(evt.getPropertyName())) {
+            Stock updatedStock = stockViewModel.getState().getStock();
+            if (updatedStock != null) {
+                updateStockData(updatedStock);
+            }
+        }
     }
 }
