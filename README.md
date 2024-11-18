@@ -55,13 +55,14 @@ Introducing our Stock Marketplace Application, a user-friendly platform designed
 <img width="340" alt="image" src="https://github.com/user-attachments/assets/cd0a81bd-30e3-4be4-9406-4b1f978c88ca">
 
 `Stock View`
-<img width="340" alt="image" src="https://github.com/user-attachments/assets/42a6abe9-b8f2-4973-bf81-9422a6b49d85">
+<img width="340" alt="image" src="https://github.com/user-attachments/assets/dd2d7e3a-3e26-4a15-b1c7-5071d5b148b6">
 
 `Portfolio`
 <img width="340" alt="image" src="https://github.com/user-attachments/assets/ccbf28cd-9192-4c75-a00d-ad7ec0d45395">
 
 `Watchlist`
 <img width="340" alt="image" src="https://github.com/user-attachments/assets/aa932f8c-9820-49d0-a0d8-dcbb53094d30">
+
 
 
 
