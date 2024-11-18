@@ -1,20 +1,30 @@
 package view;
 
+import data_access.DBUserDataAccessObject;
+import entity.Stock;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.change_password.LoggedInState;
+import interface_adapter.login.LoginState;
 import interface_adapter.watchlist_view.WatchListViewModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
 
-public class WatchListView extends JPanel {
+public class WatchListView extends JPanel implements PropertyChangeListener {
 
     private final ViewManagerModel viewManagerModel;
+    private final DBUserDataAccessObject dbUserDataAccessObject;
+    private final JPanel contentPanel = new JPanel();
 
-    public WatchListView(WatchListViewModel viewModel, ViewManagerModel viewManagerModel) {
+    public WatchListView(WatchListViewModel viewModel, ViewManagerModel viewManagerModel, DBUserDataAccessObject dbUserDataAccessObject) {
         this.viewManagerModel = viewManagerModel;
+        this.dbUserDataAccessObject = dbUserDataAccessObject;
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
@@ -42,7 +52,6 @@ public class WatchListView extends JPanel {
         add(topPanel, BorderLayout.NORTH);
 
         // stock information
-        final JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(Color.WHITE);
 
@@ -51,9 +60,10 @@ public class WatchListView extends JPanel {
         addStockItem(contentPanel, "QQQ", "$514.07", "+$0.56", "+0.60%", "+$141.25", "+37.87%");
 
         add(contentPanel, BorderLayout.CENTER);
+
     }
 
-    private void addStockItem(JPanel contentPanel, String code, String price, String dailyChange, String dailyPercentage, String totalChange, String totalPercentage) {
+    private void addStockItem(JPanel contentPanel, String code, String price, String dailyChange, String dailyPercentage, String volume) {
         final JPanel stockPanel = new JPanel(new BorderLayout());
         stockPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
         stockPanel.setBackground(Color.WHITE);
@@ -77,13 +87,13 @@ public class WatchListView extends JPanel {
         rightPanel.setBackground(Color.WHITE);
         rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 10));
 
-        final JLabel dailyChangeLabel = new JLabel(dailyChange + "(" + dailyPercentage + ")");
+        final JLabel dailyChangeLabel = new JLabel(dailyChange + " (" + dailyPercentage + ")");
         dailyChangeLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        final JLabel totalChangeLabel = new JLabel(totalChange + "(" + totalPercentage + ")");
-        totalChangeLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        final JLabel volumeLabel = new JLabel("Volume: " + volume);
+        volumeLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
 
         rightPanel.add(dailyChangeLabel);
-        rightPanel.add(totalChangeLabel);
+        rightPanel.add(volumeLabel);
 
         // Add all to stockPanel
         stockPanel.add(leftPanel, BorderLayout.WEST);
@@ -93,8 +103,36 @@ public class WatchListView extends JPanel {
         contentPanel.add(stockPanel);
     }
 
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if ("watchList".equals(evt.getPropertyName())) {
+            final ArrayList<String> updatedWatchList = (ArrayList<String>) evt.getNewValue();
+            updateWatchList(updatedWatchList);
+        }
+    }
+
+    private void updateWatchList(ArrayList<String> updatedWatchList) {
+        contentPanel.removeAll();
+        createWatchListview(updatedWatchList);
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+
+    private void createWatchListview(ArrayList<String> WatchList) {
+        for (String stockcode: WatchList) {
+            final Stock stock = dbUserDataAccessObject.getStock(stockcode);
+            final String price = Double.toString(stock.getClosePrice());
+            final String dailyChange = Double.toString(stock.getDailyChange());
+            final String dailyPercentage = Double.toString((stock.getDailyChange() / stock.getOpenPrice()) * 100) + "%";
+            final String volume = Double.toString(stock.getVolume());
+
+            addStockItem(contentPanel, stock.getSymbol(), "$" + price, dailyChange, dailyPercentage, volume);
+        }
+    }
+
     public String getViewName() {
         return "WatchListView";
     }
+
 }
 
