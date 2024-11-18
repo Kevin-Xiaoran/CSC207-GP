@@ -58,6 +58,6 @@ public class CommonStock implements Stock {
 
     @Override
     public double getDailyPercentage() {
-        return (closePrice - openPrice) / closePrice;
+        return (closePrice - openPrice) / openPrice * 100;
     }
 }
