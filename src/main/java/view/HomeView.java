@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.change_password.IsLoggedIn;
 import interface_adapter.home_view.HomeController;
 import interface_adapter.home_view.HomeState;
 import interface_adapter.home_view.HomeViewModel;
@@ -47,10 +48,16 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
     private final JButton thirdStockButton = new JButton(RIGHTARROW);
 
     // Login/Logout component
-    private final JButton loginButton = new JButton("Login");
-    private final JButton signupButton = new JButton("Sign up");
+    private JButton loginButton = new JButton();
+    private final JButton signupButton = new JButton("Sign Up");
 
     public HomeView(HomeViewModel homeViewModel) {
+        if (IsLoggedIn.isLoggedIn()) {
+            loginButton.setText("Log Out");
+        }
+        else {
+            loginButton.setText("Log In");
+        }
         this.homeViewModel = homeViewModel;
         this.homeViewModel.addPropertyChangeListener(this);
 
@@ -124,7 +131,12 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
         loginPanel.add(loginButton);
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                homeController.switchToLoginView();
+                if (IsLoggedIn.isLoggedIn()) {
+                    IsLoggedIn.setLoggedIn(false);
+                }
+                else {
+                    homeController.switchToLoginView();
+                }
             }
         });
 
