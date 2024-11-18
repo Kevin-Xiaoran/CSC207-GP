@@ -40,4 +40,16 @@ public interface Stock {
      * @return the stock lowest price of the stock.
      */
     double getLow();
+
+    /**
+     * Returns the stock dailyChange price of the stock.
+     * @return the stock dailyChange price of the stock.
+     */
+    double getDailyChange();
+
+    /**
+     * Returns the stock dailyPercentage of  price of the stock.
+     * @return the stock dailyPercentage of  price of the stock.
+     */
+    double getDailyPercentage();
 }

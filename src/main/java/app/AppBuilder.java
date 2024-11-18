@@ -1,6 +1,7 @@
 package app;
 
 import java.awt.CardLayout;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -83,6 +84,7 @@ public class AppBuilder {
     private PortfolioViewModel portfolioViewModel;
     private StockView stockView;
     private StockViewModel stockViewModel;
+    private ArrayList watchList = fileUserDataAccessObject.getWatchList();
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -139,7 +141,7 @@ public class AppBuilder {
      */
     public AppBuilder addWatchListView() {
         watchListViewModel = new WatchListViewModel();
-        watchListView = new WatchListView(watchListViewModel, viewManagerModel);
+        watchListView = new WatchListView(watchListViewModel, viewManagerModel,dbUserDataAccessObject);
         cardPanel.add(watchListView, watchListView.getViewName());
         return this;
     }

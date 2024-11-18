@@ -1,24 +1,32 @@
 package interface_adapter.watchlist_view;
 
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The View Model for the WatchList View.
  */
 public class WatchListViewModel {
-    private List<String[]> stockList;
+    private final ArrayList<String> watchList = new ArrayList<>();
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
-    public WatchListViewModel() {
-        this.stockList = new ArrayList<>();
+    public ArrayList<String> getWatchList() {
+        return new ArrayList<>(watchList);
     }
 
-    public List<String[]> getStockList() {
-        return stockList;
+    // add to watchlist
+    public void addWatchList(String symbol) {
+        watchList.add(symbol);
+        pcs.firePropertyChange("watchList", null, new ArrayList<>(watchList));
     }
 
-    public void setStockList(List<String[]> stockList) {
-        this.stockList = stockList;
+    // remove from watchlist
+    public void removeWatchList(String symbol) {
+        watchList.remove(symbol);
+        pcs.firePropertyChange("watchList", null, new ArrayList<>(watchList));
     }
-
+    // return State of Stock, return ture if stock is already in the watchlist, false else
+    public boolean checkStockState(String symbol) {
+        return watchList.contains(symbol);
+    }
 }
