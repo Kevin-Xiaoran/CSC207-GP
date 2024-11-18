@@ -2,7 +2,9 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+.idea
 .idea/easycode.ignore
+homework-5.iml
 
 target/
 

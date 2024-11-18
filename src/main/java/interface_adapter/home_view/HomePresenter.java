@@ -2,7 +2,10 @@ package interface_adapter.home_view;
 
 import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.portfolio.PortfolioViewModel;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.stock_view.StockViewModel;
+import interface_adapter.stock_view.StockViewState;
 import use_case.home_view.HomeOutputBoundary;
 import use_case.home_view.HomeOutputData;
 import view.WatchListView;
@@ -16,23 +19,33 @@ public class HomePresenter implements HomeOutputBoundary {
     private final LoginViewModel loginViewModel;
     private final SignupViewModel signupViewModel;
     private final ViewManagerModel viewManagerModel;
-
-    private static final String WATCHLIST_VIEW_NAME = "WatchListView";
+    private final PortfolioViewModel portfolioViewModel;
+    private final StockViewModel stockViewModel;
 
     public HomePresenter(HomeViewModel homeViewModel,
                          LoginViewModel loginViewModel,
                          SignupViewModel signupViewModel,
-                         ViewManagerModel viewManagerModel) {
+                         ViewManagerModel viewManagerModel,
+                         PortfolioViewModel portfolioViewModel,
+                         StockViewModel stockViewModel) {
+
         this.homeViewModel = homeViewModel;
         this.loginViewModel = loginViewModel;
         this.signupViewModel = signupViewModel;
         this.viewManagerModel = viewManagerModel;
+        this.portfolioViewModel = portfolioViewModel;
+        this.stockViewModel = stockViewModel;
     }
 
     @Override
     public void prepareSuccessView(HomeOutputData searchOutputData) {
-        // Present stock view
-        System.out.println("Show stock view after searching stock");
+        final StockViewState stockViewState = new StockViewState();
+        stockViewState.setStock(searchOutputData.getStock());
+        this.stockViewModel.setState(stockViewState);
+        this.stockViewModel.firePropertyChanged();
+
+        viewManagerModel.setState("StockView");
+        viewManagerModel.firePropertyChanged();
     }
 
     @Override
@@ -43,7 +56,8 @@ public class HomePresenter implements HomeOutputBoundary {
 
     @Override
     public void switchToPortfolio() {
-        System.out.println("Show portfolio view");
+        viewManagerModel.setState("PortfolioView");
+        viewManagerModel.firePropertyChanged();
     }
 
     @Override

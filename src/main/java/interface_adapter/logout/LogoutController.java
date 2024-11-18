@@ -11,7 +11,6 @@ public class LogoutController {
     private LogoutInputBoundary logoutUseCaseInteractor;
 
     public LogoutController(LogoutInputBoundary logoutUseCaseInteractor) {
-
         this.logoutUseCaseInteractor = logoutUseCaseInteractor;
     }
 
@@ -20,8 +19,7 @@ public class LogoutController {
      * @param username the username of the user logging in
      */
     public void execute(String username) {
-
-        final LogoutInputData logoutInputData = new LogoutInputData(username);
-        logoutUseCaseInteractor.execute(logoutInputData);
+        final LogoutInputData loginInputData = new LogoutInputData(username);
+        logoutUseCaseInteractor.execute(loginInputData);
     }
 }

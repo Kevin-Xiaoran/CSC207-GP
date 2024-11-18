@@ -163,7 +163,7 @@ public class AppBuilder {
      */
     public AppBuilder addStockView() {
         stockViewModel = new StockViewModel();
-        stockView = new StockView(viewManagerModel);
+        stockView = new StockView(stockViewModel, viewManagerModel);
         cardPanel.add(stockView, stockView.getViewName());
         return this;
     }

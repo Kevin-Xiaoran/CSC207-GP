@@ -1,15 +1,13 @@
 package data_access;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
-import entity.Stock;
-import entity.StockFactory;
+import entity.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import entity.User;
-import entity.UserFactory;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -31,12 +29,6 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         HomeDataAccessInterface {
     private static final int SUCCESS_CODE = 200;
 
-    private static final int CLOSE = 138;
-    private static final int OPEN = 132;
-    private static final int VOLUME = 100502000;
-    private static final int HIGH = 140;
-    private static final int LOW = 125;
-
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";
     private static final String STATUS_CODE_LABEL = "status_code";
@@ -49,7 +41,6 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     public DBUserDataAccessObject(UserFactory userFactory, StockFactory stockFactory) {
         this.userFactory = userFactory;
         this.stockFactory = stockFactory;
-        // No need to do anything to reinitialize a user list! The data is the cloud that may be miles away.
     }
 
     @Override
@@ -69,8 +60,11 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                 final JSONObject userJSONObject = responseBody.getJSONObject("user");
                 final String name = userJSONObject.getString(USERNAME);
                 final String password = userJSONObject.getString(PASSWORD);
+                final ArrayList<String> emptyWatchList = new ArrayList<>();
+                final ArrayList<SimulatedHolding> emptyStockList = new ArrayList<>();
+                final User user = userFactory.create(name, password, emptyWatchList, emptyStockList);
 
-                return userFactory.create(name, password);
+                return user;
             }
             else {
                 throw new RuntimeException(responseBody.getString(MESSAGE));
@@ -172,6 +166,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         }
     }
 
+    // Stock related APIs
     @Override
     public Stock getStock(String symbol) {
         final OkHttpClient client = new OkHttpClient().newBuilder().build();

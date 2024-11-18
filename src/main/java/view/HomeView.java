@@ -1,6 +1,8 @@
 package view;
 
+import interface_adapter.change_password.IsLoggedIn;
 import interface_adapter.home_view.HomeController;
+import interface_adapter.home_view.HomeState;
 import interface_adapter.home_view.HomeViewModel;
 
 import java.awt.*;
@@ -10,6 +12,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  * The View for the Home Page.
@@ -23,11 +27,11 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
     private HomeController homeController;
 
     // Search components
-    private final JTextField searchTextField = new JTextField(30);
+    private final JTextField searchTextField = new JTextField(20);
 
     // Stock view components
     private final JLabel stockLabel = new JLabel("Stock View");
-    private final JButton stockButton = new JButton(RIGHTARROW);
+    private final JButton searchButton = new JButton(RIGHTARROW);
 
     // Portfolio components
     private final JLabel portfolioLabel = new JLabel("Portfolio");
@@ -44,26 +48,57 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
     private final JButton thirdStockButton = new JButton(RIGHTARROW);
 
     // Login/Logout component
-    private final JButton loginButton = new JButton("Login");
-    private final JButton signupButton = new JButton("Sign up");
+    private JButton loginButton = new JButton();
+    private final JButton signupButton = new JButton("Sign Up");
 
     public HomeView(HomeViewModel homeViewModel) {
+        if (IsLoggedIn.isLoggedIn()) {
+            loginButton.setText("Log Out");
+        }
+        else {
+            loginButton.setText("Log In");
+        }
         this.homeViewModel = homeViewModel;
         this.homeViewModel.addPropertyChangeListener(this);
 
         // Config search components style
-        searchTextField.setText("Search");
-        final JPanel searchPanel = new JPanel(new FlowLayout());
+        searchTextField.setText("NVDA");
+        final JPanel searchPanel = new JPanel();
         searchPanel.add(searchTextField);
-
-        // Config stock view components style
-        final JPanel stockViewPanel = new JPanel();
-        stockViewPanel.setLayout(new BoxLayout(stockViewPanel, BoxLayout.LINE_AXIS));
-        stockViewPanel.add(stockLabel);
-        stockViewPanel.add(stockButton);
-        stockButton.addActionListener(new ActionListener() {
+        searchPanel.add(searchButton);
+        // Add search stock button listener
+        searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                homeController.search("NVDA");
+                if (evt.getSource().equals(searchButton)) {
+                    final HomeState currentState = homeViewModel.getState();
+                    currentState.setSymbol("NVDA");
+
+                    homeController.search(currentState.getSymbol());
+                }
+            }
+        });
+        // Add textField listener
+        searchTextField.getDocument().addDocumentListener(new DocumentListener() {
+
+            private void documentListenerHelper() {
+                final HomeState currentState = homeViewModel.getState();
+                currentState.setSymbol(new String(searchTextField.getText()));
+                homeViewModel.setState(currentState);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                documentListenerHelper();
             }
         });
 
@@ -96,18 +131,12 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
         loginPanel.add(loginButton);
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                homeController.switchToLoginView();
-            }
-        });
-
-        // Config signup components style
-        signupButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        final JPanel signupPanel = new JPanel();
-        signupPanel.setLayout(new BoxLayout(signupPanel, BoxLayout.LINE_AXIS));
-        signupPanel.add(signupButton);
-        signupButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                homeController.switchToSignupView();
+                if (IsLoggedIn.isLoggedIn()) {
+                    IsLoggedIn.setLoggedIn(false);
+                }
+                else {
+                    homeController.switchToLoginView();
+                }
             }
         });
 
@@ -116,11 +145,9 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
 
         // Add all components
         this.add(searchPanel);
-        this.add(stockViewPanel);
         this.add(portfolioPanel);
         this.add(watchListPanel);
         this.add(loginPanel);
-        this.add(signupPanel);
     }
 
     /**

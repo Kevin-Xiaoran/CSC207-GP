@@ -49,6 +49,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
         final JLabel usernameInfo = new JLabel("Currently logged in: ");
         username = new JLabel();
 
+        //123
         final JPanel buttons = new JPanel();
         logOut = new JButton("Log Out");
         buttons.add(logOut);
@@ -100,8 +101,8 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                 // This creates an anonymous subclass of ActionListener and instantiates it.
                 evt -> {
                     if (evt.getSource().equals(logOut)) {
-                        final LoggedInState currentState1 = loggedInViewModel.getState();
-                        this.logoutController.execute(currentState1.getUsername());
+                        final LoggedInState currentState = loggedInViewModel.getState();
+                        logoutController.execute(currentState.getUsername());
                     }
                 }
         );
@@ -137,7 +138,6 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
     }
 
     public void setLogoutController(LogoutController logoutController) {
-
         this.logoutController = logoutController;
     }
 }

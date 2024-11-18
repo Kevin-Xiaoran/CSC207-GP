@@ -20,7 +20,6 @@ public class LogoutPresenter implements LogoutOutputBoundary {
     public LogoutPresenter(ViewManagerModel viewManagerModel,
                            LoggedInViewModel loggedInViewModel,
                            LoginViewModel loginViewModel) {
-
         this.loggedInViewModel = loggedInViewModel;
         this.viewManagerModel = viewManagerModel;
         this.loginViewModel = loginViewModel;
@@ -33,7 +32,6 @@ public class LogoutPresenter implements LogoutOutputBoundary {
 
         // We also need to set the username in the LoggedInState to
         // the empty string.
-
         final LoggedInState loggedInState = loggedInViewModel.getState();
         loggedInState.setUsername("");
         this.loggedInViewModel.setState(loggedInState);
