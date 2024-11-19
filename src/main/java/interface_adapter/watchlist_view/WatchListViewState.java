@@ -15,7 +15,15 @@ public class WatchListViewState {
         return stock;
     }
 
+    public ArrayList<String> getWatchlist() {
+        return watchlist;
+    }
+
     public void setStock(Stock newStock) {
         this.stock = newStock;
+    }
+
+    public void setWatchlist(ArrayList<String> newWatchlist) {
+        this.watchlist = newWatchlist;
     }
 }

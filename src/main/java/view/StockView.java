@@ -133,12 +133,9 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        // React to StockViewModel's state changes
-        if ("state".equals(evt.getPropertyName())) {
-            Stock updatedStock = stockViewModel.getState().getStock();
-            if (updatedStock != null) {
-                updateStockData(updatedStock);
-            }
+        Stock updatedStock = stockViewModel.getState().getStock();
+        if (updatedStock != null) {
+            updateStockData(updatedStock);
         }
     }
 }

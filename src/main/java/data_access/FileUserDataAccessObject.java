@@ -27,29 +27,43 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
     private final String watchListFilePath = "watchlist.txt";
     private final String portfolioFilePath = "portfolio.txt";
 
-    private final StockFactory stockFactory;
     private final SimulatedHoldingFactory simulatedHoldingFactory;
 
-    public FileUserDataAccessObject(StockFactory stockFactory, SimulatedHoldingFactory simulatedHoldingFactory) {
-        this.stockFactory = stockFactory;
+    public FileUserDataAccessObject(SimulatedHoldingFactory simulatedHoldingFactory) {
         this.simulatedHoldingFactory = simulatedHoldingFactory;
     }
 
     // Watch list related APIs
     @Override
     public ArrayList<String> getWatchList() {
-        // Using FileReader and BufferedReader to read the file
-        try (BufferedReader reader = new BufferedReader(new FileReader(mainFilePath + watchListFilePath))) {
-            final String line = reader.readLine();
-            if (line != null) {
-                Collections.addAll(watchList, line.split(","));
-            }
+        // Check if watchlist.txt file exists
+        final Boolean isFileExisted = new File(mainFilePath + watchListFilePath).isFile();
 
-            return watchList;
+        if (isFileExisted) {
+            // Using FileReader and BufferedReader to read the file
+            try (BufferedReader reader = new BufferedReader(new FileReader(mainFilePath + watchListFilePath))) {
+                watchList.clear();
+                final String line = reader.readLine();
+                if (line != null) {
+                    Collections.addAll(watchList, line.split(","));
+                }
+
+                return watchList;
+            }
+            catch (IOException ex) {
+                // Normally, this means the file doesn't exist
+                throw new RuntimeException(ex);
+            }
         }
-        catch (IOException ex) {
-            // Normally, this means the file doesn't exist
-            throw new RuntimeException(ex);
+        else {
+            // If the watchlist file doesn't exist, we create a new one
+            this.watchList.add("AAPl");
+            this.watchList.add("NVDA");
+            this.watchList.add("AMD");
+            this.saveWatchList();
+
+            // Get watchlist data again
+            return this.getWatchList();
         }
     }
 
@@ -57,9 +71,9 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
     public void saveWatchList() {
         final BufferedWriter writer;
         try {
-            writer = new BufferedWriter(new FileWriter(mainFilePath + watchListFilePath));
+            // Override original file
+            writer = new BufferedWriter(new FileWriter(mainFilePath + watchListFilePath, false));
             writer.write(String.join(",", watchList));
-            writer.newLine();
 
             writer.close();
         }
@@ -71,6 +85,7 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
     @Override
     public void addToWatchList(String symbol) {
         watchList.add(symbol);
+        watchList.sort(String::compareTo);
         saveWatchList();
     }
 
@@ -82,31 +97,46 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
 
     // Portfolio list related APIs
     public ArrayList<SimulatedHolding> getPortfolioList() {
-        // Using FileReader and BufferedReader to read the file
-        try (BufferedReader reader = new BufferedReader(new FileReader(mainFilePath + portfolioFilePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                final String[] data = line.split(",");
-                final String symbol = data[0];
-                final double price = Double.parseDouble(data[1]);
-                final int amount = Integer.parseInt(data[2]);
-                final SimulatedHolding simulatedHolding = simulatedHoldingFactory.create(symbol, price, amount);
+        // Check if watchlist.txt file exists
+        final Boolean isFileExisted = new File(mainFilePath + watchListFilePath).isFile();
 
-                portfolioList.add(simulatedHolding);
+        if (isFileExisted) {
+            // Using FileReader and BufferedReader to read the file
+            try (BufferedReader reader = new BufferedReader(new FileReader(mainFilePath + portfolioFilePath))) {
+                // Clear all data first
+                portfolioList.clear();
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    final String[] data = line.split(",");
+                    final String symbol = data[0];
+                    final double price = Double.parseDouble(data[1]);
+                    final int amount = Integer.parseInt(data[2]);
+                    final SimulatedHolding simulatedHolding = simulatedHoldingFactory.create(symbol, price, amount);
+
+                    portfolioList.add(simulatedHolding);
+                }
+
+                return portfolioList;
             }
-
-            return portfolioList;
+            catch (IOException ex) {
+                // Normally, this means the file doesn't exist
+                throw new RuntimeException(ex);
+            }
         }
-        catch (IOException ex) {
-            // Normally, this means the file doesn't exist
-            throw new RuntimeException(ex);
+        else {
+            // If file doesn't exist, we create one first
+            savePortfolioList();
+
+            return this.getPortfolioList();
         }
     }
 
     public void savePortfolioList() {
         final BufferedWriter writer;
         try {
-            writer = new BufferedWriter(new FileWriter(mainFilePath + watchListFilePath));
+            // Override original file
+            writer = new BufferedWriter(new FileWriter(mainFilePath + watchListFilePath, false));
             for (SimulatedHolding simulatedHolding : portfolioList) {
                 writer.write(simulatedHolding.getSymbol() + ",");
                 writer.write(simulatedHolding.getPurchasePrice() + ",");

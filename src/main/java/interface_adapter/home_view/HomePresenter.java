@@ -7,8 +7,11 @@ import interface_adapter.portfolio.PortfolioViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.stock_view.StockViewModel;
 import interface_adapter.stock_view.StockViewState;
+import interface_adapter.stock_view.WatchListViewState;
+import interface_adapter.watchlist_view.WatchListViewModel;
 import use_case.home_view.HomeOutputBoundary;
 import use_case.home_view.SearchOutputData;
+import view.WatchListView;
 
 import java.util.ArrayList;
 
@@ -23,13 +26,15 @@ public class HomePresenter implements HomeOutputBoundary {
     private final ViewManagerModel viewManagerModel;
     private final PortfolioViewModel portfolioViewModel;
     private final StockViewModel stockViewModel;
+    private final WatchListViewModel watchListViewModel;
 
     public HomePresenter(HomeViewModel homeViewModel,
                          LoginViewModel loginViewModel,
                          SignupViewModel signupViewModel,
                          ViewManagerModel viewManagerModel,
                          PortfolioViewModel portfolioViewModel,
-                         StockViewModel stockViewModel) {
+                         StockViewModel stockViewModel,
+                         WatchListViewModel watchListViewModel) {
 
         this.homeViewModel = homeViewModel;
         this.loginViewModel = loginViewModel;
@@ -37,6 +42,7 @@ public class HomePresenter implements HomeOutputBoundary {
         this.viewManagerModel = viewManagerModel;
         this.portfolioViewModel = portfolioViewModel;
         this.stockViewModel = stockViewModel;
+        this.watchListViewModel = watchListViewModel;
     }
 
     @Override
@@ -66,7 +72,13 @@ public class HomePresenter implements HomeOutputBoundary {
     }
 
     @Override
-    public void switchToWatchList() {
+    public void switchToWatchList(ArrayList<String> watchListSymbols) {
+        // Pass watchList symbols to watchList view
+        final WatchListViewState watchListViewState = new WatchListViewState();
+        watchListViewState.setWatchlist(watchListSymbols);
+        watchListViewModel.setState(watchListViewState);
+        watchListViewModel.firePropertyChanged("watchList");
+
         viewManagerModel.setState("WatchListView");
         viewManagerModel.firePropertyChanged();
     }

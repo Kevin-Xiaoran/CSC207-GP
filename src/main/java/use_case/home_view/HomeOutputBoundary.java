@@ -28,8 +28,9 @@ public interface HomeOutputBoundary {
 
     /**
      * Switches to the watch list View.
+     * @param watchListSymbols the symbols of whole watch list
      */
-    void switchToWatchList();
+    void switchToWatchList(ArrayList<String> watchListSymbols);
 
     /**
      * Switches to the Login View.
