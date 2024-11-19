@@ -52,7 +52,7 @@ Introducing our Stock Marketplace Application, a user-friendly platform designed
 
 ## Week 2 Progress
 `Home Page`
-<img width="340" alt="image" src="https://github.com/user-attachments/assets/cd0a81bd-30e3-4be4-9406-4b1f978c88ca">
+<img width="340" alt="image" src="https://github.com/user-attachments/assets/a4a52458-5be6-4bef-8e1f-18776d97f362">
 
 `Stock View`
 <img width="340" alt="image" src="https://github.com/user-attachments/assets/dd2d7e3a-3e26-4a15-b1c7-5071d5b148b6">
