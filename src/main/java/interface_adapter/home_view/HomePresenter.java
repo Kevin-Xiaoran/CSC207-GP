@@ -41,10 +41,14 @@ public class HomePresenter implements HomeOutputBoundary {
 
     @Override
     public void prepareSuccessView(SearchOutputData searchOutputData) {
+        // Show stock view
         final StockViewState stockViewState = new StockViewState();
         stockViewState.setStock(searchOutputData.getStock());
         this.stockViewModel.setState(stockViewState);
         this.stockViewModel.firePropertyChanged();
+
+        // Clean home view error message
+        this.sendErrorMessage("");
 
         viewManagerModel.setState("StockView");
         viewManagerModel.firePropertyChanged();
@@ -52,8 +56,7 @@ public class HomePresenter implements HomeOutputBoundary {
 
     @Override
     public void prepareFailView(String errorMessage) {
-        // Show error dialog
-        System.out.println("Show dialog view after failed to search stock");
+        this.sendErrorMessage(errorMessage);
     }
 
     @Override
@@ -85,6 +88,14 @@ public class HomePresenter implements HomeOutputBoundary {
         final HomeState homeState = new HomeState();
         homeState.setWatchList(watchList);
         this.homeViewModel.setState(homeState);
-        this.homeViewModel.firePropertyChanged();
+        this.homeViewModel.firePropertyChanged("getWatchList");
+    }
+
+    // Helper function
+    private void sendErrorMessage(String errorMessage) {
+        final HomeState homeState = this.homeViewModel.getState();
+        homeState.setErrorMessage(errorMessage);
+        this.homeViewModel.setState(homeState);
+        this.homeViewModel.firePropertyChanged("error");
     }
 }

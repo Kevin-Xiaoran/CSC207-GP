@@ -24,16 +24,20 @@ import javax.swing.event.DocumentListener;
 public class HomeView extends JPanel implements PropertyChangeListener {
 
     private static final String RIGHTARROW = "->";
+    private static final String FONTFAMILY = "SansSerif";
 
     private final String viewName = "home view";
     private final HomeViewModel homeViewModel;
     private HomeController homeController;
 
+    // Welcome component
+    private final JLabel welcomeLabel;
+
     // Search components
     private final JTextField searchTextField = new JTextField(20);
+    private final JLabel searchErrorMessageLabel = new JLabel();
 
     // Stock view components
-    private final JLabel stockLabel = new JLabel("Stock View");
     private final JButton searchButton = new JButton(RIGHTARROW);
 
     // Portfolio components
@@ -49,14 +53,33 @@ public class HomeView extends JPanel implements PropertyChangeListener {
     private JButton loginButton = new JButton();
 
     public HomeView(HomeViewModel homeViewModel) {
+        // Set up homeViewModel and listen any upcoming events
         this.homeViewModel = homeViewModel;
         this.homeViewModel.addPropertyChangeListener(this);
 
+        // Config welcome label style
+        final JPanel welcomePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        welcomePanel.setBackground(Color.WHITE);
+        welcomeLabel = new JLabel("Welcome");
+        updateLabelStyle(welcomeLabel, 24);
+        welcomePanel.add(welcomeLabel);
+
         // Config search components style
-        searchTextField.setText("NVDA");
         final JPanel searchPanel = new JPanel();
-        searchPanel.add(searchTextField);
-        searchPanel.add(searchButton);
+        final JPanel searchTextFieldPanel = new JPanel();
+        final JPanel searchErrorMessagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        searchTextField.setText("NVDA");
+        searchErrorMessageLabel.setForeground(Color.RED);
+        searchErrorMessageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        searchTextFieldPanel.setBackground(Color.WHITE);
+        searchTextFieldPanel.add(searchTextField);
+        searchTextFieldPanel.add(searchButton);
+        searchErrorMessagePanel.setBackground(Color.WHITE);
+        searchErrorMessagePanel.add(searchErrorMessageLabel);
+        searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
+        searchPanel.setBackground(Color.WHITE);
+        searchPanel.add(searchTextFieldPanel);
+        searchPanel.add(searchErrorMessagePanel);
         // Add search stock button listener
         searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -95,9 +118,17 @@ public class HomeView extends JPanel implements PropertyChangeListener {
 
         // Config portfolio components style
         final JPanel portfolioPanel = new JPanel();
-        portfolioPanel.setLayout(new BoxLayout(portfolioPanel, BoxLayout.LINE_AXIS));
-        portfolioPanel.add(portfolioLabel);
-        portfolioPanel.add(portfolioButton);
+        final JPanel portfolioLeftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        final JPanel portfolioRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        updateLabelStyle(portfolioLabel, 20);
+        portfolioLeftPanel.setBackground(Color.WHITE);
+        portfolioLeftPanel.add(portfolioLabel);
+        portfolioRightPanel.setBackground(Color.WHITE);
+        portfolioRightPanel.add(portfolioButton);
+        portfolioPanel.setBackground(Color.WHITE);
+        portfolioPanel.setLayout(new BoxLayout(portfolioPanel, BoxLayout.X_AXIS));
+        portfolioPanel.add(portfolioLeftPanel);
+        portfolioPanel.add(portfolioRightPanel);
         portfolioButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 homeController.switchToPortfolio();
@@ -106,9 +137,18 @@ public class HomeView extends JPanel implements PropertyChangeListener {
 
         // Config watch list components style
         final JPanel watchListPanel = new JPanel();
+        final JPanel watchListLeftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        final JPanel watchListRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        updateLabelStyle(watchListLabel, 20);
+        watchListPanel.setBackground(Color.WHITE);
+        watchListLeftPanel.setBackground(Color.WHITE);
+        watchListRightPanel.setBackground(Color.WHITE);
         watchListPanel.setLayout(new BoxLayout(watchListPanel, BoxLayout.LINE_AXIS));
-        watchListPanel.add(watchListLabel);
-        watchListPanel.add(watchListButton);
+        watchListLeftPanel.add(watchListLabel);
+        watchListRightPanel.add(watchListButton);
+        watchListPanel.add(watchListLeftPanel);
+        watchListPanel.add(watchListRightPanel);
+        watchListPanel.setBorder(BorderFactory.createEmptyBorder(16, 0, 0, 0));
         watchListButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 homeController.switchToWatchList();
@@ -121,7 +161,7 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         // Config login components style
         loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         final JPanel loginPanel = new JPanel();
-        loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.LINE_AXIS));
+        loginButton.setPreferredSize(new Dimension(150, 32));
         loginPanel.add(loginButton);
         loginButton.setText("Log Out");
         loginButton.addActionListener(new ActionListener() {
@@ -132,8 +172,7 @@ public class HomeView extends JPanel implements PropertyChangeListener {
 //                else {
 //                    homeController.switchToLoginView();
 //                }
-                // Preload watchList data
-                homeController.getWatchList();
+                homeController.switchToLoginView();
             }
         });
 
@@ -141,6 +180,7 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         // Add all components
+        this.add(welcomePanel);
         this.add(searchPanel);
         this.add(portfolioPanel);
         this.add(watchListPanel);
@@ -151,11 +191,21 @@ public class HomeView extends JPanel implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         final HomeState state = (HomeState) evt.getNewValue();
-        final ArrayList<Stock> watchList = state.getWatchList();
-        watchListContentPanel.removeAll();
-        updateWatchListComponents(watchList);
-        watchListContentPanel.revalidate();
-        watchListContentPanel.repaint();
+        if (evt.getPropertyName().equals("getWatchList")) {
+            final ArrayList<Stock> watchList = state.getWatchList();
+            watchListContentPanel.removeAll();
+            updateWatchListComponents(watchList);
+            watchListContentPanel.revalidate();
+            watchListContentPanel.repaint();
+        }
+        else if (evt.getPropertyName().equals("error")) {
+            searchErrorMessageLabel.setText(state.getErrorMessage());
+        }
+
+    }
+
+    public void updateLabelStyle(JLabel label, int fontSize) {
+        label.setFont(new Font(FONTFAMILY, Font.BOLD, fontSize));
     }
 
     public void updateWatchListComponents(ArrayList<Stock> watchList) {
@@ -166,18 +216,18 @@ public class HomeView extends JPanel implements PropertyChangeListener {
 
     private void addWatchListItem(JPanel contentPanel, String code, String price) {
         final JPanel stockPanel = new JPanel(new BorderLayout());
-        stockPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
         stockPanel.setBackground(Color.WHITE);
 
         // Left part: Stock code and price
         final JPanel leftPanel = new JPanel();
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(16, 64, 0, 0));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setBackground(Color.WHITE);
 
-        final JLabel stockCodeLabel = new JLabel(code);
-        stockCodeLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+        final JLabel stockCodeLabel = new JLabel("- " + code);
+        stockCodeLabel.setFont(new Font(FONTFAMILY, Font.BOLD, 16));
         final JLabel stockPriceLabel = new JLabel(price);
-        stockPriceLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        stockPriceLabel.setFont(new Font(FONTFAMILY, Font.PLAIN, 14));
 
         leftPanel.add(stockCodeLabel);
         leftPanel.add(stockPriceLabel);
@@ -186,7 +236,7 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         final JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBackground(Color.WHITE);
-        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 10));
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(24, 0, 0, 5));
 
         final JButton viewStockButton = new JButton(RIGHTARROW);
         viewStockButton.addActionListener(new ActionListener() {

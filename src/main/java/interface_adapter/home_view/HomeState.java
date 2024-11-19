@@ -10,20 +10,29 @@ import java.util.ArrayList;
 public class HomeState {
     private String symbol;
     private ArrayList<Stock> watchList;
+    private String errorMessage;
 
     public String getSymbol() {
         return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
     }
 
     public ArrayList<Stock> getWatchList() {
         return watchList;
     }
 
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
     public void setWatchList(ArrayList<Stock> watchList) {
         this.watchList = watchList;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }

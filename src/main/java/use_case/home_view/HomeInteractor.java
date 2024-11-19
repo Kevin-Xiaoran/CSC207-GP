@@ -27,9 +27,15 @@ public class HomeInteractor implements HomeInputBoundary {
     @Override
     public void search(SearchInputData searchInputData) {
 //        final String stockSymbol = searchInputData.getStockSymbol();
-//        final Stock stock = homeDataAccessObject.getStock(stockSymbol);
-
-        // Fake data to save usage limit
+//        try {
+//            final Stock stock = homeDataAccessInterface.getStock(stockSymbol);
+//            final SearchOutputData searchOutputData = new SearchOutputData(stock, false);
+//            homePresenter.prepareSuccessView(searchOutputData);
+//        }
+//        catch (Exception err) {
+//            err.printStackTrace();
+//            homePresenter.prepareFailView("Failed to fetch stock data");
+//        }
         final StockFactory stockFactory = new CommonStockFactory();
         final Stock stock = stockFactory.create("NVDA", 128.2, 322.1, 100002322, 500.1, 100.23);
 
