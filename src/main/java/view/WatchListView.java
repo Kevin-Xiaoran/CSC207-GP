@@ -130,6 +130,7 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
 //            final String dailyPercentage = Double.toString((stock.getDailyChange() / stock.getOpenPrice()) * 100) + "%";
 //            final String volume = Double.toString(stock.getVolume());
 
+//          addStockItem(contentPanel, stock.getSymbol(), "$" + price, dailyChange, dailyPercentage, volume);
             addStockItem(contentPanel, stockcode, "$" + "123", "234", "0.45%", "1232323.23");
         }
     }
