@@ -68,7 +68,7 @@ public class AppBuilder {
 
     // thought question: is the hard dependency below a problem?
     private final DBUserDataAccessObject dbUserDataAccessObject = new DBUserDataAccessObject(userFactory, stockFactory);
-    private final FileUserDataAccessObject fileUserDataAccessObject = new FileUserDataAccessObject(stockFactory, simulatedHoldingFactory);
+    private final FileUserDataAccessObject fileUserDataAccessObject = new FileUserDataAccessObject(simulatedHoldingFactory);
 
     private HomeView homeView;
     private HomeViewModel homeViewModel;
@@ -141,7 +141,7 @@ public class AppBuilder {
      */
     public AppBuilder addWatchListView() {
         watchListViewModel = new WatchListViewModel();
-        watchListView = new WatchListView(watchListViewModel, viewManagerModel,dbUserDataAccessObject);
+        watchListView = new WatchListView(watchListViewModel, viewManagerModel, dbUserDataAccessObject);
         cardPanel.add(watchListView, watchListView.getViewName());
         return this;
     }
@@ -174,7 +174,12 @@ public class AppBuilder {
      */
     public AppBuilder addHomeUseCase() {
         final HomeOutputBoundary homeOutputBoundary = new HomePresenter(homeViewModel,
-                loginViewModel, signupViewModel, viewManagerModel, portfolioViewModel, stockViewModel);
+                                                                        loginViewModel,
+                                                                        signupViewModel,
+                                                                        viewManagerModel,
+                                                                        portfolioViewModel,
+                                                                        stockViewModel,
+                                                                        watchListViewModel);
         final HomeInputBoundary homeInteractor = new HomeInteractor(dbUserDataAccessObject, fileUserDataAccessObject, homeOutputBoundary);
 
         final HomeController controller = new HomeController(homeInteractor);

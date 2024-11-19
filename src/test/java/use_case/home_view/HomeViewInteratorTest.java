@@ -1,8 +1,11 @@
 package use_case.home_view;
 
+import data_access.DBUserDataAccessObject;
 import data_access.FileUserDataAccessObject;
 import entity.*;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -11,34 +14,12 @@ public class HomeViewInteratorTest {
 
     @Test
     public void successTest() {
-//        LoginInputData inputData = new LoginInputData("Paul", "password");
-//        LoginUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
-//
-//        // For the success test, we need to add Paul to the data access repository before we log in.
-//        UserFactory factory = new CommonUserFactory();
-//        User user = factory.create("Paul", "password");
-//        userRepository.save(user);
-//
-//        // This creates a successPresenter that tests whether the test case is as we expect.
-//        LoginOutputBoundary successPresenter = new LoginOutputBoundary() {
-//            @Override
-//            public void prepareSuccessView(LoginOutputData user) {
-//                assertEquals("Paul", user.getUsername());
-//            }
-//
-//            @Override
-//            public void prepareFailView(String error) {
-//                fail("Use case failure is unexpected.");
-//            }
-//        };
-//
-//        LoginInputBoundary interactor = new LoginInteractor(userRepository, successPresenter);
-//        interactor.execute(inputData);
-
         final SearchInputData inputData = new SearchInputData("NVDA");
+        final UserFactory userFactory = new CommonUserFactory();
         final StockFactory stockFactory = new CommonStockFactory();
         final SimulatedHoldingFactory simulatedHoldingFactory = new CommonSimulatedHoldingFactory();
-        final FileUserDataAccessObject homeData = new FileUserDataAccessObject(stockFactory, simulatedHoldingFactory);
+        final FileUserDataAccessObject watchListData = new FileUserDataAccessObject(simulatedHoldingFactory);
+        final DBUserDataAccessObject stockData = new DBUserDataAccessObject(userFactory, stockFactory);
 
         // This creates a successPresenter that tests whether the test case is as we expect.
         HomeOutputBoundary successPresenter = new HomeOutputBoundary() {
@@ -58,7 +39,7 @@ public class HomeViewInteratorTest {
             }
 
             @Override
-            public void switchToWatchList() {
+            public void switchToWatchList(ArrayList<String> watchList) {
                 // Do nothing right now
             }
 
@@ -71,9 +52,14 @@ public class HomeViewInteratorTest {
             public void switchToSignupView() {
                 // Do nothing right now
             }
+
+            @Override
+            public void getWatchListData(ArrayList<Stock> watchList) {
+                // Do nothing
+            }
         };
 
-        final HomeInputBoundary interactor = new HomeInteractor(homeData, successPresenter);
+        final HomeInputBoundary interactor = new HomeInteractor(stockData, watchListData, successPresenter);
         interactor.search(inputData);
     }
 }
