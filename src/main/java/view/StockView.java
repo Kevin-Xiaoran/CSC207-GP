@@ -6,6 +6,9 @@ import interface_adapter.stock_view.StockViewModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -80,10 +83,19 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
         actionPanel.setBackground(Color.WHITE);
         actionPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JButton buyButton = new JButton("BUY");
+        final JButton buyButton = new JButton("BUY");
         buyButton.setFont(new Font("SansSerif", Font.BOLD, 18));
         buyButton.setFocusPainted(false);
-        buyButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Buy action triggered!"));
+        // buyButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Buy action triggered!"));
+        // respond to buy button
+        buyButton.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        viewManagerModel.setState("buy view");
+                        viewManagerModel.firePropertyChanged();
+                    }
+                }
+        );
 
         JButton favoriteButton = new JButton("★");
         favoriteButton.setFont(new Font("SansSerif", Font.BOLD, 18));

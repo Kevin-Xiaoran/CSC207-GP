@@ -12,6 +12,9 @@ import data_access.FileUserDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
 import entity.*;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.buy_view.BuyController;
+import interface_adapter.buy_view.BuyPresenter;
+import interface_adapter.buy_view.BuyViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.change_password.LoggedInViewModel;
@@ -30,6 +33,9 @@ import interface_adapter.signup.SignupViewModel;
 import interface_adapter.stock_view.StockViewModel;
 import interface_adapter.watchlist_view.WatchListViewModel;
 import interface_adapter.portfolio.PortfolioViewModel;
+import use_case.buy.BuyInputBoundary;
+import use_case.buy.BuyInteractor;
+import use_case.buy.BuyOutputBoundary;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
@@ -69,6 +75,7 @@ public class AppBuilder {
     // thought question: is the hard dependency below a problem?
     private final DBUserDataAccessObject dbUserDataAccessObject = new DBUserDataAccessObject(userFactory, stockFactory);
     private final FileUserDataAccessObject fileUserDataAccessObject = new FileUserDataAccessObject(simulatedHoldingFactory);
+    //private final Buy
 
     private HomeView homeView;
     private HomeViewModel homeViewModel;
@@ -84,6 +91,8 @@ public class AppBuilder {
     private PortfolioViewModel portfolioViewModel;
     private StockView stockView;
     private StockViewModel stockViewModel;
+    private BuyView buyView;
+    private BuyViewModel buyViewModel;
     private ArrayList watchList = fileUserDataAccessObject.getWatchList();
 
     public AppBuilder() {
@@ -169,6 +178,17 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the Buy View to the application.
+     * @return this builder
+     */
+    public AppBuilder addBuyView() {
+        buyViewModel = new BuyViewModel();
+        buyView = new BuyView(buyViewModel, viewManagerModel);
+        cardPanel.add(buyView, buyView.getViewName());
+        return this;
+    }
+
+    /**
      * Adds the Home Use Case to the application.
      * @return this builder
      */
@@ -249,6 +269,20 @@ public class AppBuilder {
         loggedInView.setLogoutController(logoutController);
         return this;
     }
+
+    /**
+     * Adds the Buy Use Case to the application.
+     * @return this builder
+     */
+    //public AppBuilder addBuyUseCase() {
+    //    final BuyOutputBoundary buyOutputBoundary = new BuyPresenter(buyViewModel, viewManagerModel, homeViewModel);
+    //    final BuyInputBoundary buyInteractor = new BuyInteractor(
+    //            buyUserDataAccessObject, buyOutputBoundary);
+
+    //    final BuyController buyController = new BuyController(buyInteractor);
+    //    buyView.setBuyController(buyController);
+    //    return this;
+    //}
 
     /**
      * Creates the JFrame for the application and initially sets the SignupView to be displayed.
