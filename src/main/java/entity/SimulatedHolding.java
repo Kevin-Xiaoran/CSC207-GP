@@ -19,4 +19,16 @@ public interface SimulatedHolding {
      */
     int getPurchaseAmount();
 
+    /**
+     * Sets the new purchase price of the stock.
+     * @param purchasePrice the new purchase price of the stock.
+     */
+    void setPurchasePrice(double purchasePrice);
+
+    /**
+     * Sets the new purchase amount of the stock.
+     * @param purchaseAmount the new purchase amount of the stock.
+     */
+    void setPurchaseAmount(int purchaseAmount);
+
 }

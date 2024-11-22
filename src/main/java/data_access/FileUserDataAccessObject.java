@@ -11,6 +11,7 @@ import java.util.*;
 import entity.*;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
+import use_case.portfolio.PortfolioDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 import use_case.watchlist.WatchListDataAccessInterface;
 import use_case.watchlist.WatchListModifyDataAccessInterface;
@@ -18,7 +19,7 @@ import use_case.watchlist.WatchListModifyDataAccessInterface;
 /**
  * DAO for user data implemented using a File to persist the data.
  */
-public class FileUserDataAccessObject implements WatchListDataAccessInterface, WatchListModifyDataAccessInterface {
+public class FileUserDataAccessObject implements WatchListDataAccessInterface, WatchListModifyDataAccessInterface, PortfolioDataAccessInterface {
 
     private final ArrayList<String> watchList = new ArrayList<>();
     private final ArrayList<SimulatedHolding> portfolioList = new ArrayList<>();
@@ -123,7 +124,18 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
     }
 
     public void addToPortfolioList(SimulatedHolding simulatedHolding) {
-        portfolioList.add(simulatedHolding);
+        boolean duplicate = false;
+        for (SimulatedHolding data : portfolioList) {
+            if (data.getSymbol().equals(simulatedHolding.getSymbol())) {
+                data.setPurchaseAmount(simulatedHolding.getPurchaseAmount() + data.getPurchaseAmount());
+                data.setPurchasePrice(simulatedHolding.getPurchasePrice() + data.getPurchasePrice());
+                duplicate = true;
+                break;
+            }
+        }
+        if (!duplicate) {
+            portfolioList.add(simulatedHolding);
+        }
         savePortfolioList();
     }
 
