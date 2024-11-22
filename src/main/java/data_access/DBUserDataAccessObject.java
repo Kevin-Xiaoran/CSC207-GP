@@ -18,6 +18,7 @@ import use_case.home_view.HomeDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
+import use_case.watchlist.WatchListDataAccessInterface;
 
 /**
  * The DAO for user data.
@@ -26,7 +27,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         LoginUserDataAccessInterface,
         ChangePasswordUserDataAccessInterface,
         LogoutUserDataAccessInterface,
-        HomeDataAccessInterface {
+        HomeDataAccessInterface,
+        WatchListDataAccessInterface {
     private static final int SUCCESS_CODE = 200;
 
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
@@ -198,5 +200,15 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     @Override
     public String getCurrentUsername() {
         return null;
+    }
+
+    @Override
+    public ArrayList<String> getWatchList() {
+        return null;
+    }
+
+    @Override
+    public void saveWatchList() {
+
     }
 }

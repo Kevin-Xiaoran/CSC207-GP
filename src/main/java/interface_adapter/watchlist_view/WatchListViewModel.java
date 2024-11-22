@@ -11,6 +11,7 @@ import java.util.ArrayList;
  * The View Model for the WatchList View.
  */
 public class WatchListViewModel extends ViewModel<WatchListViewState> {
+
     public WatchListViewModel() {
         super("watch list view");
         setState(new WatchListViewState());

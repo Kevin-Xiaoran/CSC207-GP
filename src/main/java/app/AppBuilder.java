@@ -18,9 +18,9 @@ import interface_adapter.buy_view.BuyViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.change_password.LoggedInViewModel;
-import interface_adapter.home_view.HomeController;
-import interface_adapter.home_view.HomePresenter;
-import interface_adapter.home_view.HomeViewModel;
+import interface_adapter.home_view.*;
+import interface_adapter.home_view.WatchlistController;
+import interface_adapter.home_view.WatchlistPresenter;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
@@ -40,6 +40,10 @@ import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
 import use_case.home_view.*;
+import use_case.home_view.WatchlistInputBoundary;
+import use_case.home_view.WatchlistInteractor;
+import use_case.home_view.WatchlistOutputBoundary;
+import use_case.home_view.WatchlistOutputData;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;
@@ -204,6 +208,22 @@ public class AppBuilder {
 
         final HomeController controller = new HomeController(homeInteractor);
         homeView.setHomeController(controller);
+        return this;
+    }
+
+    /**
+     * Adds the Home Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addWatchlistUseCase() {
+        final WatchlistOutputBoundary watchlistOutputBoundary = new WatchlistPresenter(
+                viewManagerModel,
+                stockViewModel,
+                watchListViewModel);
+        final WatchlistInputBoundary watchlistInteractor = new WatchlistInteractor(dbUserDataAccessObject, watchlistOutputBoundary);
+
+        final WatchlistController controller = new WatchlistController(watchlistInteractor);
+        watchListView.setwatchlistController(controller);
         return this;
     }
 

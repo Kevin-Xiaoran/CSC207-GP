@@ -20,6 +20,7 @@ public class Main {
                                             .addLoggedInView()
                                             .addStockView()
                                             .addHomeUseCase()
+                                            .addWatchlistUseCase()
                                             .addSignupUseCase()
                                             .addLoginUseCase()
                                             .addLogoutUseCase()

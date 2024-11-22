@@ -1,10 +1,8 @@
 package view;
 
 import data_access.DBUserDataAccessObject;
-import entity.Stock;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.change_password.LoggedInState;
-import interface_adapter.login.LoginState;
+import interface_adapter.home_view.WatchlistController;
 import interface_adapter.stock_view.WatchListViewState;
 import interface_adapter.watchlist_view.WatchListViewModel;
 
@@ -23,6 +21,7 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
     private final WatchListViewModel watchListViewModel;
     private final DBUserDataAccessObject dbUserDataAccessObject;
     private final JPanel contentPanel = new JPanel();
+    private WatchlistController watchlistController;
 
     public WatchListView(WatchListViewModel viewModel, ViewManagerModel viewManagerModel, DBUserDataAccessObject dbUserDataAccessObject) {
         this.viewManagerModel = viewManagerModel;
@@ -31,6 +30,7 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
         setBackground(Color.WHITE);
         this.watchListViewModel = viewModel;
         this.watchListViewModel.addPropertyChangeListener(this);
+
 
         // return button
         final JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -59,9 +59,9 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(Color.WHITE);
 
-        addStockItem(contentPanel, "AAPL", "$226.97", "−$0.26", "+0.11%", "+$44.09");
-        addStockItem(contentPanel, "COST", "$953.20", "+$39.27", "+4.30%", "+$386.00");
-        addStockItem(contentPanel, "QQQ", "$514.07", "+$0.56", "+0.60%", "+$141.25");
+//        addStockItem(contentPanel, "AAPL", "$226.97", "−$0.26", "+0.11%", "+$44.09");
+//        addStockItem(contentPanel, "COST", "$953.20", "+$39.27", "+4.30%", "+$386.00");
+//        addStockItem(contentPanel, "QQQ", "$514.07", "+$0.56", "+0.60%", "+$141.25");
 
         add(contentPanel, BorderLayout.CENTER);
 
@@ -72,8 +72,26 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
         stockPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
         stockPanel.setBackground(Color.WHITE);
 
+        stockPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                goToStockInformation(code);
+            }
+
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                stockPanel.setBackground(new Color(240, 240, 240));
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                stockPanel.setBackground(Color.WHITE);
+            }
+        });
+
         // Left part: Stock code and price
         final JPanel leftPanel = new JPanel();
+        leftPanel.setOpaque(false);
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setBackground(Color.WHITE);
 
@@ -87,6 +105,7 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
 
         // Right part: up and down information
         final JPanel rightPanel = new JPanel();
+        rightPanel.setOpaque(false);
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBackground(Color.WHITE);
         rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 10));
@@ -122,6 +141,15 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
         contentPanel.repaint();
     }
 
+    private void goToStockInformation(String code) {
+        if (watchlistController == null) {
+            throw new IllegalStateException("WatchlistController is not initialized.");
+        }
+        final WatchListViewState currentState = watchListViewModel.getState();
+        currentState.setSymbol(code);
+        watchlistController.search(currentState.getSymbol());
+    }
+
     private void createWatchListview(ArrayList<String> WatchList) {
         for (String stockcode: WatchList) {
 //            final Stock stock = dbUserDataAccessObject.getStock(stockcode);
@@ -131,7 +159,7 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
 //            final String volume = Double.toString(stock.getVolume());
 
 //          addStockItem(contentPanel, stock.getSymbol(), "$" + price, dailyChange, dailyPercentage, volume);
-            addStockItem(contentPanel, stockcode, "$" + "123", "234", "0.45%", "1232323.23");
+            addStockItem(contentPanel, stockcode, "$" + "123", "+$" + "234", "0.45%", "100000.23");
         }
     }
 
@@ -139,5 +167,9 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
         return "WatchListView";
     }
 
+    public void setwatchlistController(WatchlistController controller) {
+        this.watchlistController = controller;
+        controller.getWatchList();
+    }
 }
 
