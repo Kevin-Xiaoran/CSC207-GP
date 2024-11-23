@@ -9,11 +9,8 @@ import javax.swing.WindowConstants;
 
 import data_access.DBUserDataAccessObject;
 import data_access.FileUserDataAccessObject;
-import data_access.InMemoryUserDataAccessObject;
 import entity.*;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.buy_view.BuyController;
-import interface_adapter.buy_view.BuyPresenter;
 import interface_adapter.buy_view.BuyViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
@@ -30,12 +27,10 @@ import interface_adapter.portfolio.PortfolioViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.stock_view.StockController;
+import interface_adapter.stock_view.StockPresenter;
 import interface_adapter.stock_view.StockViewModel;
 import interface_adapter.watchlist_view.WatchListViewModel;
-import interface_adapter.portfolio.PortfolioViewModel;
-import use_case.buy.BuyInputBoundary;
-import use_case.buy.BuyInteractor;
-import use_case.buy.BuyOutputBoundary;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
@@ -53,6 +48,10 @@ import use_case.logout.LogoutOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
+import use_case.stock.StockInputBoundary;
+import use_case.stock.StockInteractor;
+import interface_adapter.stock_view.StockOutputBoundary;
+import use_case.watchlist.WatchListModifyDataAccessInterface;
 import view.*;
 
 /**
@@ -287,6 +286,19 @@ public class AppBuilder {
 
         final LogoutController logoutController = new LogoutController(logoutInteractor);
         loggedInView.setLogoutController(logoutController);
+        return this;
+    }
+    /**
+     * Adds the Stock Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addStockUseCase() {
+        final StockOutputBoundary stockPresenter = new StockPresenter(stockViewModel, viewManagerModel);
+        final WatchListModifyDataAccessInterface watchlistDataAccess = dbUserDataAccessObject; // 确保 dbUserDataAccessObject 实现了 WatchListModifyDataAccessInterface
+        final StockInputBoundary stockInteractor = new StockInteractor(stockPresenter, watchlistDataAccess);
+        StockController stockController = new StockController(stockInteractor);
+        stockView.setStockController(stockController);
+
         return this;
     }
 

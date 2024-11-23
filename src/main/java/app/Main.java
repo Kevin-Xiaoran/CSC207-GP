@@ -25,6 +25,7 @@ public class Main {
                                             .addLoginUseCase()
                                             .addLogoutUseCase()
                                             .addChangePasswordUseCase()
+                                            .addStockUseCase()
                                             .addPortfolioView()
                                             .build();
 

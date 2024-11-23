@@ -3,12 +3,12 @@ package view;
 import entity.Stock;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.stock_view.StockViewModel;
+import interface_adapter.stock_view.StockController;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -19,6 +19,8 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
 
     private final ViewManagerModel viewManagerModel;
     private final StockViewModel stockViewModel;
+    private StockController stockController;
+
     private JLabel stockSymbolLabel;
     private JLabel stockPriceLabel;
     private JLabel openPriceLabel;
@@ -47,6 +49,10 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
         add(Box.createRigidArea(new Dimension(0, 20)));
         add(createActionButtonsPanel());
         add(Box.createVerticalGlue());
+    }
+
+    public void setStockController(StockController stockController) {
+        this.stockController = stockController;
     }
 
     private void initializeComponents(JPanel contentPanel) {
@@ -86,21 +92,26 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
         final JButton buyButton = new JButton("BUY");
         buyButton.setFont(new Font("SansSerif", Font.BOLD, 18));
         buyButton.setFocusPainted(false);
-        // buyButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Buy action triggered!"));
-        // respond to buy button
-        buyButton.addActionListener(
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        viewManagerModel.setState("buy view");
-                        viewManagerModel.firePropertyChanged();
-                    }
-                }
-        );
+
+        // Buy Button Action: Invoke the controller to buy stock
+        buyButton.addActionListener(e -> {
+            Stock currentStock = stockViewModel.getState().getStock();
+            if (currentStock != null && stockController != null) {
+                stockController.buyStock(currentStock);
+            }
+        });
 
         JButton favoriteButton = new JButton("★");
         favoriteButton.setFont(new Font("SansSerif", Font.BOLD, 18));
         favoriteButton.setFocusPainted(false);
-        favoriteButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Added to favorites!"));
+
+        // Favorite Button Action: Add or remove stock from watchlist
+        favoriteButton.addActionListener(e -> {
+            Stock currentStock = stockViewModel.getState().getStock();
+            if (currentStock != null && stockController != null) {
+                stockController.toggleWatchlist(currentStock);
+            }
+        });
 
         actionPanel.add(Box.createHorizontalGlue());
         actionPanel.add(buyButton);
@@ -121,8 +132,7 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
 
         double volume = stock.getVolume();
         String volumeText = (volume >= 1_000_000) ? (volume / 1_000_000) + " M" :
-                (volume >= 1_000) ? (volume / 1_000) + " K" :
-                        String.valueOf(volume);
+                (volume >= 1_000) ? (volume / 1_000) + " K" : String.valueOf(volume);
         volumeLabel.setText("Volume: " + volumeText);
     }
 
