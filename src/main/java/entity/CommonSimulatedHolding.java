@@ -28,4 +28,14 @@ public class CommonSimulatedHolding implements SimulatedHolding {
     public int getPurchaseAmount() {
         return amount;
     }
+
+    @Override
+    public void setPurchasePrice(double purchasePrice) {
+
+    }
+
+    @Override
+    public void setPurchaseAmount(int purchaseAmount) {
+
+    }
 }
