@@ -1,4 +1,4 @@
-package interface_adapter.stock_view;
+package use_case.stock;
 
 import entity.Stock;
 
@@ -20,4 +20,10 @@ public interface StockOutputBoundary {
      * @param stock The stock that was removed.
      */
     void presentRemoveFromWatchlist(Stock stock);
+
+    /**
+     * Updates favourite button UI.
+     * @param isFavourite is stock in watchlist.
+     */
+    void updateFavouriteButton(Boolean isFavourite);
 }

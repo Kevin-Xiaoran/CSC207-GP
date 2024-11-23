@@ -15,7 +15,7 @@ public class StockController {
         stockInteractor.buyStock(stock);
     }
 
-    public void toggleWatchlist(Stock stock) {
-        stockInteractor.toggleWatchlist(stock);
+    public void toggleWatchlist(Stock stock, Boolean shouldModifyData) {
+        stockInteractor.toggleWatchlist(stock, shouldModifyData);
     }
 }

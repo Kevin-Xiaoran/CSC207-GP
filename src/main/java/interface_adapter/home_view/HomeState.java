@@ -35,4 +35,21 @@ public class HomeState {
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
+
+    public void add(Stock stock) {
+        this.watchList.add(stock);
+        System.out.println(watchList.size());
+    }
+
+    public void remove(Stock stock) {
+        int i = 0;
+        for (Stock s : watchList) {
+            if (s.getSymbol().equals(stock.getSymbol())) {
+                break;
+            }
+            i++;
+        }
+        this.watchList.remove(i);
+        System.out.println(watchList.size());
+    }
 }

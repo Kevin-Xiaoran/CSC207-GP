@@ -38,7 +38,6 @@ import use_case.home_view.*;
 import use_case.home_view.WatchlistInputBoundary;
 import use_case.home_view.WatchlistInteractor;
 import use_case.home_view.WatchlistOutputBoundary;
-import use_case.home_view.WatchlistOutputData;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;
@@ -50,8 +49,7 @@ import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
 import use_case.stock.StockInputBoundary;
 import use_case.stock.StockInteractor;
-import interface_adapter.stock_view.StockOutputBoundary;
-import use_case.watchlist.WatchListModifyDataAccessInterface;
+import use_case.stock.StockOutputBoundary;
 import view.*;
 
 /**
@@ -78,7 +76,6 @@ public class AppBuilder {
     // thought question: is the hard dependency below a problem?
     private final DBUserDataAccessObject dbUserDataAccessObject = new DBUserDataAccessObject(userFactory, stockFactory);
     private final FileUserDataAccessObject fileUserDataAccessObject = new FileUserDataAccessObject(simulatedHoldingFactory);
-    //private final Buy
 
     private HomeView homeView;
     private HomeViewModel homeViewModel;
@@ -293,10 +290,13 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addStockUseCase() {
-        final StockOutputBoundary stockPresenter = new StockPresenter(stockViewModel, viewManagerModel);
-        final WatchListModifyDataAccessInterface watchlistDataAccess = dbUserDataAccessObject; // 确保 dbUserDataAccessObject 实现了 WatchListModifyDataAccessInterface
-        final StockInputBoundary stockInteractor = new StockInteractor(stockPresenter, watchlistDataAccess);
-        StockController stockController = new StockController(stockInteractor);
+        final StockOutputBoundary stockPresenter = new StockPresenter(stockViewModel,
+                                                                      buyViewModel,
+                                                                      homeViewModel,
+                                                                      watchListViewModel,
+                                                                      viewManagerModel);
+        final StockInputBoundary stockInteractor = new StockInteractor(stockPresenter, fileUserDataAccessObject, fileUserDataAccessObject);
+        final StockController stockController = new StockController(stockInteractor);
         stockView.setStockController(stockController);
 
         return this;

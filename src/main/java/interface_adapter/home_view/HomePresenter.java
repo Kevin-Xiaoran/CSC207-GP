@@ -51,7 +51,7 @@ public class HomePresenter implements HomeOutputBoundary {
         final StockViewState stockViewState = new StockViewState();
         stockViewState.setStock(searchOutputData.getStock());
         this.stockViewModel.setState(stockViewState);
-        this.stockViewModel.firePropertyChanged();
+        this.stockViewModel.firePropertyChanged("switchToStockView");
 
         // Clean home view error message
         this.sendErrorMessage("");

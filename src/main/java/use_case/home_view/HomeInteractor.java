@@ -71,13 +71,13 @@ public class HomeInteractor implements HomeInputBoundary {
         final ArrayList<Stock> watchList = new ArrayList<>();
 
         final StockFactory stockFactory = new CommonStockFactory();
-        final Stock aapl = stockFactory.create("AAPL", 552.2, 130.3, 100002322, 500.1, 100.23);
-        final Stock nvda = stockFactory.create("NVDA", 128.2, 148.2, 100002322, 500.1, 100.23);
-        final Stock meta = stockFactory.create("META", 11.2, 559.2, 100002322, 500.1, 100.23);
 
-        watchList.add(aapl);
-        watchList.add(nvda);
-        watchList.add(meta);
+        int i = 0;
+        for (String symbol : watchListData) {
+            final Stock stock = stockFactory.create(symbol, i, 130.3, 100002322, 500.1, 100.23);
+            watchList.add(stock);
+            i += 1;
+        }
 
 //        for (String symbol : watchListData) {
 //            final Stock stockData = homeDataAccessInterface.getStock(symbol);
