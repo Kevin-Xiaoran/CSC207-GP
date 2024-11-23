@@ -16,7 +16,6 @@ public class StockInteractor implements StockInputBoundary {
 
     @Override
     public void buyStock(Stock stock) {
-        // 通知 Presenter 执行页面跳转
         stockPresenter.presentBuyView(stock);
     }
 

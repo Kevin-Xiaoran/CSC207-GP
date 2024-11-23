@@ -2,7 +2,6 @@ package interface_adapter.stock_view;
 
 import entity.Stock;
 import interface_adapter.ViewManagerModel;
-import use_case.stock.StockOutputBoundary;
 
 public class StockPresenter implements StockOutputBoundary {
 

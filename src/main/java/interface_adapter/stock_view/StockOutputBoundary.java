@@ -1,4 +1,4 @@
-package use_case.stock;
+package interface_adapter.stock_view;
 
 import entity.Stock;
 
