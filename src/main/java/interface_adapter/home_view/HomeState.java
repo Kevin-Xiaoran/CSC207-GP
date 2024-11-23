@@ -3,6 +3,8 @@ package interface_adapter.home_view;
 import entity.Stock;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * The state for the Home View Model.
@@ -38,6 +40,11 @@ public class HomeState {
 
     public void add(Stock stock) {
         this.watchList.add(stock);
+        Collections.sort(this.watchList, new Comparator<Stock>() {
+            public int compare(Stock o1, Stock o2) {
+                return o1.getSymbol().compareTo(o2.getSymbol());
+            }
+        });
         System.out.println(watchList.size());
     }
 

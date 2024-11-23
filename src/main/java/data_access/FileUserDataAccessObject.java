@@ -58,9 +58,9 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
         }
         else {
             // If the watchlist file doesn't exist, we create a new one
-            this.watchList.add("AAPl");
+            this.watchList.add("AAPL");
+            this.watchList.add("COST");
             this.watchList.add("NVDA");
-            this.watchList.add("AMD");
             this.saveWatchList();
 
             // Get watchlist data again
@@ -99,7 +99,7 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
     // Portfolio list related APIs
     public ArrayList<SimulatedHolding> getPortfolioList() {
         // Check if watchlist.txt file exists
-        final Boolean isFileExisted = new File(mainFilePath + watchListFilePath).isFile();
+        final Boolean isFileExisted = new File(mainFilePath + portfolioFilePath).isFile();
 
         if (isFileExisted) {
             // Using FileReader and BufferedReader to read the file
@@ -137,7 +137,7 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
         final BufferedWriter writer;
         try {
             // Override original file
-            writer = new BufferedWriter(new FileWriter(mainFilePath + watchListFilePath, false));
+            writer = new BufferedWriter(new FileWriter(mainFilePath + portfolioFilePath, false));
             for (SimulatedHolding simulatedHolding : portfolioList) {
                 writer.write(simulatedHolding.getSymbol() + ",");
                 writer.write(simulatedHolding.getPurchasePrice() + ",");

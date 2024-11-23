@@ -37,8 +37,15 @@ public class HomeInteractor implements HomeInputBoundary {
 //            err.printStackTrace();
 //            homePresenter.prepareFailView("Failed to fetch stock data");
 //        }
+        String stockSymbol = searchInputData.getStockSymbol();
+        if (stockSymbol == null || stockSymbol.isEmpty()) {
+            stockSymbol = "NVDA";
+        }
+        else {
+            stockSymbol = stockSymbol.toUpperCase();
+        }
         final StockFactory stockFactory = new CommonStockFactory();
-        final Stock stock = stockFactory.create(searchInputData.getStockSymbol(), 128.2, 322.1, 100002322, 500.1, 100.23);
+        final Stock stock = stockFactory.create(stockSymbol, 128.2, 322.1, 100002322, 500.1, 100.23);
 
         final SearchOutputData searchOutputData = new SearchOutputData(stock, false);
         homePresenter.prepareSuccessView(searchOutputData);
@@ -74,7 +81,7 @@ public class HomeInteractor implements HomeInputBoundary {
 
         int i = 0;
         for (String symbol : watchListData) {
-            final Stock stock = stockFactory.create(symbol, i, 130.3, 100002322, 500.1, 100.23);
+            final Stock stock = stockFactory.create(symbol, i, i, 100002322, 500.1, 100.23);
             watchList.add(stock);
             i += 1;
         }

@@ -8,7 +8,7 @@ public class SearchInputData {
     private final String stockSymbol;
 
     public SearchInputData(String stockSymbol) {
-        this.stockSymbol = stockSymbol.toUpperCase();
+        this.stockSymbol = stockSymbol;
     }
 
     public String getStockSymbol() {

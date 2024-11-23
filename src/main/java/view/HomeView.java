@@ -85,8 +85,6 @@ public class HomeView extends JPanel implements PropertyChangeListener {
             public void actionPerformed(ActionEvent evt) {
                 if (evt.getSource().equals(searchButton)) {
                     final HomeState currentState = homeViewModel.getState();
-                    currentState.setSymbol("NVDA");
-
                     homeController.search(currentState.getSymbol());
                 }
             }
@@ -192,7 +190,8 @@ public class HomeView extends JPanel implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         final HomeState state = (HomeState) evt.getNewValue();
         if (evt.getPropertyName().equals("getWatchList")) {
-            final ArrayList<Stock> watchList = state.getWatchList();
+            // We only display first three stocks
+            final ArrayList<Stock> watchList = new ArrayList<Stock>(state.getWatchList().subList(0, 3));
             watchListContentPanel.removeAll();
             updateWatchListComponents(watchList);
             watchListContentPanel.revalidate();
