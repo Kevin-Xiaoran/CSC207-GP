@@ -5,19 +5,23 @@ package use_case.buy;
  */
 public class BuyInputData {
 
-    private final String price;
-    private final String quantity;
+    private final String symbol;
+    private final double price;
+    private final int quantity;
 
-    public BuyInputData(String price, String quantity) {
+    public BuyInputData(String symbol, double price, int quantity) {
+        this.symbol = symbol;
         this.price = price;
         this.quantity = quantity;
     }
 
-    String getPrice() {
+    public String getSymbol() { return symbol; }
+
+    public double getPrice() {
         return price;
     }
 
-    String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 

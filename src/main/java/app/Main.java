@@ -27,6 +27,8 @@ public class Main {
                                             .addChangePasswordUseCase()
                                             .addStockUseCase()
                                             .addPortfolioView()
+                                            .addBuyView()
+                                            .addBuyUseCase()
                                             .build();
 
         application.pack();

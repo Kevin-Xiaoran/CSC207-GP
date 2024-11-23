@@ -30,6 +30,9 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
     private JLabel highPriceLabel;
     private JLabel volumeLabel;
 
+    private String previousView;
+
+
     public StockView(StockViewModel stockViewModel, ViewManagerModel viewManagerModel) {
         this.viewManagerModel = viewManagerModel;
         this.stockViewModel = stockViewModel;
@@ -150,7 +153,12 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
 
     @Override
     void backButtonAction() {
-        viewManagerModel.setState("home view");
+        if ("StockView".equals(viewManagerModel.getState())) {
+            viewManagerModel.setState("WatchListView");
+        }
+        else {
+            viewManagerModel.setState("home view");
+        }
         viewManagerModel.firePropertyChanged();
     }
 
@@ -169,4 +177,9 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
             System.out.println("updateFavouriteButton" + " " + stockViewState.getIsFavorite());
         }
     }
+
+    public void setPreviousView(String viewName) {
+        this.previousView = viewName;
+    }
+
 }

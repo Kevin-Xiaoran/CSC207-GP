@@ -5,7 +5,8 @@ out/
 .idea
 .idea/easycode.ignore
 homework-5.iml
-
+/src/main/java/data_access/portfolio.txt
+/src/main/java/data_access/watchlist.txt
 target/
 
 ### Eclipse ###

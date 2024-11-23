@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
  */
 
 abstract class AbstractViewWithBackButton extends JPanel {
-    private final JButton backButton = new JButton("Back");
+    private final JButton backButton = new JButton("←");
 
     AbstractViewWithBackButton() {
         // Configure back button
@@ -19,7 +19,7 @@ abstract class AbstractViewWithBackButton extends JPanel {
         backButton.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         backButton.setFocusPainted(false);
         backButton.setContentAreaFilled(false);
-        topPanel.add(backButton, BorderLayout.WEST);
+        topPanel.add(backButton, BorderLayout.WEST);;
 
         backButton.addActionListener(new ActionListener() {
             @Override
