@@ -8,8 +8,12 @@ import java.util.ArrayList;
  * The state for the Stock View Model.
  */
 public class WatchListViewState {
+    private String symbol;
     private Stock stock;
     private ArrayList<String> watchlist;
+    public String getSymbol() {
+        return symbol;
+    }
 
     public Stock getStock() {
         return stock;
@@ -25,5 +29,8 @@ public class WatchListViewState {
 
     public void setWatchlist(ArrayList<String> newWatchlist) {
         this.watchlist = newWatchlist;
+    }
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 }
