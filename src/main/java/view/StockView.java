@@ -4,6 +4,7 @@ import entity.Stock;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.stock_view.StockViewModel;
 import interface_adapter.stock_view.StockController;
+import interface_adapter.stock_view.StockViewState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -107,9 +108,9 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
 
         // Favorite Button Action: Add or remove stock from watchlist
         favoriteButton.addActionListener(e -> {
-            Stock currentStock = stockViewModel.getState().getStock();
+            final Stock currentStock = stockViewModel.getState().getStock();
             if (currentStock != null && stockController != null) {
-                stockController.toggleWatchlist(currentStock);
+                stockController.toggleWatchlist(currentStock, true);
             }
         });
 
@@ -155,9 +156,17 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        Stock updatedStock = stockViewModel.getState().getStock();
-        if (updatedStock != null) {
-            updateStockData(updatedStock);
+        final StockViewState stockViewState = stockViewModel.getState();
+        if (evt.getPropertyName().equals("switchToStockView")) {
+            final Stock updatedStock = stockViewState.getStock();
+            if (updatedStock != null) {
+                updateStockData(updatedStock);
+                stockController.toggleWatchlist(updatedStock, false);
+            }
+        }
+        else if (evt.getPropertyName().equals("updateFavouriteButton")) {
+            // Change favourite button UI
+            System.out.println("updateFavouriteButton" + " " + stockViewState.getIsFavorite());
         }
     }
 }

@@ -11,6 +11,7 @@ public class WatchListViewState {
     private String symbol;
     private Stock stock;
     private ArrayList<String> watchlist;
+
     public String getSymbol() {
         return symbol;
     }
@@ -30,7 +31,20 @@ public class WatchListViewState {
     public void setWatchlist(ArrayList<String> newWatchlist) {
         this.watchlist = newWatchlist;
     }
+
     public void setSymbol(String symbol) {
         this.symbol = symbol;
+    }
+
+    public void add(String ticker) {
+        if (this.watchlist != null) {
+            this.watchlist.add(ticker);
+        }
+    }
+
+    public void remove(String ticker) {
+        if (this.watchlist != null) {
+            this.watchlist.remove(ticker);
+        }
     }
 }

@@ -40,7 +40,7 @@ public class WatchlistPresenter implements WatchlistOutputBoundary {
         final StockViewState stockViewState = new StockViewState();
         stockViewState.setStock(searchOutputData.getStock());
         this.stockViewModel.setState(stockViewState);
-        this.stockViewModel.firePropertyChanged();
+        this.stockViewModel.firePropertyChanged("switchToStockView");
 
         viewManagerModel.setState("StockView");
         viewManagerModel.firePropertyChanged();
