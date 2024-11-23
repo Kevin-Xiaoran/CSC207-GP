@@ -22,9 +22,9 @@ public class BuyController {
      * @param quantity the quantity of the stock
      */
 
-    public void execute(String price, String quantity) {
+    public void execute(String symbol, double price, int quantity) {
         final BuyInputData buyInputData = new BuyInputData(
-                price, quantity);
+                symbol, price, quantity);
 
         buyUseCaseInteractor.execute(buyInputData);
     }

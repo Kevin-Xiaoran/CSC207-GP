@@ -11,6 +11,8 @@ import data_access.DBUserDataAccessObject;
 import data_access.FileUserDataAccessObject;
 import entity.*;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.buy_view.BuyController;
+import interface_adapter.buy_view.BuyPresenter;
 import interface_adapter.buy_view.BuyViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
@@ -31,6 +33,9 @@ import interface_adapter.stock_view.StockController;
 import interface_adapter.stock_view.StockPresenter;
 import interface_adapter.stock_view.StockViewModel;
 import interface_adapter.watchlist_view.WatchListViewModel;
+import use_case.buy.BuyInputBoundary;
+import use_case.buy.BuyInteractor;
+import use_case.buy.BuyOutputBoundary;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
@@ -306,15 +311,15 @@ public class AppBuilder {
      * Adds the Buy Use Case to the application.
      * @return this builder
      */
-    //public AppBuilder addBuyUseCase() {
-    //    final BuyOutputBoundary buyOutputBoundary = new BuyPresenter(buyViewModel, viewManagerModel, homeViewModel);
-    //    final BuyInputBoundary buyInteractor = new BuyInteractor(
-    //            buyUserDataAccessObject, buyOutputBoundary);
+    public AppBuilder addBuyUseCase() {
+        final BuyOutputBoundary buyOutputBoundary = new BuyPresenter(buyViewModel, portfolioViewModel, viewManagerModel, homeViewModel);
+        final BuyInputBoundary buyInteractor = new BuyInteractor(
+                buyOutputBoundary, fileUserDataAccessObject);
 
-    //    final BuyController buyController = new BuyController(buyInteractor);
-    //    buyView.setBuyController(buyController);
-    //    return this;
-    //}
+        final BuyController buyController = new BuyController(buyInteractor);
+        buyView.setBuyController(buyController);
+        return this;
+    }
 
     /**
      * Creates the JFrame for the application and initially sets the SignupView to be displayed.
