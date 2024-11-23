@@ -30,6 +30,8 @@ import interface_adapter.portfolio.PortfolioViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.stock_view.StockController;
+import interface_adapter.stock_view.StockPresenter;
 import interface_adapter.stock_view.StockViewModel;
 import interface_adapter.watchlist_view.WatchListViewModel;
 import interface_adapter.portfolio.PortfolioViewModel;
@@ -49,6 +51,10 @@ import use_case.logout.LogoutOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
+import use_case.stock.StockInputBoundary;
+import use_case.stock.StockInteractor;
+import use_case.stock.StockOutputBoundary;
+import use_case.watchlist.WatchListModifyDataAccessInterface;
 import view.*;
 
 /**
@@ -267,6 +273,19 @@ public class AppBuilder {
 
         final LogoutController logoutController = new LogoutController(logoutInteractor);
         loggedInView.setLogoutController(logoutController);
+        return this;
+    }
+    /**
+     * Adds the Stock Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addStockUseCase() {
+        final StockOutputBoundary stockPresenter = new StockPresenter(stockViewModel, viewManagerModel);
+        final WatchListModifyDataAccessInterface watchlistDataAccess = dbUserDataAccessObject; // 确保 dbUserDataAccessObject 实现了 WatchListModifyDataAccessInterface
+        final StockInputBoundary stockInteractor = new StockInteractor(stockPresenter, watchlistDataAccess);
+        StockController stockController = new StockController(stockInteractor);
+        stockView.setStockController(stockController);
+
         return this;
     }
 
