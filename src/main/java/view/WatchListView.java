@@ -1,5 +1,7 @@
 package view;
 
+import view.HomeViewComponents.ScrollablePanel;
+
 import data_access.DBUserDataAccessObject;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.home_view.WatchlistController;
@@ -20,7 +22,7 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
     private final ViewManagerModel viewManagerModel;
     private final WatchListViewModel watchListViewModel;
     private final DBUserDataAccessObject dbUserDataAccessObject;
-    private final JPanel contentPanel = new JPanel();
+    private final ScrollablePanel contentPanel = new ScrollablePanel();
     private WatchlistController watchlistController;
 
     public WatchListView(WatchListViewModel viewModel, ViewManagerModel viewManagerModel, DBUserDataAccessObject dbUserDataAccessObject) {
@@ -30,7 +32,6 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
         setBackground(Color.WHITE);
         this.watchListViewModel = viewModel;
         this.watchListViewModel.addPropertyChangeListener(this);
-
 
         // return button
         final JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -63,14 +64,26 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
 //        addStockItem(contentPanel, "COST", "$953.20", "+$39.27", "+4.30%", "+$386.00");
 //        addStockItem(contentPanel, "QQQ", "$514.07", "+$0.56", "+0.60%", "+$141.25");
 
-        add(contentPanel, BorderLayout.CENTER);
+        JScrollPane scrollPane = contentPanel.wrapInScrollPane();
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        add(scrollPane, BorderLayout.CENTER);
 
     }
 
     private void addStockItem(JPanel contentPanel, String code, String price, String dailyChange, String dailyPercentage, String volume) {
         final JPanel stockPanel = new JPanel(new BorderLayout());
-        stockPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
         stockPanel.setBackground(Color.WHITE);
+
+        final boolean isFirstStock = contentPanel.getComponentCount() == 0;
+        if (isFirstStock) {
+            stockPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.LIGHT_GRAY));
+        }
+        else {
+            stockPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+        }
+
+        stockPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
+        stockPanel.setMinimumSize(new Dimension(0, 80));
 
         stockPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -97,26 +110,30 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
 
         final JLabel stockCodeLabel = new JLabel(code);
         stockCodeLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+
         final JLabel stockPriceLabel = new JLabel(price);
         stockPriceLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
 
+        leftPanel.add(Box.createVerticalGlue());
         leftPanel.add(stockCodeLabel);
         leftPanel.add(stockPriceLabel);
+        leftPanel.add(Box.createVerticalGlue());
 
         // Right part: up and down information
         final JPanel rightPanel = new JPanel();
         rightPanel.setOpaque(false);
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBackground(Color.WHITE);
-        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 10));
 
         final JLabel dailyChangeLabel = new JLabel(dailyChange + " (" + dailyPercentage + ")");
         dailyChangeLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
         final JLabel volumeLabel = new JLabel("Volume: " + volume);
         volumeLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
 
+        rightPanel.add(Box.createVerticalGlue());
         rightPanel.add(dailyChangeLabel);
         rightPanel.add(volumeLabel);
+        rightPanel.add(Box.createVerticalGlue());
 
         // Add all to stockPanel
         stockPanel.add(leftPanel, BorderLayout.WEST);
