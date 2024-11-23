@@ -29,9 +29,8 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
     private JLabel lowPriceLabel;
     private JLabel highPriceLabel;
     private JLabel volumeLabel;
-
+    private JButton favoriteButton;
     private String previousView;
-
 
     public StockView(StockViewModel stockViewModel, ViewManagerModel viewManagerModel) {
         this.viewManagerModel = viewManagerModel;
@@ -105,15 +104,20 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
             }
         });
 
-        JButton favoriteButton = new JButton("★");
+        // Star button for favorite
+        favoriteButton = new JButton("☆");
         favoriteButton.setFont(new Font("SansSerif", Font.BOLD, 18));
         favoriteButton.setFocusPainted(false);
 
         // Favorite Button Action: Add or remove stock from watchlist
         favoriteButton.addActionListener(e -> {
-            final Stock currentStock = stockViewModel.getState().getStock();
+            Stock currentStock = stockViewModel.getState().getStock();
             if (currentStock != null && stockController != null) {
-                stockController.toggleWatchlist(currentStock, true);
+                boolean isFavorite = "★".equals(favoriteButton.getText());
+                stockController.toggleWatchlist(currentStock, !isFavorite);
+
+                // Toggle button text between filled and empty star
+                favoriteButton.setText(isFavorite ? "☆" : "★");
             }
         });
 
@@ -138,6 +142,19 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
         String volumeText = (volume >= 1_000_000) ? (volume / 1_000_000) + " M" :
                 (volume >= 1_000) ? (volume / 1_000) + " K" : String.valueOf(volume);
         volumeLabel.setText("Volume: " + volumeText);
+
+        // 星星按钮的可见性
+        updateFavoriteButtonVisibility(stock.getSymbol());
+    }
+
+    private void updateFavoriteButtonVisibility(String stockSymbol) {
+        // 隐藏 AAPL, COST, NVDA 的星星按钮
+        if ("AAPL".equals(stockSymbol) || "COST".equals(stockSymbol) || "NVDA".equals(stockSymbol)) {
+            favoriteButton.setVisible(false);
+        }
+        else {
+            favoriteButton.setVisible(true);
+        }
     }
 
     private JLabel createLabel(String text, int fontSize, int fontStyle) {
@@ -165,21 +182,15 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         final StockViewState stockViewState = stockViewModel.getState();
-        if (evt.getPropertyName().equals("switchToStockView")) {
+        if ("switchToStockView".equals(evt.getPropertyName())) {
             final Stock updatedStock = stockViewState.getStock();
             if (updatedStock != null) {
                 updateStockData(updatedStock);
-                stockController.toggleWatchlist(updatedStock, false);
             }
-        }
-        else if (evt.getPropertyName().equals("updateFavouriteButton")) {
-            // Change favourite button UI
-            System.out.println("updateFavouriteButton" + " " + stockViewState.getIsFavorite());
         }
     }
 
     public void setPreviousView(String viewName) {
         this.previousView = viewName;
     }
-
 }
