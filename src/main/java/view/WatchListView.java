@@ -148,6 +148,9 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
         final WatchListViewState currentState = watchListViewModel.getState();
         currentState.setSymbol(code);
         watchlistController.search(currentState.getSymbol());
+
+        viewManagerModel.setState("StockView");
+        viewManagerModel.firePropertyChanged();
     }
 
     private void createWatchListview(ArrayList<String> WatchList) {
