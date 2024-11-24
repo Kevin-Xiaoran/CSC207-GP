@@ -92,8 +92,8 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 if (evt.getSource().equals(searchButton)) {
-                    final HomeState currentState = homeViewModel.getState();
-                    homeController.search(currentState.getSymbol());
+                        final HomeState currentState = homeViewModel.getState();
+                        homeController.search(currentState.getSymbol());
                 }
             }
         });
@@ -137,7 +137,12 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         portfolioPanel.add(portfolioRightPanel);
         portfolioButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                homeController.switchToPortfolio();
+                if (dataAccessObject.isUserLoggedIn()) {
+                    homeController.switchToPortfolio();
+                }
+                else {
+                    showLoginRequiredDialog();
+                }
             }
         });
 
@@ -157,7 +162,12 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         watchListPanel.setBorder(BorderFactory.createEmptyBorder(16, 0, 0, 0));
         watchListButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                homeController.switchToWatchList();
+                if (dataAccessObject.isUserLoggedIn()) {
+                    homeController.switchToWatchList();
+                }
+                else {
+                    showLoginRequiredDialog();
+                }
             }
         });
         // Watch list stock information
@@ -299,5 +309,26 @@ public class HomeView extends JPanel implements PropertyChangeListener {
             loginButton.setText("Log In");
         }
         homeViewModel.firePropertyChanged();
+    }
+
+    public void showLoginRequiredDialog() {
+        final Object[] options = {"Go to Login"};
+        final int response = JOptionPane.showOptionDialog(
+                this,
+                "You need to login first",
+                "Login Required",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        if (response == JOptionPane.YES_OPTION) {
+            dataAccessObject.setUserLoggedIn(true);
+            dataAccessObject.saveUserLoginStatus();
+            changeLoginButtonText();
+            homeController.switchToLoginView();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package view;
 
+import data_access.FileUserDataAccessObject;
 import entity.Stock;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.stock_view.StockViewModel;
@@ -30,9 +31,15 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
     private JLabel highPriceLabel;
     private JLabel volumeLabel;
     private JButton favoriteButton;
+    private JButton buyButton;
     private String previousView;
 
+    private FileUserDataAccessObject fileUserDataAccessObject = new FileUserDataAccessObject();
+
     public StockView(StockViewModel stockViewModel, ViewManagerModel viewManagerModel) {
+        fileUserDataAccessObject.isUserLoggedIn();
+        fileUserDataAccessObject.saveUserLoginStatus();
+
         this.viewManagerModel = viewManagerModel;
         this.stockViewModel = stockViewModel;
 
@@ -92,7 +99,7 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
         actionPanel.setBackground(Color.WHITE);
         actionPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        final JButton buyButton = new JButton("BUY");
+        buyButton = new JButton("BUY");
         buyButton.setFont(new Font("SansSerif", Font.BOLD, 18));
         buyButton.setFocusPainted(false);
 
@@ -154,6 +161,11 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
         }
     }
 
+    private void setButtonVisible(boolean visible) {
+        favoriteButton.setVisible(visible);
+        buyButton.setVisible(visible);
+    }
+
     private JLabel createLabel(String text, int fontSize, int fontStyle) {
         final JLabel label = new JLabel(text);
         label.setFont(new Font("SansSerif", fontStyle, fontSize));
@@ -192,6 +204,7 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
             // Toggle button text between filled and empty star
             favoriteButton.setText(stockViewState.getIsFavorite() ? "★" : "☆");
         }
+        setButtonVisible(fileUserDataAccessObject.isUserLoggedIn());
     }
 
     public void setPreviousView(String viewName) {
