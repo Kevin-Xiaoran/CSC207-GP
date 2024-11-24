@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.*;
 
 import entity.*;
+import use_case.buy.BuyUserDataAccessInterface;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.portfolio.PortfolioDataAccessInterface;
@@ -19,7 +20,7 @@ import use_case.watchlist.WatchListModifyDataAccessInterface;
 /**
  * DAO for user data implemented using a File to persist the data.
  */
-public class FileUserDataAccessObject implements WatchListDataAccessInterface, WatchListModifyDataAccessInterface, PortfolioDataAccessInterface {
+public class FileUserDataAccessObject implements WatchListDataAccessInterface, WatchListModifyDataAccessInterface, PortfolioDataAccessInterface, BuyUserDataAccessInterface {
 
     private final ArrayList<String> watchList = new ArrayList<>();
     private final ArrayList<SimulatedHolding> portfolioList = new ArrayList<>();
@@ -27,8 +28,14 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
     private final String mainFilePath = "src/main/java/data_access/";
     private final String watchListFilePath = "watchlist.txt";
     private final String portfolioFilePath = "portfolio.txt";
+    private final String userIsLoggedInFilePath = "userIsLoggedIn.txt";
 
-    private final SimulatedHoldingFactory simulatedHoldingFactory;
+    private SimulatedHoldingFactory simulatedHoldingFactory;
+
+    private boolean userIsLoggedIn;
+
+    public FileUserDataAccessObject() {
+    }
 
     public FileUserDataAccessObject(SimulatedHoldingFactory simulatedHoldingFactory) {
         this.simulatedHoldingFactory = simulatedHoldingFactory;
@@ -173,4 +180,44 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
         portfolioList.remove(simulatedHolding);
         savePortfolioList();
     }
+
+    // Method to get the login status of the user
+    public boolean isUserLoggedIn() {
+        // Check whether the file exists
+        final File file = new File(mainFilePath + userIsLoggedInFilePath);
+        if (file.isFile()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                final String line = reader.readLine();
+                if (line != null) {
+                    // Converts the read string to a Boolean value
+                    userIsLoggedIn = Boolean.parseBoolean(line);
+                }
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        } else {
+            // If the file does not exist, the default setting is not logged in
+            userIsLoggedIn = false;
+            saveUserLoginStatus();
+        }
+        return userIsLoggedIn;
+    }
+
+    // Method to save the login status of the user
+    public void saveUserLoginStatus() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(mainFilePath + userIsLoggedInFilePath, false))) {
+            // Converts a Boolean value to a string and writes it to a file
+            writer.write(Boolean.toString(userIsLoggedIn));
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    // Change the login status of the user
+    public void setUserLoggedIn(boolean loggedIn) {
+        this.userIsLoggedIn = loggedIn;
+        saveUserLoginStatus();
+    }
 }
+
+
