@@ -114,10 +114,7 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
             Stock currentStock = stockViewModel.getState().getStock();
             if (currentStock != null && stockController != null) {
                 boolean isFavorite = "★".equals(favoriteButton.getText());
-                stockController.toggleWatchlist(currentStock, !isFavorite);
-
-                // Toggle button text between filled and empty star
-                favoriteButton.setText(isFavorite ? "☆" : "★");
+                stockController.toggleWatchlist(currentStock, true);
             }
         });
 
@@ -187,6 +184,13 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
             if (updatedStock != null) {
                 updateStockData(updatedStock);
             }
+
+            // Update favourite button UI only
+            stockController.toggleWatchlist(updatedStock, false);
+        }
+        else if ("updateFavouriteButton".equals(evt.getPropertyName())) {
+            // Toggle button text between filled and empty star
+            favoriteButton.setText(stockViewState.getIsFavorite() ? "★" : "☆");
         }
     }
 

@@ -37,6 +37,7 @@ public class HomeInteractor implements HomeInputBoundary {
 //            err.printStackTrace();
 //            homePresenter.prepareFailView("Failed to fetch stock data");
 //        }
+        // Default search symbol is NVDA
         String stockSymbol = searchInputData.getStockSymbol();
         if (stockSymbol == null || stockSymbol.isEmpty()) {
             stockSymbol = "NVDA";
