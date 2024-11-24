@@ -6,12 +6,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -37,7 +32,6 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
 
     private final JButton signUp;
     private final JButton logIn;
-    private final JButton cancel;
     private final ViewManagerModel viewManagerModel;
     private LoginController loginController;
 
@@ -61,9 +55,6 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         logIn = new JButton("Log In");
         buttons.add(logIn);
 
-        cancel = new JButton("Cancel");
-        buttons.add(cancel);
-
         signUp.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
@@ -86,14 +77,6 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                     }
                 }
         );
-
-        cancel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                viewManagerModel.setState("home view");
-                viewManagerModel.firePropertyChanged();
-            }
-        });
 
         usernameInputField.getDocument().addDocumentListener(new DocumentListener() {
 
