@@ -1,5 +1,7 @@
 package view;
 
+import data_access.FileUserDataAccessObject;
+import entity.SimulatedHoldingFactory;
 import entity.Stock;
 import interface_adapter.change_password.IsLoggedIn;
 import interface_adapter.home_view.HomeController;
@@ -52,7 +54,13 @@ public class HomeView extends JPanel implements PropertyChangeListener {
     // Login/Logout component
     private JButton loginButton = new JButton();
 
+    // Add DAO
+    private final FileUserDataAccessObject dataAccessObject;
+
     public HomeView(HomeViewModel homeViewModel) {
+
+        this.dataAccessObject = new FileUserDataAccessObject();
+
         // Set up homeViewModel and listen any upcoming events
         this.homeViewModel = homeViewModel;
         this.homeViewModel.addPropertyChangeListener(this);
@@ -163,16 +171,17 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         final JPanel loginPanel = new JPanel();
         loginButton.setPreferredSize(new Dimension(150, 32));
         loginPanel.add(loginButton);
-        loginButton.setText("Log Out");
+        changeLoginButtonText();
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-//                if (IsLoggedIn.isLoggedIn()) {
-//                    showLogoutDialog();
-//                }
-//                else {
-//                    homeController.switchToLoginView();
-//                }
-                homeController.switchToLoginView();
+                if (dataAccessObject.isUserLoggedIn()) {
+                    // If you are logged in, the logout dialog box is displayed
+                    showLogoutDialog();
+                } else {
+                    // If you are not logged in, switch to the login view
+                    homeController.switchToLoginView();
+                }
+
             }
         });
 
@@ -271,21 +280,22 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         homeController.getWatchList();
     }
 
-    public void changeLoginButtonText() {
-        if (IsLoggedIn.isLoggedIn()) {
-            loginButton.setText("Log Out");
-        }
-        else {
-            loginButton.setText("Log In");
-        }
-    }
-
     public void showLogoutDialog() {
         final int response = JOptionPane.showConfirmDialog(this, "Do you want to logout?", "Confirm", JOptionPane.YES_NO_OPTION);
 
         if (response == JOptionPane.YES_OPTION) {
-            IsLoggedIn.setLoggedIn(false);
+            dataAccessObject.setUserLoggedIn(false);
+            dataAccessObject.saveUserLoginStatus();
             changeLoginButtonText();
         }
+    }
+
+    public void changeLoginButtonText() {
+        if (dataAccessObject.isUserLoggedIn()) {
+            loginButton.setText("Log Out");
+        } else {
+            loginButton.setText("Log In");
+        }
+        homeViewModel.firePropertyChanged();
     }
 }
