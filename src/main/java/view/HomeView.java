@@ -178,6 +178,8 @@ public class HomeView extends JPanel implements PropertyChangeListener {
                 } else {
                     // If you are not logged in, switch to the login view
                     homeController.switchToLoginView();
+                    dataAccessObject.setUserLoggedIn(true);
+                    changeLoginButtonText();
                 }
 
             }
