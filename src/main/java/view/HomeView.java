@@ -179,7 +179,6 @@ public class HomeView extends JPanel implements PropertyChangeListener {
                     // If you are not logged in, switch to the login view
                     homeController.switchToLoginView();
                 }
-
             }
         });
 
@@ -209,7 +208,9 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         else if (evt.getPropertyName().equals("error")) {
             searchErrorMessageLabel.setText(state.getErrorMessage());
         }
-
+        else if (evt.getPropertyName().equals("error")) {
+            changeLoginButtonText();
+        }
     }
 
     public void updateLabelStyle(JLabel label, int fontSize) {
@@ -258,7 +259,7 @@ public class HomeView extends JPanel implements PropertyChangeListener {
             }
         });
 
-        rightPanel.add(viewStockButton);
+//        rightPanel.add(viewStockButton);
 
         // Add all to stockPanel
         stockPanel.add(leftPanel, BorderLayout.WEST);
