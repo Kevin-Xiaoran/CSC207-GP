@@ -1,22 +1,33 @@
 package view;
 
+import entity.SimulatedHolding;
+import entity.Stock;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.portfolio.PortfolioController;
+import interface_adapter.portfolio.PortfolioState;
 import interface_adapter.portfolio.PortfolioViewModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
 import javax.swing.border.Border;
 import javax.swing.BorderFactory;
 
 
-public class PortfolioView extends JPanel {
+public class PortfolioView extends JPanel implements PropertyChangeListener {
 
+    private final PortfolioViewModel portfolioViewModel;
     private final ViewManagerModel viewManagerModel;
+    private PortfolioController portfolioController;
 
-    public PortfolioView(PortfolioViewModel viewModel, ViewManagerModel viewManagerModel) {
+    public PortfolioView(PortfolioViewModel portfolioViewModel, ViewManagerModel viewManagerModel) {
+        this.portfolioViewModel = portfolioViewModel;
+        this.portfolioViewModel.addPropertyChangeListener(this);
         this.viewManagerModel = viewManagerModel;
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
@@ -199,5 +210,23 @@ public class PortfolioView extends JPanel {
     public String getViewName() {
         return "PortfolioView";
     }
-}
 
+    public void setController(PortfolioController controller) {
+        this.portfolioController = controller;
+
+        // Load portfolio list data
+        controller.getPortfolioList();
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        // Listen getPortfolioList event
+        if (evt.getPropertyName().equals("getPortfolioList")) {
+            final PortfolioState portfolioState = portfolioViewModel.getState();
+            final ArrayList<SimulatedHolding> portfolioList = portfolioState.getSimulatedHoldings();
+            final ArrayList<Stock> stockList = portfolioState.getStocks();
+            System.out.println("Portfolio list size: " + portfolioList.size());
+            // Update UI components based on data
+        }
+    }
+}
