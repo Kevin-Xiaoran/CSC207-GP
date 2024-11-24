@@ -72,7 +72,7 @@ public class StockPresenter implements StockOutputBoundary {
 
         // Pass new watchlist data to watchListView
         watchListViewState.remove(stock.getSymbol());
-        watchListViewModel.firePropertyChanged("getWatchList");
+        watchListViewModel.firePropertyChanged("watchList");
     }
 
     @Override
