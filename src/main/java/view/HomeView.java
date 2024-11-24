@@ -92,14 +92,8 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 if (evt.getSource().equals(searchButton)) {
-                    if (dataAccessObject.isUserLoggedIn()) {
                         final HomeState currentState = homeViewModel.getState();
                         homeController.search(currentState.getSymbol());
-                    }
-                    else {
-                        showLoginRequiredDialog();
-                    }
-
                 }
             }
         });
