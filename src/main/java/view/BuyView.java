@@ -67,7 +67,7 @@ public class BuyView extends JPanel implements ActionListener, PropertyChangeLis
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         final BuyState buyState = buyViewModel.getState();
-                        // 从状态中获取价格，不需要从输入字段获取
+                        // Get the price from the status, not from the input field
                         buyController.execute(
                                 buyState.getSymbol(),
                                 Double.parseDouble(buyState.getPrice()),
