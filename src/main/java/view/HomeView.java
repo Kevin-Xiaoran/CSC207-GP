@@ -210,11 +210,15 @@ public class HomeView extends JPanel implements PropertyChangeListener {
 
     public void updateWatchListComponents(ArrayList<Stock> watchList) {
         for (Stock stock : watchList) {
-            this.addWatchListItem(watchListContentPanel, stock.getSymbol(), String.valueOf(stock.getClosePrice()));
+            final String symbol = stock.getSymbol();
+            final String price = String.valueOf(stock.getClosePrice());
+            final String dailyChange = String.valueOf(stock.getDailyChange());
+            final String dailyPercentage = (((stock.getDailyChange() / stock.getOpenPrice()) * 100)) + "%";
+            this.addWatchListItem(watchListContentPanel, symbol, price, dailyChange, dailyPercentage);
         }
     }
 
-    private void addWatchListItem(JPanel contentPanel, String code, String price) {
+    private void addWatchListItem(JPanel contentPanel, String code, String price, String dailyChange, String dailyPercentage) {
         final JPanel stockPanel = new JPanel(new BorderLayout());
         stockPanel.setBackground(Color.WHITE);
 
@@ -224,19 +228,23 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setBackground(Color.WHITE);
 
-        final JLabel stockCodeLabel = new JLabel("- " + code);
-        stockCodeLabel.setFont(new Font(FONTFAMILY, Font.BOLD, 16));
-        final JLabel stockPriceLabel = new JLabel(price);
-        stockPriceLabel.setFont(new Font(FONTFAMILY, Font.PLAIN, 14));
-
-        leftPanel.add(stockCodeLabel);
-        leftPanel.add(stockPriceLabel);
-
         // Right part: up and down information
         final JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBackground(Color.WHITE);
         rightPanel.setBorder(BorderFactory.createEmptyBorder(24, 0, 0, 5));
+
+        final JLabel stockCodeLabel = new JLabel("- " + code);
+        stockCodeLabel.setFont(new Font(FONTFAMILY, Font.BOLD, 16));
+        final JLabel stockPriceLabel = new JLabel(price);
+        stockPriceLabel.setFont(new Font(FONTFAMILY, Font.PLAIN, 14));
+
+        final JLabel dailyChangeLabel = new JLabel(dailyChange + " (" + dailyPercentage + ")");
+        dailyChangeLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+
+        leftPanel.add(stockCodeLabel);
+        leftPanel.add(stockPriceLabel);
+        rightPanel.add(dailyChangeLabel);
 
         final JButton viewStockButton = new JButton(RIGHTARROW);
         viewStockButton.addActionListener(new ActionListener() {
