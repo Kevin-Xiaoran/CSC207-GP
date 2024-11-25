@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 import entity.*;
@@ -175,15 +177,26 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
 
     public void addToPortfolioList(SimulatedHolding simulatedHolding) {
         boolean duplicate = false;
-        for (SimulatedHolding data : portfolioList) {
+        SimulatedHolding updatedHolding = null;
+
+        for (SimulatedHolding data : new ArrayList<>(portfolioList)) {
             if (data.getSymbol().equals(simulatedHolding.getSymbol())) {
-                data.setPurchaseAmount(simulatedHolding.getPurchaseAmount() + data.getPurchaseAmount());
-                data.setPurchasePrice(simulatedHolding.getPurchasePrice() + data.getPurchasePrice());
+                int newAmount = simulatedHolding.getPurchaseAmount() + data.getPurchaseAmount();
+                double newPrice = roundToOneDecimalPlace(
+                        (simulatedHolding.getPurchasePrice() * simulatedHolding.getPurchaseAmount()
+                                + data.getPurchasePrice() * data.getPurchaseAmount()) / newAmount);
+
+                updatedHolding = simulatedHoldingFactory.create(data.getSymbol(), newPrice, newAmount);
+
+                portfolioList.remove(data);
                 duplicate = true;
                 break;
             }
         }
-        if (!duplicate) {
+        if (duplicate) {
+            portfolioList.add(updatedHolding);
+        }
+        else {
             portfolioList.add(simulatedHolding);
         }
         savePortfolioList();
@@ -231,6 +244,19 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
         this.userIsLoggedIn = loggedIn;
         saveUserLoginStatus();
     }
+
+    /**
+     * Helper method to round a double to one decimal place.
+     * @param value The double value to be rounded.
+     * @return The rounded value.
+     */
+    private double roundToOneDecimalPlace(double value) {
+        return BigDecimal.valueOf(value)
+                .setScale(1, RoundingMode.HALF_UP)
+                .doubleValue();
+    }
 }
+
+
 
 
