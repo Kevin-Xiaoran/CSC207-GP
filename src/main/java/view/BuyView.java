@@ -40,6 +40,7 @@ public class BuyView extends JPanel implements ActionListener, PropertyChangeLis
     public BuyView(BuyViewModel viewModel, ViewManagerModel viewManagerModel) {
         this.viewManagerModel = viewManagerModel;
         this.buyViewModel = viewModel;
+        this.buyViewModel.addPropertyChangeListener(this);
 
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
@@ -52,6 +53,9 @@ public class BuyView extends JPanel implements ActionListener, PropertyChangeLis
         final LabelTextPanel quantityInfo = new LabelTextPanel(
                 new JLabel("Quantity"), quantityInputField);
 
+        priceInputField.setEditable(false);
+        priceInputField.setText(buyViewModel.getState().getPrice());
+
         final JPanel buttons = new JPanel();
         buy = new JButton("Buy");
         buttons.add(buy);
@@ -63,7 +67,11 @@ public class BuyView extends JPanel implements ActionListener, PropertyChangeLis
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         final BuyState buyState = buyViewModel.getState();
-                        buyController.execute(buyState.getSymbol(), Double.parseDouble(buyState.getPrice()), Integer.parseInt(quantityInputField.getText()));
+                        // Get the price from the status, not from the input field
+                        buyController.execute(
+                                buyState.getSymbol(),
+                                Double.parseDouble(buyState.getPrice()),
+                                Integer.parseInt(quantityInputField.getText()));
                     }
                 }
         );
@@ -144,6 +152,7 @@ public class BuyView extends JPanel implements ActionListener, PropertyChangeLis
     public void propertyChange(PropertyChangeEvent evt) {
         final BuyState state = (BuyState) evt.getNewValue();
         setFields(state);
+        setPrice();
     }
 
     private void setFields(BuyState state) {
@@ -157,5 +166,9 @@ public class BuyView extends JPanel implements ActionListener, PropertyChangeLis
 
     public void setBuyController(BuyController buyController) {
         this.buyController = buyController;
+    }
+
+    public void setPrice() {
+        this.priceInputField.setText(buyViewModel.getState().getPrice());
     }
 }
