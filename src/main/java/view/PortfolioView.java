@@ -118,7 +118,14 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
         addStockItem(contentPanel, "COST", "$953.20", "+$39.27", "+4.30%", "+$386.00", "+68.03%");
         addStockItem(contentPanel, "QQQ", "$514.07", "+$0.56", "+0.60%", "+$141.25", "+37.87%");
 
-        add(contentPanel, BorderLayout.CENTER);
+        // Wrap the content panel in a JScrollPane
+        final JScrollPane scrollPane = new JScrollPane(contentPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        // Set the preferred size of the scroll pane
+        scrollPane.setPreferredSize(new Dimension(400, 300));
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     private void percentChangeLayout(JPanel statisticsPanel, String title, String totalChange, String totalPercentage) {
