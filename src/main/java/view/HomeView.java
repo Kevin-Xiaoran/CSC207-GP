@@ -213,7 +213,7 @@ public class HomeView extends JPanel implements PropertyChangeListener {
             final String symbol = stock.getSymbol();
             final String price = String.valueOf(stock.getClosePrice());
             final String dailyChange = String.valueOf(stock.getDailyChange());
-            final String dailyPercentage = (((stock.getDailyChange() / stock.getOpenPrice()) * 100)) + "%";
+            final String dailyPercentage = stock.getDailyPercentage() + "%";
             this.addWatchListItem(watchListContentPanel, symbol, price, dailyChange, dailyPercentage);
         }
     }
