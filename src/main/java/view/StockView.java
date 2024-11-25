@@ -179,12 +179,7 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
 
     @Override
     void backButtonAction() {
-        if ("StockView".equals(viewManagerModel.getState())) {
-            viewManagerModel.setState("WatchListView");
-        }
-        else {
-            viewManagerModel.setState("home view");
-        }
+        viewManagerModel.popView();
         viewManagerModel.firePropertyChanged();
     }
 

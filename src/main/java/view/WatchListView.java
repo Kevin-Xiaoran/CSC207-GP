@@ -49,8 +49,7 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                viewManagerModel.setState("home view");
-                viewManagerModel.firePropertyChanged();
+                viewManagerModel.popView();
             }
         });
 
@@ -166,8 +165,7 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
         currentState.setSymbol(code);
         watchlistController.search(currentState.getSymbol());
 
-        viewManagerModel.setState("StockView");
-        viewManagerModel.firePropertyChanged();
+        viewManagerModel.pushView("StockView");
     }
 
     private void createWatchListview(ArrayList<String> WatchList) {

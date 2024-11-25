@@ -56,8 +56,7 @@ public class HomePresenter implements HomeOutputBoundary {
         // Clean home view error message
         this.sendErrorMessage("");
 
-        viewManagerModel.setState("StockView");
-        viewManagerModel.firePropertyChanged();
+        viewManagerModel.pushView("StockView");
     }
 
     @Override
@@ -69,6 +68,8 @@ public class HomePresenter implements HomeOutputBoundary {
     public void switchToPortfolio() {
         viewManagerModel.setState("PortfolioView");
         viewManagerModel.firePropertyChanged();
+
+        viewManagerModel.pushView("PortfolioView");
     }
 
     @Override
@@ -79,8 +80,7 @@ public class HomePresenter implements HomeOutputBoundary {
         watchListViewModel.setState(watchListViewState);
         watchListViewModel.firePropertyChanged("watchList");
 
-        viewManagerModel.setState("WatchListView");
-        viewManagerModel.firePropertyChanged();
+        viewManagerModel.pushView("WatchListView");
     }
 
     @Override
