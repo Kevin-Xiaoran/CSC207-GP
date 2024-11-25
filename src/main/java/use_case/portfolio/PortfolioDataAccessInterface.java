@@ -14,4 +14,6 @@ public interface PortfolioDataAccessInterface {
 
     public void removeFromPortfolioList(SimulatedHolding simulatedHolding);
 
+    public void createPortfolioList();
+
 }

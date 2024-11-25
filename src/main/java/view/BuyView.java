@@ -82,8 +82,6 @@ public class BuyView extends JPanel implements ActionListener, PropertyChangeLis
                 final BuyState currentState = buyViewModel.getState();
                 currentState.setQuantity(quantityInputField.getText());
                 buyViewModel.setState(currentState);
-
-                System.out.println("Quantity:" + currentState.getQunatity());
             }
 
             @Override
@@ -110,8 +108,6 @@ public class BuyView extends JPanel implements ActionListener, PropertyChangeLis
                 final BuyState currentState = buyViewModel.getState();
                 currentState.setPrice(new String(priceInputField.getText()));
                 buyViewModel.setState(currentState);
-
-                System.out.println("Price:" + currentState.getPrice());
             }
 
             @Override

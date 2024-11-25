@@ -211,4 +211,9 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     public void saveWatchList() {
 
     }
+
+    @Override
+    public void createWatchList() {
+
+    }
 }

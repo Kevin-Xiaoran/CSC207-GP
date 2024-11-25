@@ -60,4 +60,11 @@ public class HomeController {
     public void getWatchList() {
         homeUseCaseInteractor.getWatchListData();
     }
+
+    /**
+     * Delete watchlist and portfolio data, and updates relative views
+     */
+    public void deleteLocalData() {
+        homeUseCaseInteractor.deleteLocalData();
+    }
 }

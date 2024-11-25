@@ -33,6 +33,9 @@ public class BuyInteractor implements BuyInputBoundary {
         // Pass data to Portfolio View
         final BuyOutputData buyOutputData = new BuyOutputData(simulatedHolding);
         buyPresenter.prepareSuccessView(buyOutputData);
+
+        // Tempory output data
+        System.out.println("User purchases: " + quantity + " " + symbol + " stock(s) at $" + price);
     }
 
     @Override

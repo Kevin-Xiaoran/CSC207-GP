@@ -36,4 +36,9 @@ public interface HomeInputBoundary {
      * Executes the switch to Signup view use case.
      */
     void getWatchListData();
+
+    /**
+     * Executes the switch to Signup view use case.
+     */
+    void deleteLocalData();
 }

@@ -97,10 +97,23 @@ public class HomePresenter implements HomeOutputBoundary {
 
     @Override
     public void getWatchListData(ArrayList<Stock> watchList) {
-        final HomeState homeState = new HomeState();
+        final HomeState homeState = this.homeViewModel.getState();
         homeState.setWatchList(watchList);
         this.homeViewModel.setState(homeState);
         this.homeViewModel.firePropertyChanged("getWatchList");
+    }
+
+    @Override
+    public void deleteLocalData() {
+        final HomeState homeState = this.homeViewModel.getState();
+        homeState.resetWatchList();
+        homeViewModel.setState(homeState);
+        homeViewModel.firePropertyChanged("getWatchList");
+
+        final WatchListViewState watchListViewState = this.watchListViewModel.getState();
+        watchListViewState.resetWatchlist();
+        watchListViewModel.setState(watchListViewState);
+        watchListViewModel.firePropertyChanged("watchList");
     }
 
     // Helper function
