@@ -25,6 +25,8 @@ import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logout.LogoutController;
 import interface_adapter.logout.LogoutPresenter;
+import interface_adapter.portfolio.PortfolioController;
+import interface_adapter.portfolio.PortfolioPresenter;
 import interface_adapter.portfolio.PortfolioViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
@@ -49,6 +51,9 @@ import use_case.login.LoginOutputBoundary;
 import use_case.logout.LogoutInputBoundary;
 import use_case.logout.LogoutInteractor;
 import use_case.logout.LogoutOutputBoundary;
+import use_case.portfolio.PortfolioInputBoundary;
+import use_case.portfolio.PortfolioInteractor;
+import use_case.portfolio.PortfolioOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
@@ -205,7 +210,10 @@ public class AppBuilder {
                                                                         portfolioViewModel,
                                                                         stockViewModel,
                                                                         watchListViewModel);
-        final HomeInputBoundary homeInteractor = new HomeInteractor(dbUserDataAccessObject, fileUserDataAccessObject, homeOutputBoundary);
+        final HomeInputBoundary homeInteractor = new HomeInteractor(dbUserDataAccessObject,
+                fileUserDataAccessObject,
+                fileUserDataAccessObject,
+                homeOutputBoundary);
 
         final HomeController controller = new HomeController(homeInteractor);
         homeView.setHomeController(controller);
@@ -318,6 +326,15 @@ public class AppBuilder {
 
         final BuyController buyController = new BuyController(buyInteractor);
         buyView.setBuyController(buyController);
+        return this;
+    }
+
+    public AppBuilder addPortfolioUseCase() {
+        final PortfolioOutputBoundary portfolioPresenter = new PortfolioPresenter(portfolioViewModel);
+        final PortfolioInputBoundary portfolioInteractor = new PortfolioInteractor(fileUserDataAccessObject, dbUserDataAccessObject ,portfolioPresenter);
+        final PortfolioController portfolioController = new PortfolioController(portfolioInteractor);
+        portfolioView.setController(portfolioController);
+
         return this;
     }
 

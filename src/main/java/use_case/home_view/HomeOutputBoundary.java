@@ -48,4 +48,8 @@ public interface HomeOutputBoundary {
      */
     void getWatchListData(ArrayList<Stock> watchList);
 
+    /**
+     * Delete watchlist and portfolio data, and updates relative views
+     */
+    void deleteLocalData();
 }

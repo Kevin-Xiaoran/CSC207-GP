@@ -211,7 +211,11 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         final HomeState state = (HomeState) evt.getNewValue();
         if (evt.getPropertyName().equals("getWatchList")) {
             // We only display first three stocks
-            final ArrayList<Stock> watchList = new ArrayList<Stock>(state.getWatchList().subList(0, 3));
+            ArrayList<Stock> watchList = state.getWatchList();
+            if (watchList.size() != 3) {
+                watchList = new ArrayList<Stock>(state.getWatchList().subList(0, 3));
+            }
+
             watchListContentPanel.removeAll();
             updateWatchListComponents(watchList);
             watchListContentPanel.revalidate();
@@ -307,6 +311,7 @@ public class HomeView extends JPanel implements PropertyChangeListener {
             dataAccessObject.setUserLoggedIn(false);
             dataAccessObject.saveUserLoginStatus();
             changeLoginButtonText();
+            homeController.deleteLocalData();
         }
     }
 

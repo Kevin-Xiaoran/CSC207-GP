@@ -31,6 +31,8 @@ public class BuyPresenter implements BuyOutputBoundary {
     @Override
     public void prepareSuccessView(BuyOutputData response) {
         portfolioViewModel.firePropertyChanged("getPortfolioList");
+
+        switchToHomeView();
     }
 
     @Override

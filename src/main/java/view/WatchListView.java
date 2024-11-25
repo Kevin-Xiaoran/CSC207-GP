@@ -146,7 +146,9 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         if ("watchList".equals(evt.getPropertyName())) {
             final WatchListViewState watchListViewState = (WatchListViewState) evt.getNewValue();
-            updateWatchList(watchListViewState.getWatchlist());
+            if (watchListViewState.getWatchlist() != null) {
+                updateWatchList(watchListViewState.getWatchlist());
+            }
         }
     }
 

@@ -3,6 +3,7 @@ package use_case.home_view;
 import entity.CommonStockFactory;
 import entity.Stock;
 import entity.StockFactory;
+import use_case.portfolio.PortfolioDataAccessInterface;
 import use_case.watchlist.WatchListDataAccessInterface;
 
 import java.util.ArrayList;
@@ -15,13 +16,16 @@ public class HomeInteractor implements HomeInputBoundary {
 
     private final HomeDataAccessInterface homeDataAccessInterface;
     private final WatchListDataAccessInterface watchListDataAccessInterface;
+    private final PortfolioDataAccessInterface portfolioDataAccessInterface;
     private final HomeOutputBoundary homePresenter;
 
     public HomeInteractor(HomeDataAccessInterface homeDataAccessInterface,
                           WatchListDataAccessInterface watchListDataAccessInterface,
+                          PortfolioDataAccessInterface portfolioDataAccessInterface,
                           HomeOutputBoundary homeInteractor) {
         this.homeDataAccessInterface = homeDataAccessInterface;
         this.watchListDataAccessInterface = watchListDataAccessInterface;
+        this.portfolioDataAccessInterface = portfolioDataAccessInterface;
         this.homePresenter = homeInteractor;
     }
 
@@ -93,5 +97,13 @@ public class HomeInteractor implements HomeInputBoundary {
 //        }
 
         homePresenter.getWatchListData(watchList);
+    }
+
+    @Override
+    public void deleteLocalData() {
+        watchListDataAccessInterface.createWatchList();
+        portfolioDataAccessInterface.createPortfolioList();
+
+        homePresenter.deleteLocalData();
     }
 }

@@ -47,4 +47,18 @@ public class WatchListViewState {
             this.watchlist.remove(ticker);
         }
     }
+
+    public void resetWatchlist() {
+        if (this.watchlist != null) {
+            final ArrayList<String> temp = new ArrayList<>();
+            for (String ticker : this.watchlist) {
+                if (ticker.equals("AAPL") || ticker.equals("COST") || ticker.equals("NVDA")) {
+                    temp.add(ticker);
+                }
+            }
+
+            this.watchlist.clear();
+            this.watchlist.addAll(temp);
+        }
+    }
 }

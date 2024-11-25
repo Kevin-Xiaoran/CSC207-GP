@@ -14,4 +14,9 @@ public interface WatchListDataAccessInterface {
      * Saves the watchlist.
      */
     void saveWatchList();
+
+    /**
+     * Creates the watchlist.
+     */
+    void createWatchList();
 }

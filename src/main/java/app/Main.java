@@ -19,6 +19,8 @@ public class Main {
                                             .addSignupView()
                                             .addLoggedInView()
                                             .addStockView()
+                                            .addPortfolioView()
+                                            .addBuyView()
                                             .addHomeUseCase()
                                             .addWatchlistUseCase()
                                             .addSignupUseCase()
@@ -26,9 +28,8 @@ public class Main {
                                             .addLogoutUseCase()
                                             .addChangePasswordUseCase()
                                             .addStockUseCase()
-                                            .addPortfolioView()
-                                            .addBuyView()
                                             .addBuyUseCase()
+                                            .addPortfolioUseCase()
                                             .build();
 
         application.pack();

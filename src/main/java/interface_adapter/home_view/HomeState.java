@@ -59,4 +59,15 @@ public class HomeState {
         this.watchList.remove(i);
         System.out.println(watchList.size());
     }
+
+    public void resetWatchList() {
+        final ArrayList<Stock> temp = new ArrayList<>();
+        for (Stock s : watchList) {
+            if (s.getSymbol().equals("AAPL") || s.getSymbol().equals("COST") || s.getSymbol().equals("NVDA")) {
+                temp.add(s);
+            }
+        }
+        this.watchList.clear();
+        this.watchList.addAll(temp);
+    }
 }

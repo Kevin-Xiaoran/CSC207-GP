@@ -65,10 +65,7 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
         }
         else {
             // If the watchlist file doesn't exist, we create a new one
-            this.watchList.add("AAPL");
-            this.watchList.add("COST");
-            this.watchList.add("NVDA");
-            this.saveWatchList();
+            createWatchList();
 
             // Get watchlist data again
             return this.getWatchList();
@@ -88,6 +85,15 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
         catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    @Override
+    public void createWatchList() {
+        this.watchList.clear();
+        this.watchList.add("AAPL");
+        this.watchList.add("COST");
+        this.watchList.add("NVDA");
+        this.saveWatchList();
     }
 
     @Override
@@ -158,6 +164,13 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
             // Normally, this means the file doesn't exist
             throw new RuntimeException(ex);
         }
+    }
+
+    @Override
+    public void createPortfolioList() {
+        // Create an empty portfolio list file
+        this.portfolioList.clear();
+        savePortfolioList();
     }
 
     public void addToPortfolioList(SimulatedHolding simulatedHolding) {
