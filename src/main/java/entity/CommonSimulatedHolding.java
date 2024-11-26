@@ -1,17 +1,14 @@
 package entity;
 
-/**
- * A simple implementation of the Simulated Holding interface.
- */
 public class CommonSimulatedHolding implements SimulatedHolding {
     private String symbol;
-    private double price;
-    private int amount;
+    private double purchasePrice;
+    private int purchaseAmount;
 
-    public CommonSimulatedHolding(String symbol, double price, int amount) {
+    public CommonSimulatedHolding(String symbol, double purchasePrice, int purchaseAmount) {
         this.symbol = symbol;
-        this.price = price;
-        this.amount = amount;
+        this.purchasePrice = purchasePrice;
+        this.purchaseAmount = purchaseAmount;
     }
 
     @Override
@@ -21,21 +18,22 @@ public class CommonSimulatedHolding implements SimulatedHolding {
 
     @Override
     public double getPurchasePrice() {
-        return price;
+        return purchasePrice;
     }
 
     @Override
     public int getPurchaseAmount() {
-        return amount;
+        return purchaseAmount;
     }
 
     @Override
     public void setPurchasePrice(double purchasePrice) {
-
+        this.purchasePrice = purchasePrice;
     }
 
     @Override
     public void setPurchaseAmount(int purchaseAmount) {
-
+        this.purchaseAmount = purchaseAmount;
     }
 }
+
