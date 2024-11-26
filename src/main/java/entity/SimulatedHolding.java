@@ -31,4 +31,11 @@ public interface SimulatedHolding {
      */
     void setPurchaseAmount(int purchaseAmount);
 
+    /**
+     * Returns the amount of the stock that the user purchased.
+     * @return the amount of the stock that the user purchased.
+     */
+    default int getAmount() {
+        return getPurchaseAmount();
+    }
 }
