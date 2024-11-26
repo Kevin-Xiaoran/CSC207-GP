@@ -5,7 +5,7 @@ package entity;
  */
 public class CommonSimulatedHoldingFactory implements SimulatedHoldingFactory {
     @Override
-    public SimulatedHolding create(String symbol, double price, int amount) {
+    public SimulatedHolding create(String symbol, double price, double amount) {
         return new CommonSimulatedHolding(symbol, price, amount);
     }
 }

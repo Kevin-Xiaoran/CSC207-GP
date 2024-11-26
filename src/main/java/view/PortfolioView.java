@@ -109,7 +109,7 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    private void addStockItem(String code, double closePrice, double purchasePrice, int amount, double openPrice) {
+    private void addStockItem(String code, double closePrice, double purchasePrice, double amount, double openPrice) {
         final JPanel stockPanel = new JPanel(new BorderLayout());
         stockPanel.setBackground(Color.WHITE);
         // Create a matte border and an empty border
