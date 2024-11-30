@@ -22,7 +22,7 @@ public class BuyInteractor implements BuyInputBoundary {
     public void execute(BuyInputData buyInputData) {
         final String symbol = buyInputData.getSymbol();
         final double price = buyInputData.getPrice();
-        final int quantity = buyInputData.getQuantity();
+        final double quantity = buyInputData.getQuantity();
 
         final CommonSimulatedHoldingFactory commonSimulatedHoldingFactory = new CommonSimulatedHoldingFactory();
         final SimulatedHolding simulatedHolding = commonSimulatedHoldingFactory.create(symbol, price, quantity);

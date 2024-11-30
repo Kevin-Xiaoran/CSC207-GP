@@ -3,9 +3,9 @@ package entity;
 public class CommonSimulatedHolding implements SimulatedHolding {
     private String symbol;
     private double purchasePrice;
-    private int purchaseAmount;
+    private double purchaseAmount;
 
-    public CommonSimulatedHolding(String symbol, double purchasePrice, int purchaseAmount) {
+    public CommonSimulatedHolding(String symbol, double purchasePrice, double purchaseAmount) {
         this.symbol = symbol;
         this.purchasePrice = purchasePrice;
         this.purchaseAmount = purchaseAmount;
@@ -22,7 +22,7 @@ public class CommonSimulatedHolding implements SimulatedHolding {
     }
 
     @Override
-    public int getPurchaseAmount() {
+    public double getPurchaseAmount() {
         return purchaseAmount;
     }
 
@@ -32,7 +32,7 @@ public class CommonSimulatedHolding implements SimulatedHolding {
     }
 
     @Override
-    public void setPurchaseAmount(int purchaseAmount) {
+    public void setPurchaseAmount(double purchaseAmount) {
         this.purchaseAmount = purchaseAmount;
     }
 }

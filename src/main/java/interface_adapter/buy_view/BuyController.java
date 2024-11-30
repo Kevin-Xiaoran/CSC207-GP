@@ -22,7 +22,7 @@ public class BuyController {
      * @param quantity the quantity of the stock
      */
 
-    public void execute(String symbol, double price, int quantity) {
+    public void execute(String symbol, double price, double quantity) {
         final BuyInputData buyInputData = new BuyInputData(
                 symbol, price, quantity);
 
