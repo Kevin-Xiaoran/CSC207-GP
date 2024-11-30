@@ -7,6 +7,16 @@ Stock MarketPlace
 ## Project Description
 Introducing our Stock Marketplace Application, a user-friendly platform designed for both casual viewers and active investors. With this app, users can quickly look up stock information by entering ticker symbols without needing to log in, providing immediate access to essential market data. For personalized experience, users can create an account to build a watchlist of their favorite stocks, making it easy to track preferred investments. Additionally, the application features a simulated holdings section where logged-in users can add stocks along with their purchase amounts and prices, allowing for real-time calculations of day gains and total gains.
 
+## Table of Contents
+
+ADD TABLE OF CONTENTS HERE
+
+## Installation Instructions
+
+## Usage Guide
+
+## Feedback
+
 ## User Stories
 - As a visitor, I want to view stock information by entering a ticker symbol, so that I can quickly access market data without needing to create an account. (kairanzh)
 - As a registered user, I want to log in to my account, so that I can save my favorite stocks in a personalized watchlist. (huan4000)
@@ -62,6 +72,14 @@ Introducing our Stock Marketplace Application, a user-friendly platform designed
 
 `Watchlist`
 <img width="340" alt="image" src="https://github.com/user-attachments/assets/aa932f8c-9820-49d0-a0d8-dcbb53094d30">
+
+## Contributing
+
+add sum here
+
+## License
+
+CC0-1.0 license
 
 
 
