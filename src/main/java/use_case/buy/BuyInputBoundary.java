@@ -15,4 +15,9 @@ public interface BuyInputBoundary {
      * Executes the switch to home view use case.
      */
     void switchToHomeView();
+
+    /**
+     * Executes the switch to stock view use case.
+     */
+    void switchToStockView();
 }

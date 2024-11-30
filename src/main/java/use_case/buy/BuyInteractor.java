@@ -40,6 +40,13 @@ public class BuyInteractor implements BuyInputBoundary {
 
     @Override
     public void switchToHomeView() {
+
         buyPresenter.switchToHomeView();
+    }
+
+    @Override
+    public void switchToStockView() {
+
+        buyPresenter.switchToStockView();
     }
 }
