@@ -1,13 +1,13 @@
 # Stock Marketplace
 
 ## Contents
-- Authors and Contributors
-- Project Description
-- Features
-- Installation and Usage Instructions
-- Feedbacks
-- Contributions
-- License
+- [Authors and Contributors](#authors-and-contributors)
+- [Project Description](#project-description)
+- [Features](#features)
+- [Installation and Usage Instructions](#installation-and-usage-instructions)
+- [Feedbacks](#feedbacks)
+- [Contributions](#contributions)
+- [License](#license)
 
 ## Authors and Contributors
 - Kairan Zhai
@@ -26,28 +26,21 @@ Introducing our Stock Marketplace Application, a user-friendly platform designed
 - Users can add simulated purchase to their portfolio list.
 - Users can check their performance in portfolio list view.
 - Users can sign up by entering their usernames and passwords.
-- Users can log in by entering their usernames and passwors.
+- Users can log in by entering their usernames and passwords.
 
-## Installation and Usage Instruction
+## Installation and Usage Instructions
 To run this project, follow these steps:
 
 1. Clone the repository to your local machine.
 2. Navigate to the `src/main/java/app` directory:
-3. Click the green arrow on the top right section in your Intellij.![image](https://github.com/user-attachments/assets/a31de5dc-624e-4e24-938c-1cc258b78c23)
+3. Click the green arrow on the top right section in your IntelliJ.![image](https://github.com/user-attachments/assets/a31de5dc-624e-4e24-938c-1cc258b78c23)
 
 ## Feedbacks
-You are welcomed to submit a issue!
+You are welcomed to submit an issue!
 
 ## Contributions
 Any pull requests are welcomed! 💖
 
 ## License
 Stock Marketplace is under CC0-1.0 license. See the LICENSE file for more info.
-
-
-
-
-
-
-
 
