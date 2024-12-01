@@ -185,7 +185,8 @@ public class HomeView extends JPanel implements PropertyChangeListener {
                 if (dataAccessObject.isUserLoggedIn()) {
                     // If you are logged in, the logout dialog box is displayed
                     showLogoutDialog();
-                } else {
+                }
+                else {
                     // If you are not logged in, switch to the login view
                     homeController.switchToLoginView();
                     dataAccessObject.setUserLoggedIn(true);
@@ -229,10 +230,21 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         }
     }
 
+    /**
+     * Updates the style of a JLabel with the specified font size.
+     *
+     * @param label    The JLabel to update.
+     * @param fontSize The desired font size.
+     */
     public void updateLabelStyle(JLabel label, int fontSize) {
         label.setFont(new Font(FONTFAMILY, Font.BOLD, fontSize));
     }
 
+    /**
+     * Updates the watch list components with the given list of stocks.
+     *
+     * @param watchList The list of stocks to display.
+     */
     public void updateWatchListComponents(ArrayList<Stock> watchList) {
         for (Stock stock : watchList) {
             final String symbol = stock.getSymbol();
@@ -243,7 +255,8 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         }
     }
 
-    private void addWatchListItem(JPanel contentPanel, String code, String price, String dailyChange, String dailyPercentage) {
+    private void addWatchListItem(JPanel contentPanel, String code,
+                                  String price, String dailyChange, String dailyPercentage) {
         final JPanel stockPanel = new JPanel(new BorderLayout());
         stockPanel.setBackground(Color.WHITE);
 
@@ -283,7 +296,7 @@ public class HomeView extends JPanel implements PropertyChangeListener {
             }
         });
 
-//        rightPanel.add(viewStockButton);
+        // rightPanel.add(viewStockButton);
 
         // Add all to stockPanel
         stockPanel.add(leftPanel, BorderLayout.WEST);
@@ -297,6 +310,11 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         return viewName;
     }
 
+    /**
+     * Sets the HomeController for this view.
+     *
+     * @param homeController The HomeController to set.
+     */
     public void setHomeController(HomeController homeController) {
         this.homeController = homeController;
 
@@ -304,8 +322,12 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         homeController.getWatchList();
     }
 
+    /**
+     * Displays a logout confirmation dialog and logs out if confirmed.
+     */
     public void showLogoutDialog() {
-        final int response = JOptionPane.showConfirmDialog(this, "Do you want to logout?", "Confirm", JOptionPane.YES_NO_OPTION);
+        final int response = JOptionPane.showConfirmDialog(this,
+                "Do you want to logout?", "Confirm", JOptionPane.YES_NO_OPTION);
 
         if (response == JOptionPane.YES_OPTION) {
             dataAccessObject.setUserLoggedIn(false);
@@ -315,15 +337,22 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         }
     }
 
+    /**
+     * Updates the text of the login button based on the login status.
+     */
     public void changeLoginButtonText() {
         if (dataAccessObject.isUserLoggedIn()) {
             loginButton.setText("Log Out");
-        } else {
+        }
+        else {
             loginButton.setText("Log In");
         }
         homeViewModel.firePropertyChanged();
     }
 
+    /**
+     * Displays a dialog indicating that login is required and switches to the login view.
+     */
     public void showLoginRequiredDialog() {
         final Object[] options = {"Go to Login"};
         final int response = JOptionPane.showOptionDialog(

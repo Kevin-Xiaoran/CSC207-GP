@@ -9,7 +9,12 @@ import javax.swing.WindowConstants;
 
 import data_access.DBUserDataAccessObject;
 import data_access.FileUserDataAccessObject;
-import entity.*;
+import entity.CommonSimulatedHoldingFactory;
+import entity.CommonStockFactory;
+import entity.CommonUserFactory;
+import entity.SimulatedHoldingFactory;
+import entity.StockFactory;
+import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.buy_view.BuyController;
 import interface_adapter.buy_view.BuyPresenter;
@@ -17,7 +22,9 @@ import interface_adapter.buy_view.BuyViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.change_password.LoggedInViewModel;
-import interface_adapter.home_view.*;
+import interface_adapter.home_view.HomeController;
+import interface_adapter.home_view.HomePresenter;
+import interface_adapter.home_view.HomeViewModel;
 import interface_adapter.home_view.WatchlistController;
 import interface_adapter.home_view.WatchlistPresenter;
 import interface_adapter.login.LoginController;
@@ -41,7 +48,9 @@ import use_case.buy.BuyOutputBoundary;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
-import use_case.home_view.*;
+import use_case.home_view.HomeInputBoundary;
+import use_case.home_view.HomeInteractor;
+import use_case.home_view.HomeOutputBoundary;
 import use_case.home_view.WatchlistInputBoundary;
 import use_case.home_view.WatchlistInteractor;
 import use_case.home_view.WatchlistOutputBoundary;
@@ -60,7 +69,15 @@ import use_case.signup.SignupOutputBoundary;
 import use_case.stock.StockInputBoundary;
 import use_case.stock.StockInteractor;
 import use_case.stock.StockOutputBoundary;
-import view.*;
+import view.BuyView;
+import view.HomeView;
+import view.LoggedInView;
+import view.LoginView;
+import view.PortfolioView;
+import view.SignupView;
+import view.StockView;
+import view.ViewManager;
+import view.WatchListView;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -85,7 +102,8 @@ public class AppBuilder {
 
     // thought question: is the hard dependency below a problem?
     private final DBUserDataAccessObject dbUserDataAccessObject = new DBUserDataAccessObject(userFactory, stockFactory);
-    private final FileUserDataAccessObject fileUserDataAccessObject = new FileUserDataAccessObject(simulatedHoldingFactory);
+    private final FileUserDataAccessObject fileUserDataAccessObject =
+            new FileUserDataAccessObject(simulatedHoldingFactory);
 
     private HomeView homeView;
     private HomeViewModel homeViewModel;
@@ -127,7 +145,7 @@ public class AppBuilder {
      */
     public AppBuilder addSignupView() {
         signupViewModel = new SignupViewModel();
-        signupView = new SignupView(signupViewModel,viewManagerModel);
+        signupView = new SignupView(signupViewModel, viewManagerModel);
         cardPanel.add(signupView, signupView.getViewName());
         return this;
     }
@@ -148,7 +166,7 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addLoggedInView() {
-        loggedInViewModel =  new LoggedInViewModel();
+        loggedInViewModel = new LoggedInViewModel();
         loggedInView = new LoggedInView(loggedInViewModel);
         cardPanel.add(loggedInView, loggedInView.getViewName());
         return this;
@@ -229,7 +247,8 @@ public class AppBuilder {
                 viewManagerModel,
                 stockViewModel,
                 watchListViewModel);
-        final WatchlistInputBoundary watchlistInteractor = new WatchlistInteractor(dbUserDataAccessObject, watchlistOutputBoundary);
+        final WatchlistInputBoundary watchlistInteractor =
+                new WatchlistInteractor(dbUserDataAccessObject, watchlistOutputBoundary);
 
         final WatchlistController controller = new WatchlistController(watchlistInteractor);
         watchListView.setwatchlistController(controller);
@@ -298,6 +317,7 @@ public class AppBuilder {
         loggedInView.setLogoutController(logoutController);
         return this;
     }
+
     /**
      * Adds the Stock Use Case to the application.
      * @return this builder
@@ -308,7 +328,8 @@ public class AppBuilder {
                                                                       homeViewModel,
                                                                       watchListViewModel,
                                                                       viewManagerModel);
-        final StockInputBoundary stockInteractor = new StockInteractor(stockPresenter, fileUserDataAccessObject, fileUserDataAccessObject);
+        final StockInputBoundary stockInteractor =
+                new StockInteractor(stockPresenter, fileUserDataAccessObject, fileUserDataAccessObject);
         final StockController stockController = new StockController(stockInteractor);
         stockView.setStockController(stockController);
 
@@ -330,9 +351,14 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the Portfolio Use Case to the application.
+     * @return this builder
+     */
     public AppBuilder addPortfolioUseCase() {
         final PortfolioOutputBoundary portfolioPresenter = new PortfolioPresenter(portfolioViewModel);
-        final PortfolioInputBoundary portfolioInteractor = new PortfolioInteractor(fileUserDataAccessObject, dbUserDataAccessObject ,portfolioPresenter);
+        final PortfolioInputBoundary portfolioInteractor =
+                new PortfolioInteractor(fileUserDataAccessObject, dbUserDataAccessObject, portfolioPresenter);
         final PortfolioController portfolioController = new PortfolioController(portfolioInteractor);
         portfolioView.setController(portfolioController);
 

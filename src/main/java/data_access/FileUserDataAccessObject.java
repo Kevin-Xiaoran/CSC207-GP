@@ -12,17 +12,15 @@ import java.util.*;
 
 import entity.*;
 import use_case.buy.BuyUserDataAccessInterface;
-import use_case.change_password.ChangePasswordUserDataAccessInterface;
-import use_case.login.LoginUserDataAccessInterface;
 import use_case.portfolio.PortfolioDataAccessInterface;
-import use_case.signup.SignupUserDataAccessInterface;
 import use_case.watchlist.WatchListDataAccessInterface;
 import use_case.watchlist.WatchListModifyDataAccessInterface;
 
 /**
  * DAO for user data implemented using a File to persist the data.
  */
-public class FileUserDataAccessObject implements WatchListDataAccessInterface, WatchListModifyDataAccessInterface, PortfolioDataAccessInterface, BuyUserDataAccessInterface {
+public class FileUserDataAccessObject implements WatchListDataAccessInterface,
+        WatchListModifyDataAccessInterface, PortfolioDataAccessInterface, BuyUserDataAccessInterface {
 
     private final ArrayList<String> watchList = new ArrayList<>();
     private final ArrayList<SimulatedHolding> portfolioList = new ArrayList<>();
@@ -182,8 +180,8 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
 
         for (SimulatedHolding data : new ArrayList<>(portfolioList)) {
             if (data.getSymbol().equals(simulatedHolding.getSymbol())) {
-                double newAmount = simulatedHolding.getPurchaseAmount() + data.getPurchaseAmount();
-                double newPrice = roundToOneDecimalPlace(
+                final double newAmount = simulatedHolding.getPurchaseAmount() + data.getPurchaseAmount();
+                final double newPrice = roundToOneDecimalPlace(
                         (simulatedHolding.getPurchasePrice() * simulatedHolding.getPurchaseAmount()
                                 + data.getPurchasePrice() * data.getPurchaseAmount()) / newAmount);
 
@@ -226,10 +224,12 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
                     // Converts the read string to a Boolean value
                     userIsLoggedIn = Boolean.parseBoolean(line);
                 }
-            } catch (IOException ex) {
+            }
+            catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-        } else {
+        }
+        else {
             // If the file does not exist, the default setting is not logged in
             userIsLoggedIn = false;
             saveUserLoginStatus();
@@ -247,7 +247,8 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(mainFilePath + userIsLoggedInFilePath, false))) {
             // Converts a Boolean value to a string and writes it to a file
             writer.write(Boolean.toString(userIsLoggedIn));
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }
@@ -274,7 +275,3 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
                 .doubleValue();
     }
 }
-
-
-
-

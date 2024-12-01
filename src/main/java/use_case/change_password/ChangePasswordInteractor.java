@@ -1,9 +1,9 @@
 package use_case.change_password;
 
+import java.util.ArrayList;
+
 import entity.User;
 import entity.UserFactory;
-
-import java.util.ArrayList;
 
 /**
  * The Change Password Interactor.
