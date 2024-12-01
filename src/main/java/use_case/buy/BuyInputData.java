@@ -7,9 +7,9 @@ public class BuyInputData {
 
     private final String symbol;
     private final double price;
-    private final int quantity;
+    private final double quantity;
 
-    public BuyInputData(String symbol, double price, int quantity) {
+    public BuyInputData(String symbol, double price, double quantity) {
         this.symbol = symbol;
         this.price = price;
         this.quantity = quantity;
@@ -21,7 +21,7 @@ public class BuyInputData {
         return price;
     }
 
-    public int getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 

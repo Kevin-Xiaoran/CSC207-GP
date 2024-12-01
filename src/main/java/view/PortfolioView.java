@@ -9,8 +9,6 @@ import interface_adapter.portfolio.PortfolioViewModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -18,12 +16,15 @@ import java.util.ArrayList;
 import javax.swing.border.Border;
 import javax.swing.BorderFactory;
 
-
 public class PortfolioView extends JPanel implements PropertyChangeListener {
 
     private final PortfolioViewModel portfolioViewModel;
     private final ViewManagerModel viewManagerModel;
     private PortfolioController portfolioController;
+    private JPanel contentPanel;
+    private JLabel currentAmount;
+    private JLabel todayChangeLabel;
+    private JLabel allTimeChangeLabel;
 
     public PortfolioView(PortfolioViewModel portfolioViewModel, ViewManagerModel viewManagerModel) {
         this.portfolioViewModel = portfolioViewModel;
@@ -44,24 +45,19 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
         topRowPanel.setBackground(Color.WHITE);
 
         // Return button
-        final JButton backButton = new JButton("←");
+        final JButton backButton = new JButton("\u2190");
         backButton.setFont(new Font("SansSerif", Font.PLAIN, 20));
         backButton.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         backButton.setFocusPainted(false);
         backButton.setContentAreaFilled(false);
 
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                // Sample action, replace with your own logic
-                viewManagerModel.setState("home view");
-                viewManagerModel.firePropertyChanged();
-            }
+        backButton.addActionListener(e -> {
+            viewManagerModel.setState("home view");
+            viewManagerModel.firePropertyChanged();
         });
 
         // Current amount
-        final JLabel currentAmount = new JLabel("$12345");
+        currentAmount = new JLabel("$0");
         currentAmount.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
         currentAmount.setFont(new Font("SansSerif", Font.PLAIN, 20));
 
@@ -85,38 +81,23 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
         // Add topRowPanel to statisticsPanel
         statisticsPanel.add(mainPanel);
 
-        // portfolio amount changes
-        percentChangeLayout(statisticsPanel, "Today", "+$44.09", "+24.10%");
-        percentChangeLayout(statisticsPanel, "All Time", "+$84.09", "+40.10%");
+        // Portfolio amount changes
+        todayChangeLabel = new JLabel("Today: $0 (0%)");
+        todayChangeLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        todayChangeLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        statisticsPanel.add(todayChangeLabel);
+
+        allTimeChangeLabel = new JLabel("All Time: $0 (0%)");
+        allTimeChangeLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        allTimeChangeLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        statisticsPanel.add(allTimeChangeLabel);
+
         add(statisticsPanel, BorderLayout.NORTH);
 
         // Create the content panel
-        final JPanel contentPanel = new JPanel();
+        contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(Color.WHITE);
-
-        // Create a sub-panel with BorderLayout
-        final JPanel titlePanel = new JPanel(new BorderLayout());
-        titlePanel.setBackground(Color.WHITE);
-
-        // Portfolio title on the left
-        final JLabel portfolioTitle = new JLabel("Portfolio");
-        portfolioTitle.setFont(new Font("SansSerif", Font.BOLD, 24));
-        portfolioTitle.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-        titlePanel.add(portfolioTitle, BorderLayout.WEST);
-
-        // Dummy text on the right
-        final JLabel dummyLabel = new JLabel("");
-        dummyLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        dummyLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        titlePanel.add(dummyLabel, BorderLayout.EAST);
-
-        // Add the sub-panel to the main content panel
-        contentPanel.add(titlePanel);
-
-        addStockItem(contentPanel, "AAPL", "$226.97", "−$0.26", "+0.11%", "+$44.09", "+24.10%");
-        addStockItem(contentPanel, "COST", "$953.20", "+$39.27", "+4.30%", "+$386.00", "+68.03%");
-        addStockItem(contentPanel, "QQQ", "$514.07", "+$0.56", "+0.60%", "+$141.25", "+37.87%");
 
         // Wrap the content panel in a JScrollPane
         final JScrollPane scrollPane = new JScrollPane(contentPanel);
@@ -128,52 +109,23 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    private void percentChangeLayout(JPanel statisticsPanel, String title, String totalChange, String totalPercentage) {
-        final JPanel displayPanel = new JPanel(new BorderLayout());
-        displayPanel.setBackground(Color.WHITE);
-        displayPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-
-        // Left part: Title
-        final JPanel leftPanel = new JPanel();
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        leftPanel.setBackground(Color.WHITE);
-
-        final JLabel titleLabel = new JLabel(title);
-        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-
-        leftPanel.add(titleLabel);
-
-        // Right part: up and down information
-        final JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.setBackground(Color.WHITE);
-        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 10));
-
-        final JLabel totalChangeLabel = new JLabel(totalChange + "(" + totalPercentage + ")");
-        totalChangeLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
-
-        rightPanel.add(totalChangeLabel);
-
-        // Add all to displayPanel
-        displayPanel.add(leftPanel, BorderLayout.WEST);
-        displayPanel.add(rightPanel, BorderLayout.EAST);
-
-        // Add all information
-        statisticsPanel.add(displayPanel);
-    }
-
-    private void addStockItem(JPanel contentPanel, String code, String price, String dailyChange, String dailyPercentage, String totalChange, String totalPercentage) {
+    private void addStockItem(String code, double closePrice, double purchasePrice, double amount, double openPrice) {
         final JPanel stockPanel = new JPanel(new BorderLayout());
         stockPanel.setBackground(Color.WHITE);
         // Create a matte border and an empty border
         final Border matteBorder = BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY);
-        final Border emptyBorder = BorderFactory.createEmptyBorder(0, 30, 0, 0);
+        final Border emptyBorder = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 
         // Combine them using CompoundBorder
         final Border combinedBorder = BorderFactory.createCompoundBorder(emptyBorder, matteBorder);
-
-        // Set the combined border
         stockPanel.setBorder(combinedBorder);
+
+        // Calculate values
+        double currentValue = closePrice * amount;
+        double dailyChange = (closePrice - openPrice) * amount;
+        double allTimeChange = (closePrice - purchasePrice) * amount;
+        double dailyPercentage = openPrice != 0 ? ((closePrice - openPrice) / openPrice) * 100 : 0;
+        double allTimePercentage = purchasePrice != 0 ? ((closePrice - purchasePrice) / purchasePrice) * 100 : 0;
 
         // Left part: Stock code and price
         final JPanel leftPanel = new JPanel();
@@ -183,23 +135,29 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
         final JLabel stockCodeLabel = new JLabel(code);
         stockCodeLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
         stockCodeLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-        final JLabel stockPriceLabel = new JLabel(price);
+
+        final JLabel stockPriceLabel = new JLabel("$" + String.format("%.2f", currentValue));
         stockPriceLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        stockPriceLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+
+        final JLabel stockAmountLabel = new JLabel("Amount: " + amount);
+        stockAmountLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
 
         leftPanel.add(stockCodeLabel);
         leftPanel.add(stockPriceLabel);
+        leftPanel.add(stockAmountLabel);
 
-        // Right part: up and down information
+        // Right part: daily change and total change
         final JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBackground(Color.WHITE);
         rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 10));
 
-        final JLabel dailyChangeLabel = new JLabel(dailyChange + "(" + dailyPercentage + ")");
+        final JLabel dailyChangeLabel = new JLabel(String.format("%+.2f (%.2f%%)", dailyChange, dailyPercentage));
         dailyChangeLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
         dailyChangeLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
-        final JLabel totalChangeLabel = new JLabel(totalChange + "(" + totalPercentage + ")");
+        final JLabel totalChangeLabel = new JLabel(String.format("%+.2f (%.2f%%)", allTimeChange, allTimePercentage));
         totalChangeLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
         totalChangeLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
@@ -210,7 +168,7 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
         stockPanel.add(leftPanel, BorderLayout.WEST);
         stockPanel.add(rightPanel, BorderLayout.EAST);
 
-        // Add all information
+        // Add all information to the content panel
         contentPanel.add(stockPanel);
     }
 
@@ -220,20 +178,36 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
 
     public void setController(PortfolioController controller) {
         this.portfolioController = controller;
-
-        // Load portfolio list data
         controller.getPortfolioList();
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        // Listen getPortfolioList event
         if (evt.getPropertyName().equals("getPortfolioList")) {
             final PortfolioState portfolioState = portfolioViewModel.getState();
             final ArrayList<SimulatedHolding> portfolioList = portfolioState.getSimulatedHoldings();
             final ArrayList<Stock> stockList = portfolioState.getStocks();
-            System.out.println("Portfolio list size: " + portfolioList.size());
-            // Update UI components based on data
+
+            double totalValue = 0;
+            double totalDailyChange = 0;
+            double totalAllTimeChange = 0;
+
+            int minSize = Math.min(portfolioList.size(), stockList.size());
+            for (int i = 0; i < minSize; i++) {
+                SimulatedHolding holding = portfolioList.get(i);
+                Stock stock = stockList.get(i);
+                totalValue += stock.getClosePrice() * holding.getAmount();
+                totalDailyChange += (stock.getClosePrice() - stock.getOpenPrice()) * holding.getAmount();
+                totalAllTimeChange += (stock.getClosePrice() - holding.getPurchasePrice()) * holding.getAmount();
+                addStockItem(holding.getSymbol(), stock.getClosePrice(), holding.getPurchasePrice(), holding.getAmount(), stock.getOpenPrice());
+            }
+
+            currentAmount.setText("$" + String.format("%.2f", totalValue));
+            todayChangeLabel.setText(String.format("Today: %+.2f (%.2f%%)", totalDailyChange, totalValue != 0 ? (totalDailyChange / totalValue) * 100 : 0));
+            allTimeChangeLabel.setText(String.format("All Time: %+.2f (%.2f%%)", totalAllTimeChange, totalValue != 0 ? (totalAllTimeChange / totalValue) * 100 : 0));
+
+            contentPanel.revalidate();
+            contentPanel.repaint();
         }
     }
 }

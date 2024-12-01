@@ -17,7 +17,7 @@ public interface SimulatedHolding {
      * Returns the amount the stock that user purchased.
      * @return the amount the stock that user purchased.
      */
-    int getPurchaseAmount();
+    double getPurchaseAmount();
 
     /**
      * Sets the new purchase price of the stock.
@@ -29,6 +29,13 @@ public interface SimulatedHolding {
      * Sets the new purchase amount of the stock.
      * @param purchaseAmount the new purchase amount of the stock.
      */
-    void setPurchaseAmount(int purchaseAmount);
+    void setPurchaseAmount(double purchaseAmount);
 
+    /**
+     * Returns the amount of the stock that the user purchased.
+     * @return the amount of the stock that the user purchased.
+     */
+    default double getAmount() {
+        return getPurchaseAmount();
+    }
 }

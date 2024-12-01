@@ -53,7 +53,8 @@ public class BuyView extends JPanel implements ActionListener, PropertyChangeLis
         final LabelTextPanel quantityInfo = new LabelTextPanel(
                 new JLabel("Quantity"), quantityInputField);
 
-        priceInputField.setEditable(false);
+        // Decide if the price can be changed by the user.
+        priceInputField.setEditable(true);
         priceInputField.setText(buyViewModel.getState().getPrice());
 
         final JPanel buttons = new JPanel();
@@ -66,12 +67,21 @@ public class BuyView extends JPanel implements ActionListener, PropertyChangeLis
         buy.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        final BuyState buyState = buyViewModel.getState();
-                        // Get the price from the status, not from the input field
-                        buyController.execute(
-                                buyState.getSymbol(),
-                                Double.parseDouble(buyState.getPrice()),
-                                Integer.parseInt(quantityInputField.getText()));
+                        try {
+                            double quantity = Double.parseDouble(quantityInputField.getText());
+                            if (quantity > 0) {
+                                final BuyState buyState = buyViewModel.getState();
+                                // Get the price from the status, not from the input field
+                                buyController.execute(
+                                        buyState.getSymbol(),
+                                        Double.parseDouble(buyState.getPrice()),
+                                        quantity);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Please enter a positive quantity.");
+                            }
+                        } catch (NumberFormatException e) {
+                            JOptionPane.showMessageDialog(null, "Please enter a valid quantity.");
+                        }
                     }
                 }
         );

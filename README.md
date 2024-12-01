@@ -51,5 +51,3 @@ Stock Marketplace is under CC0-1.0 license. See the LICENSE file for more info.
 
 
 
-
-

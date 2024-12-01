@@ -10,5 +10,5 @@ public interface SimulatedHoldingFactory {
      * @param amount the amount that user purchased
      * @return the new simulated holding
      */
-    SimulatedHolding create(String symbol, double price, int amount);
+    SimulatedHolding create(String symbol, double price, double amount);
 }
