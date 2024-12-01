@@ -64,7 +64,16 @@ public class HomeInteractor implements HomeInputBoundary {
     @Override
     public void switchToWatchList() {
         final ArrayList<String> watchListData = watchListDataAccessInterface.getWatchList();
-        homePresenter.switchToWatchList(watchListData);
+        final ArrayList<Stock> watchList = new ArrayList<>();
+
+        final StockFactory stockFactory = new CommonStockFactory();
+
+        for (String symbol : watchListData) {
+            final Stock stock = stockFactory.create(symbol, 0.0, 0.0, 0, 0.0, 0.0);
+            watchList.add(stock);
+        }
+
+        homePresenter.switchToWatchList(watchList);
     }
 
     @Override
