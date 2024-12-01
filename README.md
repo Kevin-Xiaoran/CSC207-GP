@@ -37,8 +37,18 @@ To run this project, follow these steps:
 
 ## Screenshots
 
-<img width="420" alt="截屏2024-12-01 18 31 51" src="https://github.com/user-attachments/assets/90d002c4-5adb-40f6-8cd3-d48515183eb3">
-<img width="420" alt="截屏2024-12-01 18 32 04" src="https://github.com/user-attachments/assets/cab648d3-74ce-4ab5-92e2-339086fd8e92">
+<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+  <tr>
+    <td align="center">
+      <img width="451" alt="截屏2024-12-01 18 31 51" src="https://github.com/user-attachments/assets/90d002c4-5adb-40f6-8cd3-d48515183eb3">
+      <p style="margin-top: 5px;">Homepage</p>
+    </td>
+    <td align="center">
+      <img width="451" alt="截屏2024-12-01 18 32 04" src="https://github.com/user-attachments/assets/cab648d3-74ce-4ab5-92e2-339086fd8e92">
+      <p style="margin-top: 5px;">Purchase Page</p>
+    </td>
+  </tr>
+</table>
 
 ## Feedbacks
 You are welcomed to submit an issue!
