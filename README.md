@@ -4,11 +4,10 @@
 - Authors and Contributors
 - Project Description
 - Features
-- Installation Instructions
-- Usage Guide
+- Installation and Usage Instructions
+- Feedbacks
+- Contributions
 - License
-- Feedback Submition
-- Contribution Submition
 
 ## Authors and Contributors
 - Kairan Zhai
@@ -29,13 +28,18 @@ Introducing our Stock Marketplace Application, a user-friendly platform designed
 - Users can sign up by entering their usernames and passwords.
 - Users can log in by entering their usernames and passwors.
 
-## Installation Instructions
+## Installation and Usage Instruction
+To run this project, follow these steps:
 
-## Usage Guide
+1. Clone the repository to your local machine.
+2. Navigate to the `src/main/java/app` directory:
+3. Click the green arrow on the top right section in your Intellij.![image](https://github.com/user-attachments/assets/a31de5dc-624e-4e24-938c-1cc258b78c23)
 
 ## Feedbacks
+You are welcomed to submit a issue!
 
 ## Contributions
+Any pull requests are welcomed! 💖
 
 ## License
 Stock Marketplace is under CC0-1.0 license. See the LICENSE file for more info.
