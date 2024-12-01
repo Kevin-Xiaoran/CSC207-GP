@@ -18,6 +18,7 @@ import java.beans.PropertyChangeListener;
  * The View for displaying detailed information about a single stock.
  */
 public class StockView extends AbstractViewWithBackButton implements PropertyChangeListener {
+    private final String viewName = "StockView";
 
     private final ViewManagerModel viewManagerModel;
     private final StockViewModel stockViewModel;
@@ -174,7 +175,7 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
     }
 
     public String getViewName() {
-        return "StockView";
+        return viewName;
     }
 
     @Override

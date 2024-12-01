@@ -320,7 +320,8 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addBuyUseCase() {
-        final BuyOutputBoundary buyOutputBoundary = new BuyPresenter(buyViewModel, portfolioViewModel, viewManagerModel, homeViewModel);
+        final BuyOutputBoundary buyOutputBoundary = new BuyPresenter(buyViewModel, portfolioViewModel,
+                viewManagerModel, homeViewModel, stockViewModel);
         final BuyInputBoundary buyInteractor = new BuyInteractor(
                 buyOutputBoundary, fileUserDataAccessObject);
 
