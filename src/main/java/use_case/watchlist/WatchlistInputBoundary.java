@@ -12,10 +12,19 @@ public interface WatchlistInputBoundary {
      */
     void search(SearchInputData searchInputData);
 
+
     /**
      * Executes the search use case.
-     * @param searchInputData the input data
+     * @param stocks the input data
      */
 
-    void getWatchListData();
+    void updateWatchlist(ArrayList<Stock> stocks);
+
+
+    /**
+     * Executes the search use case.
+     * @param stockCode the input data
+     */
+
+    Stock getStockData(String stockCode);
 }

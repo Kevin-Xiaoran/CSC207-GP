@@ -27,7 +27,18 @@ public class WatchlistController {
         watchlistInteractor.search(searchInputData);
     }
 
-    public void getWatchList() {
-        watchlistInteractor.getWatchListData();
+
+    /**
+     * Try to get WatchlistData as Stock information.
+     * @param stockCodes the code of the stock.
+     */
+    public void loadWatchlistData(ArrayList<String> stockCodes) {
+        ArrayList<Stock> stocks = new ArrayList<>();
+        for (String stockCode : stockCodes) {
+            final Stock stock = watchlistInteractor.getStockData(stockCode);
+            stocks.add(stock);
+        }
+        watchlistInteractor.updateWatchlist(stocks);
     }
+
 }
