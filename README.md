@@ -39,8 +39,10 @@ To run this project, follow these steps:
 
 1. Clone the repository to your local machine.
 2. Navigate to the `src/main/java/app` directory:
-3. Click the green arrow on the top right section in your IntelliJ.
-<img src="https://github.com/user-attachments/assets/a31de5dc-624e-4e24-938c-1cc258b78c23" alt="image" style="display:block; margin-top:10px;">
+3. Click the green arrow on the top right section in your IntelliJ.<sub><sub><img src="https://github.com/user-attachments/assets/a31de5dc-624e-4e24-938c-1cc258b78c23" alt="image" width="30"><sub><sub>
+
+
+
 
 
 
