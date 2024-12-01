@@ -31,29 +31,29 @@ public class HomeInteractor implements HomeInputBoundary {
 
     @Override
     public void search(SearchInputData searchInputData) {
-//        final String stockSymbol = searchInputData.getStockSymbol();
-//        try {
-//            final Stock stock = homeDataAccessInterface.getStock(stockSymbol);
-//            final SearchOutputData searchOutputData = new SearchOutputData(stock, false);
-//            homePresenter.prepareSuccessView(searchOutputData);
-//        }
-//        catch (Exception err) {
-//            err.printStackTrace();
-//            homePresenter.prepareFailView("Failed to fetch stock data");
-//        }
-        // Default search symbol is NVDA
-        String stockSymbol = searchInputData.getStockSymbol();
-        if (stockSymbol == null || stockSymbol.isEmpty()) {
-            stockSymbol = "NVDA";
+        final String stockSymbol = searchInputData.getStockSymbol();
+        try {
+            final Stock stock = homeDataAccessInterface.getStock(stockSymbol);
+            final SearchOutputData searchOutputData = new SearchOutputData(stock, false);
+            homePresenter.prepareSuccessView(searchOutputData);
         }
-        else {
-            stockSymbol = stockSymbol.toUpperCase();
+        catch (Exception err) {
+            err.printStackTrace();
+            homePresenter.prepareFailView("Failed to fetch stock data");
         }
-        final StockFactory stockFactory = new CommonStockFactory();
-        final Stock stock = stockFactory.create(stockSymbol, 128.2, 322.1, 100002322, 500.1, 100.23);
-
-        final SearchOutputData searchOutputData = new SearchOutputData(stock, false);
-        homePresenter.prepareSuccessView(searchOutputData);
+//        // Default search symbol is NVDA
+//        String stockSymbol = searchInputData.getStockSymbol();
+//        if (stockSymbol == null || stockSymbol.isEmpty()) {
+//            stockSymbol = "NVDA";
+//        }
+//        else {
+//            stockSymbol = stockSymbol.toUpperCase();
+//        }
+//        final StockFactory stockFactory = new CommonStockFactory();
+//        final Stock stock = stockFactory.create(stockSymbol, 128.2, 322.1, 100002322, 500.1, 100.23);
+//
+//        final SearchOutputData searchOutputData = new SearchOutputData(stock, false);
+//        homePresenter.prepareSuccessView(searchOutputData);
     }
 
     @Override
