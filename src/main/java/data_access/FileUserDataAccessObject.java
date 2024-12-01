@@ -36,6 +36,7 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
 
     private boolean userIsLoggedIn;
 
+    // Constructor prepared for userIsLoggedIn data.
     public FileUserDataAccessObject() {
     }
 
@@ -207,7 +208,14 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
         savePortfolioList();
     }
 
-    // Method to get the login status of the user
+    /**
+     * Determines if the user is currently logged in by checking the presence and content of a specific file.
+     * This method reads the login status from a file and returns true if the status indicates the user is logged in.
+     * If the file does not exist, it assumes the user is not logged in and saves this default status.
+     *
+     * @return true if the file exists and contains 'true', false otherwise.
+     * @throws RuntimeException if reading the file fails.
+     */
     public boolean isUserLoggedIn() {
         // Check whether the file exists
         final File file = new File(mainFilePath + userIsLoggedInFilePath);
@@ -229,7 +237,12 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
         return userIsLoggedIn;
     }
 
-    // Method to save the login status of the user
+    /**
+     * Saves the current login status of the user to a file.
+     * This method writes the user's login status as a string ('true' or 'false') to a designated file.
+     *
+     * @throws RuntimeException if writing to the file fails.
+     */
     public void saveUserLoginStatus() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(mainFilePath + userIsLoggedInFilePath, false))) {
             // Converts a Boolean value to a string and writes it to a file
@@ -239,7 +252,12 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
         }
     }
 
-    // Change the login status of the user
+    /**
+     * Updates and persists the login status of the user.
+     * This method sets the user's login status to the specified value and saves it to a file.
+     *
+     * @param loggedIn The new login status to set. true if the user is logging in, false otherwise.
+     */
     public void setUserLoggedIn(boolean loggedIn) {
         this.userIsLoggedIn = loggedIn;
         saveUserLoginStatus();

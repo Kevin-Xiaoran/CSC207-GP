@@ -1,15 +1,17 @@
 package view;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.*;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -41,26 +43,20 @@ public class BuyView extends JPanel implements ActionListener, PropertyChangeLis
         this.viewManagerModel = viewManagerModel;
         this.buyViewModel = viewModel;
         this.buyViewModel.addPropertyChangeListener(this);
-
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
-
         final JLabel title = new JLabel("Buy Screen");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         final LabelTextPanel priceInfo = new LabelTextPanel(
                 new JLabel("Price"), priceInputField);
         final LabelTextPanel quantityInfo = new LabelTextPanel(
                 new JLabel("Quantity"), quantityInputField);
-
         // Decide if the price can be changed by the user.
         priceInputField.setEditable(true);
         priceInputField.setText(buyViewModel.getState().getPrice());
-
         final JPanel buttons = new JPanel();
         buy = new JButton("Buy");
         buttons.add(buy);
-
         cancel = new JButton("Cancel");
         buttons.add(cancel);
 
@@ -68,7 +64,7 @@ public class BuyView extends JPanel implements ActionListener, PropertyChangeLis
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         try {
-                            double quantity = Double.parseDouble(quantityInputField.getText());
+                            final double quantity = Double.parseDouble(quantityInputField.getText());
                             if (quantity > 0) {
                                 final BuyState buyState = buyViewModel.getState();
                                 // Get the price from the status, not from the input field
@@ -76,10 +72,12 @@ public class BuyView extends JPanel implements ActionListener, PropertyChangeLis
                                         buyState.getSymbol(),
                                         Double.parseDouble(buyState.getPrice()),
                                         quantity);
-                            } else {
+                            }
+                            else {
                                 JOptionPane.showMessageDialog(null, "Please enter a positive quantity.");
                             }
-                        } catch (NumberFormatException e) {
+                        }
+                        catch (NumberFormatException e) {
                             JOptionPane.showMessageDialog(null, "Please enter a valid quantity.");
                         }
                     }

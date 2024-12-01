@@ -2,7 +2,6 @@ package use_case.buy;
 
 import entity.CommonSimulatedHoldingFactory;
 import entity.SimulatedHolding;
-import entity.Stock;
 import use_case.portfolio.PortfolioDataAccessInterface;
 
 /**
