@@ -16,12 +16,8 @@
 - Yitao Huang
 - Ryan Jin
 
-[Back to Top](#contents)
-
 ## Project Description
 Introducing our Stock Marketplace Application, a user-friendly platform designed for both casual viewers and active investors. With this app, users can quickly look up stock information by entering ticker symbols without needing to log in, providing immediate access to essential market data. For personalized experience, users can create an account to build a watchlist of their favorite stocks, making it easy to track preferred investments. Additionally, the application features a simulated holdings section where logged-in users can add stocks along with their purchase amounts and prices, allowing for real-time calculations of day gains and total gains.
-
-[Back to Top](#contents)
 
 ## Features
 - Users can search stock information by entering stock symbol.
@@ -32,26 +28,33 @@ Introducing our Stock Marketplace Application, a user-friendly platform designed
 - Users can sign up by entering their usernames and passwords.
 - Users can log in by entering their usernames and passwords.
 
-[Back to Top](#contents)
-
 ## Installation and Usage Instructions
 To run this project, follow these steps:
 
 1. Clone the repository to your local machine.
 2. Navigate to the `src/main/java/app` directory:
-3. Click the green arrow on the top right section in your IntelliJ.![image](https://github.com/user-attachments/assets/a31de5dc-624e-4e24-938c-1cc258b78c23)
+3. Click the green arrow on the top right section in your IntelliJ.<sub><sub><img src="https://github.com/user-attachments/assets/a31de5dc-624e-4e24-938c-1cc258b78c23" alt="image" width="30"><sub><sub>
 
-[Back to Top](#contents)
+## Screenshots
+
+<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+  <tr>
+    <td align="center">
+      <img width="451" alt="截屏2024-12-01 18 31 51" src="https://github.com/user-attachments/assets/90d002c4-5adb-40f6-8cd3-d48515183eb3">
+      <p style="margin-top: 5px;">Homepage</p>
+    </td>
+    <td align="center">
+      <img width="451" alt="截屏2024-12-01 18 32 04" src="https://github.com/user-attachments/assets/cab648d3-74ce-4ab5-92e2-339086fd8e92">
+      <p style="margin-top: 5px;">Purchase Page</p>
+    </td>
+  </tr>
+</table>
 
 ## Feedbacks
 You are welcomed to submit an issue!
 
-[Back to Top](#contents)
-
 ## Contributions
 Any pull requests are welcomed! 💖
-
-[Back to Top](#contents)
 
 ## License
 Stock Marketplace is under CC0-1.0 license. See the LICENSE file for more info.
