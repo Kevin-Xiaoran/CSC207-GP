@@ -72,7 +72,12 @@ public class HomeInteractor implements HomeInputBoundary {
         final StockFactory stockFactory = new CommonStockFactory();
 
         for (String symbol : watchListData) {
+//            // Using real data
+//            final Stock stock = homeDataAccessInterface.getStock(symbol);
+
+            // Using fake data
             final Stock stock = stockFactory.create(symbol, 0.0, 0.0, 0, 0.0, 0.0);
+
             watchList.add(stock);
         }
 
