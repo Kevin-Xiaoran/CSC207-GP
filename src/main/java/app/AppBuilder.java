@@ -247,7 +247,7 @@ public class AppBuilder {
                 viewManagerModel,
                 stockViewModel,
                 watchListViewModel);
-        final WatchlistInputBoundary watchlistInteractor = new WatchlistInteractor(dbUserDataAccessObject, watchlistOutputBoundary, dbUserDataAccessObject);
+        final WatchlistInputBoundary watchlistInteractor = new WatchlistInteractor(dbUserDataAccessObject, watchlistOutputBoundary);
 
         final WatchlistController controller = new WatchlistController(watchlistInteractor);
         watchListView.setwatchlistController(controller);
