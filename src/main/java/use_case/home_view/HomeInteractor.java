@@ -69,7 +69,7 @@ public class HomeInteractor implements HomeInputBoundary {
         final StockFactory stockFactory = new CommonStockFactory();
 
         for (String symbol : watchListData) {
-            final stock stock = stockFactory.create(symbol, 0.0, 0.0, 0, 0.0, 0.0)；
+            final Stock stock = stockFactory.create(symbol, 0.0, 0.0, 0, 0.0, 0.0);
             watchList.add(stock);
         }
 
