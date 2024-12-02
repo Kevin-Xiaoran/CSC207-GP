@@ -127,7 +127,7 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
                     final String[] data = line.split(",");
                     final String symbol = data[0];
                     final double price = Double.parseDouble(data[1]);
-                    final int amount = Integer.parseInt(data[2]);
+                    final double amount = Double.parseDouble(data[2]);
                     final SimulatedHolding simulatedHolding = simulatedHoldingFactory.create(symbol, price, amount);
 
                     portfolioList.add(simulatedHolding);
@@ -181,7 +181,7 @@ public class FileUserDataAccessObject implements WatchListDataAccessInterface, W
 
         for (SimulatedHolding data : new ArrayList<>(portfolioList)) {
             if (data.getSymbol().equals(simulatedHolding.getSymbol())) {
-                int newAmount = simulatedHolding.getPurchaseAmount() + data.getPurchaseAmount();
+                double newAmount = simulatedHolding.getPurchaseAmount() + data.getPurchaseAmount();
                 double newPrice = roundToOneDecimalPlace(
                         (simulatedHolding.getPurchasePrice() * simulatedHolding.getPurchaseAmount()
                                 + data.getPurchasePrice() * data.getPurchaseAmount()) / newAmount);

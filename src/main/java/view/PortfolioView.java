@@ -109,7 +109,7 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    private void addStockItem(String code, double closePrice, double purchasePrice, int amount, double openPrice) {
+    private void addStockItem(String code, double closePrice, double purchasePrice, double amount, double openPrice) {
         final JPanel stockPanel = new JPanel(new BorderLayout());
         stockPanel.setBackground(Color.WHITE);
         // Create a matte border and an empty border
@@ -124,8 +124,8 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
         double currentValue = closePrice * amount;
         double dailyChange = (closePrice - openPrice) * amount;
         double allTimeChange = (closePrice - purchasePrice) * amount;
-        double dailyPercentage = ((closePrice - openPrice) / openPrice) * 100;
-        double allTimePercentage = ((closePrice - purchasePrice) / purchasePrice) * 100;
+        double dailyPercentage = openPrice != 0 ? ((closePrice - openPrice) / openPrice) * 100 : 0;
+        double allTimePercentage = purchasePrice != 0 ? ((closePrice - purchasePrice) / purchasePrice) * 100 : 0;
 
         // Left part: Stock code and price
         final JPanel leftPanel = new JPanel();
@@ -203,8 +203,8 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
             }
 
             currentAmount.setText("$" + String.format("%.2f", totalValue));
-            todayChangeLabel.setText(String.format("Today: %+.2f (%.2f%%)", totalDailyChange, (totalDailyChange / (totalValue - totalDailyChange)) * 100));
-            allTimeChangeLabel.setText(String.format("All Time: %+.2f (%.2f%%)", totalAllTimeChange, (totalAllTimeChange / (totalValue - totalAllTimeChange)) * 100));
+            todayChangeLabel.setText(String.format("Today: %+.2f (%.2f%%)", totalDailyChange, totalValue != 0 ? (totalDailyChange / totalValue) * 100 : 0));
+            allTimeChangeLabel.setText(String.format("All Time: %+.2f (%.2f%%)", totalAllTimeChange, totalValue != 0 ? (totalAllTimeChange / totalValue) * 100 : 0));
 
             contentPanel.revalidate();
             contentPanel.repaint();
