@@ -211,11 +211,8 @@ public class HomeView extends JPanel implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         final HomeState state = (HomeState) evt.getNewValue();
         if (evt.getPropertyName().equals("getWatchList")) {
-            // We only display first three stocks
-            ArrayList<Stock> watchList = state.getWatchList();
-            if (watchList.size() != 3) {
-                watchList = new ArrayList<Stock>(state.getWatchList().subList(0, 3));
-            }
+            // Display watchlist data
+            final ArrayList<Stock> watchList = state.getWatchList();
 
             watchListContentPanel.removeAll();
             updateWatchListComponents(watchList);

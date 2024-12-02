@@ -31,7 +31,16 @@ public class HomeInteractor implements HomeInputBoundary {
 
     @Override
     public void search(SearchInputData searchInputData) {
-        final String stockSymbol = searchInputData.getStockSymbol();
+        // Default search symbol is NVDA
+        String stockSymbol = searchInputData.getStockSymbol();
+        if (stockSymbol == null || stockSymbol.isEmpty()) {
+            stockSymbol = "NVDA";
+        }
+        else {
+            stockSymbol = stockSymbol.toUpperCase();
+        }
+
+        // Search stock data based on symbol
         try {
             final Stock stock = homeDataAccessInterface.getStock(stockSymbol);
             final SearchOutputData searchOutputData = new SearchOutputData(stock, false);
@@ -41,14 +50,7 @@ public class HomeInteractor implements HomeInputBoundary {
             err.printStackTrace();
             homePresenter.prepareFailView("Failed to fetch stock data");
         }
-//        // Default search symbol is NVDA
-//        String stockSymbol = searchInputData.getStockSymbol();
-//        if (stockSymbol == null || stockSymbol.isEmpty()) {
-//            stockSymbol = "NVDA";
-//        }
-//        else {
-//            stockSymbol = stockSymbol.toUpperCase();
-//        }
+
 //        final StockFactory stockFactory = new CommonStockFactory();
 //        final Stock stock = stockFactory.create(stockSymbol, 128.2, 322.1, 100002322, 500.1, 100.23);
 //
@@ -91,19 +93,20 @@ public class HomeInteractor implements HomeInputBoundary {
         final ArrayList<String> watchListData = watchListDataAccessInterface.getWatchList();
         final ArrayList<Stock> watchList = new ArrayList<>();
 
-        final StockFactory stockFactory = new CommonStockFactory();
+//        // Using real data
+//        for (String symbol : watchListData) {
+//            final Stock stockData = homeDataAccessInterface.getStock(symbol);
+//            watchList.add(stockData);
+//        }
 
+        // Using fake data
+        final StockFactory stockFactory = new CommonStockFactory();
         int i = 0;
         for (String symbol : watchListData) {
             final Stock stock = stockFactory.create(symbol, i, i, 100002322, 500.1, 100.23);
             watchList.add(stock);
             i += 1;
         }
-
-//        for (String symbol : watchListData) {
-//            final Stock stockData = homeDataAccessInterface.getStock(symbol);
-//            watchList.add(stockData);
-//        }
 
         homePresenter.getWatchListData(watchList);
     }
