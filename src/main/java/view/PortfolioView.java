@@ -124,8 +124,8 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
         double currentValue = closePrice * amount;
         double dailyChange = (closePrice - openPrice) * amount;
         double allTimeChange = (closePrice - purchasePrice) * amount;
-        double dailyPercentage = openPrice != 0 ? ((closePrice - openPrice) / openPrice) * 100 : 0;
-        double allTimePercentage = purchasePrice != 0 ? ((closePrice - purchasePrice) / purchasePrice) * 100 : 0;
+        double dailyPercentage = openPrice != 0 ? ((closePrice - openPrice) / openPrice) * 100 : 100;
+        double allTimePercentage = purchasePrice != 0 ? ((closePrice - purchasePrice) / purchasePrice) * 100 : 100;
 
         // Left part: Stock code and price
         final JPanel leftPanel = new JPanel();
@@ -209,6 +209,9 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
 
             contentPanel.revalidate();
             contentPanel.repaint();
+        }
+        else if (evt.getPropertyName().equals("addNewStock")) {
+            portfolioController.getPortfolioList();
         }
     }
 }
