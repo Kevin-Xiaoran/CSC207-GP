@@ -119,10 +119,14 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBackground(Color.WHITE);
 
+        rightPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+
         final JLabel dailyChangeLabel = new JLabel(dailyChange + " (" + dailyPercentage + ")");
         dailyChangeLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        final JLabel volumeLabel = new JLabel("Volume: " + volume);
+        dailyChangeLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        final JLabel volumeLabel = new JLabel(volume);
         volumeLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        volumeLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
         rightPanel.add(Box.createVerticalGlue());
         rightPanel.add(dailyChangeLabel);
