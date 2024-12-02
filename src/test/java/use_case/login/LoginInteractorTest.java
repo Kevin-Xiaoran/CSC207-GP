@@ -1,145 +1,256 @@
 package use_case.login;
 
-import data_access.InMemoryUserDataAccessObject;
-import entity.CommonUserFactory;
+import data_access.FileUserDataAccessObject;
 import entity.User;
 import entity.UserFactory;
+import entity.CommonUserFactory;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class LoginInteractorTest {
 
     @Test
-    void successTest() {
-        LoginInputData inputData = new LoginInputData("Paul", "password");
-        LoginUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
-
-        // For the success test, we need to add Paul to the data access repository before we log in.
-        UserFactory factory = new CommonUserFactory();
-        User user = factory.create("Paul", "password", new ArrayList<>(), new ArrayList<>());
-        userRepository.save(user);
-
-        // This creates a successPresenter that tests whether the test case is as we expect.
-        LoginOutputBoundary successPresenter = new LoginOutputBoundary() {
-            @Override
-            public void prepareSuccessView(LoginOutputData user) {
-                assertEquals("Paul", user.getUsername());
-            }
-
-            @Override
-            public void prepareFailView(String error) {
-                fail("Use case failure is unexpected.");
-            }
-
-            @Override
-            public void switchToSignUpView() {
-                // Do nothing
-            }
-        };
-
-        LoginInputBoundary interactor = new LoginInteractor(userRepository, successPresenter);
-        interactor.execute(inputData);
+    void testLoginInputData() {
+        // Test the LoginInputData class
+        LoginInputData inputData = new LoginInputData("testUser", "testPassword");
+        assertEquals("testUser", inputData.getUsername());
+        assertEquals("testPassword", inputData.getPassword());
     }
 
     @Test
-    void successUserLoggedInTest() {
-        LoginInputData inputData = new LoginInputData("Paul", "password");
-        LoginUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
-
-        // For the success test, we need to add Paul to the data access repository before we log in.
-        UserFactory factory = new CommonUserFactory();
-        User user = factory.create("Paul", "password", new ArrayList<>(), new ArrayList<>());
-        userRepository.save(user);
-
-        // This creates a successPresenter that tests whether the test case is as we expect.
-        LoginOutputBoundary successPresenter = new LoginOutputBoundary() {
-            @Override
-            public void prepareSuccessView(LoginOutputData user) {
-                assertEquals("Paul", userRepository.getCurrentUsername());
-            }
-
-            @Override
-            public void prepareFailView(String error) {
-                fail("Use case failure is unexpected.");
-            }
-
-            @Override
-            public void switchToSignUpView() {
-                // Do nothing
-            }
-        };
-
-        LoginInputBoundary interactor = new LoginInteractor(userRepository, successPresenter);
-        assertEquals(null, userRepository.getCurrentUsername());
-
-        interactor.execute(inputData);
+    void testLoginOutputData() {
+        // Test the LoginOutputData class
+        LoginOutputData outputData = new LoginOutputData("testUser", false);
+        assertEquals("testUser", outputData.getUsername());
     }
 
     @Test
-    void failurePasswordMismatchTest() {
-        LoginInputData inputData = new LoginInputData("Paul", "wrong");
-        LoginUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
+    void testUserDoesNotExist() {
+        // Prepare input data
+        LoginInputData inputData = new LoginInputData("nonexistentUser", "password123");
 
-        // For this failure test, we need to add Paul to the data access repository before we log in, and
-        // the passwords should not match.
-        UserFactory factory = new CommonUserFactory();
-        User user = factory.create("Paul", "password", new ArrayList<>(), new ArrayList<>());
-        userRepository.save(user);
+        // Use in-memory user data access object with a UserFactory
+        UserFactory userFactory = new CommonUserFactory();
+        InMemoryLoginUserDataAccess userDataAccessObject = new InMemoryLoginUserDataAccess(userFactory);
 
-        // This creates a presenter that tests whether the test case is as we expect.
-        LoginOutputBoundary failurePresenter = new LoginOutputBoundary() {
+        // Create a test presenter
+        LoginOutputBoundary loginPresenter = new LoginOutputBoundary() {
             @Override
-            public void prepareSuccessView(LoginOutputData user) {
-                // this should never be reached since the test case should fail
-                fail("Use case success is unexpected.");
+            public void prepareSuccessView(LoginOutputData outputData) {
+                fail("Expected login failure, but login succeeded.");
             }
 
             @Override
-            public void prepareFailView(String error) {
-                assertEquals("Incorrect password for \"Paul\".", error);
+            public void prepareFailView(String errorMessage) {
+                assertEquals("nonexistentUser: Account does not exist.", errorMessage);
             }
 
             @Override
             public void switchToSignUpView() {
-                // Do nothing
+                fail("switchToSignUpView should not be called in this test.");
             }
         };
 
-        LoginInputBoundary interactor = new LoginInteractor(userRepository, failurePresenter);
-        interactor.execute(inputData);
+        // Create Interactor instance
+        LoginInteractor loginInteractor = new LoginInteractor(userDataAccessObject, loginPresenter);
+
+        // Execute test
+        loginInteractor.execute(inputData);
     }
 
     @Test
-    void failureUserDoesNotExistTest() {
-        LoginInputData inputData = new LoginInputData("Paul", "password");
-        LoginUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
+    void testIncorrectPassword() {
+        // Prepare input data
+        LoginInputData inputData = new LoginInputData("existingUser", "wrongPassword");
 
-        // Add Paul to the repo so that when we check later they already exist
+        // Use in-memory user data access object and add a user using UserFactory
+        UserFactory userFactory = new CommonUserFactory();
+        InMemoryLoginUserDataAccess userDataAccessObject = new InMemoryLoginUserDataAccess(userFactory);
+        User user = userFactory.create("existingUser", "correctPassword", new ArrayList<>(), new ArrayList<>());
+        userDataAccessObject.save(user);
 
-        // This creates a presenter that tests whether the test case is as we expect.
-        LoginOutputBoundary failurePresenter = new LoginOutputBoundary() {
+        // Create a test presenter
+        LoginOutputBoundary loginPresenter = new LoginOutputBoundary() {
             @Override
-            public void prepareSuccessView(LoginOutputData user) {
-                // this should never be reached since the test case should fail
-                fail("Use case success is unexpected.");
+            public void prepareSuccessView(LoginOutputData outputData) {
+                fail("Expected login failure, but login succeeded.");
             }
 
             @Override
-            public void prepareFailView(String error) {
-                assertEquals("Paul: Account does not exist.", error);
+            public void prepareFailView(String errorMessage) {
+                assertEquals("Incorrect password for \"existingUser\".", errorMessage);
             }
 
             @Override
             public void switchToSignUpView() {
-                // Do nothing
+                fail("switchToSignUpView should not be called in this test.");
             }
         };
 
-        LoginInputBoundary interactor = new LoginInteractor(userRepository, failurePresenter);
-        interactor.execute(inputData);
+        // Create Interactor instance
+        LoginInteractor loginInteractor = new LoginInteractor(userDataAccessObject, loginPresenter);
+
+        // Execute test
+        loginInteractor.execute(inputData);
+    }
+
+    @Test
+    void testSuccessfulLogin() {
+        // Prepare input data
+        LoginInputData inputData = new LoginInputData("existingUser", "correctPassword");
+
+        // Use in-memory user data access object and add a user using UserFactory
+        UserFactory userFactory = new CommonUserFactory();
+        InMemoryLoginUserDataAccess userDataAccessObject = new InMemoryLoginUserDataAccess(userFactory);
+        User user = userFactory.create("existingUser", "correctPassword", new ArrayList<>(), new ArrayList<>());
+        userDataAccessObject.save(user);
+
+        // Create a test presenter
+        LoginOutputBoundary loginPresenter = new LoginOutputBoundary() {
+            @Override
+            public void prepareSuccessView(LoginOutputData outputData) {
+                assertEquals("existingUser", outputData.getUsername());
+            }
+
+            @Override
+            public void prepareFailView(String errorMessage) {
+                fail("Expected login success, but login failed: " + errorMessage);
+            }
+
+            @Override
+            public void switchToSignUpView() {
+                fail("switchToSignUpView should not be called in this test.");
+            }
+        };
+
+        // Create a mock FileUserDataAccessObject
+        MockFileUserDataAccessObject dataAccessObject = new MockFileUserDataAccessObject();
+
+        // Create Interactor instance
+        LoginInteractor loginInteractor = new LoginInteractor(userDataAccessObject, loginPresenter);
+
+        // Use reflection to set the private final field 'dataAccessObject'
+        try {
+            Field dataAccessObjectField = LoginInteractor.class.getDeclaredField("dataAccessObject");
+            dataAccessObjectField.setAccessible(true);
+            dataAccessObjectField.set(loginInteractor, dataAccessObject);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            fail("Failed to set dataAccessObject via reflection: " + e.getMessage());
+        }
+
+        // Execute test
+        loginInteractor.execute(inputData);
+
+        // Verify that dataAccessObject methods were called
+        assertTrue(dataAccessObject.isUserLoggedIn());
+        assertTrue(dataAccessObject.isSaveUserLoginStatusCalled());
+
+        // Verify that the current username was set
+        assertEquals("existingUser", userDataAccessObject.getCurrentUsername());
+    }
+
+    @Test
+    void testSwitchToSignUpView() {
+        // Create a test presenter
+        TestLoginOutputBoundary loginPresenter = new TestLoginOutputBoundary();
+
+        // Use in-memory user data access object
+        UserFactory userFactory = new CommonUserFactory();
+        InMemoryLoginUserDataAccess userDataAccessObject = new InMemoryLoginUserDataAccess(userFactory);
+
+        // Create Interactor instance
+        LoginInteractor loginInteractor = new LoginInteractor(userDataAccessObject, loginPresenter);
+
+        // Execute test
+        loginInteractor.switchToSignUpView();
+
+        // Verify that switchToSignUpView was called
+        assertTrue(loginPresenter.switchCalled);
+    }
+
+    // In-memory user data access object implementation
+    static class InMemoryLoginUserDataAccess implements LoginUserDataAccessInterface {
+        private final Map<String, User> users = new HashMap<>();
+        private String currentUsername;
+        private final UserFactory userFactory;
+
+        public InMemoryLoginUserDataAccess(UserFactory userFactory) {
+            this.userFactory = userFactory;
+        }
+
+        @Override
+        public boolean existsByName(String username) {
+            return users.containsKey(username);
+        }
+
+        @Override
+        public User get(String username) {
+            return users.get(username);
+        }
+
+        @Override
+        public void save(User user) {
+            users.put(user.getName(), user);
+        }
+
+        @Override
+        public void setCurrentUsername(String username) {
+            this.currentUsername = username;
+        }
+
+        @Override
+        public String getCurrentUsername() {
+            return currentUsername;
+        }
+    }
+
+    // Mock FileUserDataAccessObject
+    static class MockFileUserDataAccessObject extends FileUserDataAccessObject {
+        private boolean userLoggedIn = false;
+        private boolean saveUserLoginStatusCalled = false;
+
+        @Override
+        public void setUserLoggedIn(boolean loggedIn) {
+            this.userLoggedIn = loggedIn;
+        }
+
+        @Override
+        public void saveUserLoginStatus() {
+            this.saveUserLoginStatusCalled = true;
+        }
+
+        public boolean isUserLoggedIn() {
+            return userLoggedIn;
+        }
+
+        public boolean isSaveUserLoginStatusCalled() {
+            return saveUserLoginStatusCalled;
+        }
+    }
+
+    // Test presenter class for switchToSignUpView test
+    static class TestLoginOutputBoundary implements LoginOutputBoundary {
+        boolean switchCalled = false;
+
+        @Override
+        public void prepareSuccessView(LoginOutputData outputData) {
+            fail("Expected switchToSignUpView to be called, but prepareSuccessView was called.");
+        }
+
+        @Override
+        public void prepareFailView(String errorMessage) {
+            fail("Expected switchToSignUpView to be called, but prepareFailView was called.");
+        }
+
+        @Override
+        public void switchToSignUpView() {
+            switchCalled = true;
+        }
     }
 }

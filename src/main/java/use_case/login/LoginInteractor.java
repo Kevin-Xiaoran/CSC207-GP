@@ -2,8 +2,6 @@ package use_case.login;
 
 import data_access.FileUserDataAccessObject;
 import entity.User;
-import interface_adapter.change_password.IsLoggedIn;
-import view.HomeView;
 
 /**
  * The Login Interactor.

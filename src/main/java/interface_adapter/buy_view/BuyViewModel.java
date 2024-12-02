@@ -1,8 +1,6 @@
 package interface_adapter.buy_view;
 
 import interface_adapter.ViewModel;
-import interface_adapter.signup.SignupState;
-import interface_adapter.stock_view.StockViewState;
 
 /**
  * The ViewModel for the Buy View.

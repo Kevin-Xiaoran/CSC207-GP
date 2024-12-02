@@ -1,9 +1,9 @@
 package use_case.signup;
 
+import java.util.ArrayList;
+
 import entity.User;
 import entity.UserFactory;
-
-import java.util.ArrayList;
 
 /**
  * The Signup Interactor.
