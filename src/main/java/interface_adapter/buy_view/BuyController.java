@@ -35,4 +35,11 @@ public class BuyController {
     public void switchToHomeView() {
         buyUseCaseInteractor.switchToHomeView();
     }
+
+    /**
+     * Executes the "switch to StockView" Use Case.
+     */
+    public void switchToStockView() {
+        buyUseCaseInteractor.switchToStockView();
+    }
 }

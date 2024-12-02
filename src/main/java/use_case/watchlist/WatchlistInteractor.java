@@ -1,5 +1,6 @@
 package use_case.home_view;
 
+import data_access.DBUserDataAccessObject;
 import entity.CommonStockFactory;
 import entity.Stock;
 import entity.StockFactory;
@@ -8,6 +9,8 @@ import use_case.home_view.WatchlistOutputBoundary;
 import use_case.home_view.WatchlistInputBoundary;
 import use_case.watchlist.WatchListDataAccessInterface;
 
+import java.util.ArrayList;
+
 /**
  * The Home View Interactor.
  */
@@ -15,11 +18,13 @@ public class WatchlistInteractor implements WatchlistInputBoundary {
 
     private final WatchListDataAccessInterface watchlistDataAccessInterface;
     private final WatchlistOutputBoundary watchlistPresenter;
+    private final DBUserDataAccessObject dbUserDataAccessObject;
 
     public WatchlistInteractor(WatchListDataAccessInterface watchlistDataAccessInterface,
-                               WatchlistOutputBoundary watchlistPresenter) {
+                               WatchlistOutputBoundary watchlistPresenter, DBUserDataAccessObject dbUserDataAccessObject) {
         this.watchlistDataAccessInterface = watchlistDataAccessInterface;
         this.watchlistPresenter = watchlistPresenter;
+        this.dbUserDataAccessObject = dbUserDataAccessObject;
     }
 
     public void search(SearchInputData searchInputData) {
@@ -40,9 +45,13 @@ public class WatchlistInteractor implements WatchlistInputBoundary {
         watchlistPresenter.prepareSuccessView(searchOutputData);
     }
 
+    @Override
+    public Stock getStockData(String stockCode) {
+        return dbUserDataAccessObject.getStock(stockCode);
+    }
 
     @Override
-    public void getWatchListData() {
-
+    public void updateWatchlist(ArrayList<Stock> stocks) {
+        System.out.println("Watchlist updated with " + stocks.size() + " stocks.");
     }
 }

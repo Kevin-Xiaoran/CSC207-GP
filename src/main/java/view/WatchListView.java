@@ -1,5 +1,6 @@
 package view;
 
+import entity.Stock;
 import view.HomeViewComponents.ScrollablePanel;
 
 import data_access.DBUserDataAccessObject;
@@ -21,13 +22,11 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
 
     private final ViewManagerModel viewManagerModel;
     private final WatchListViewModel watchListViewModel;
-    private final DBUserDataAccessObject dbUserDataAccessObject;
     private final ScrollablePanel contentPanel = new ScrollablePanel();
     private WatchlistController watchlistController;
 
-    public WatchListView(WatchListViewModel viewModel, ViewManagerModel viewManagerModel, DBUserDataAccessObject dbUserDataAccessObject) {
+    public WatchListView(WatchListViewModel viewModel, ViewManagerModel viewManagerModel) {
         this.viewManagerModel = viewManagerModel;
-        this.dbUserDataAccessObject = dbUserDataAccessObject;
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
         this.watchListViewModel = viewModel;
@@ -58,10 +57,6 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
         // stock information
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(Color.WHITE);
-
-//        addStockItem(contentPanel, "AAPL", "$226.97", "−$0.26", "+0.11%", "+$44.09");
-//        addStockItem(contentPanel, "COST", "$953.20", "+$39.27", "+4.30%", "+$386.00");
-//        addStockItem(contentPanel, "QQQ", "$514.07", "+$0.56", "+0.60%", "+$141.25");
 
         JScrollPane scrollPane = contentPanel.wrapInScrollPane();
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -152,7 +147,7 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
         }
     }
 
-    private void updateWatchList(ArrayList<String> updatedWatchList) {
+    private void updateWatchList(ArrayList<Stock> updatedWatchList) {
         contentPanel.removeAll();
         createWatchListview(updatedWatchList);
         contentPanel.revalidate();
@@ -170,16 +165,15 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
         viewManagerModel.pushView("StockView");
     }
 
-    private void createWatchListview(ArrayList<String> WatchList) {
-        for (String stockcode: WatchList) {
-//            final Stock stock = dbUserDataAccessObject.getStock(stockcode);
-//            final String price = Double.toString(stock.getClosePrice());
-//            final String dailyChange = Double.toString(stock.getDailyChange());
-//            final String dailyPercentage = Double.toString((stock.getDailyChange() / stock.getOpenPrice()) * 100) + "%";
-//            final String volume = Double.toString(stock.getVolume());
+    private void createWatchListview(ArrayList<Stock> WatchList) {
+        for (Stock stock : WatchList) {
+            final String code = stock.getSymbol();
+            final String price = "$" + stock.getClosePrice();
+            final String dailyChange = String.valueOf(stock.getDailyChange());
+            final String dailyPercentage = stock.getDailyPercentage() + "%";
+            final String volume = String.valueOf(stock.getVolume());
 
-//          addStockItem(contentPanel, stock.getSymbol(), "$" + price, dailyChange, dailyPercentage, volume);
-            addStockItem(contentPanel, stockcode, "$" + "123", "+$" + "234", "0.45%", "100000.23");
+            addStockItem(contentPanel, code, price, dailyChange, dailyPercentage, volume);
         }
     }
 
@@ -187,9 +181,8 @@ public class WatchListView extends JPanel implements PropertyChangeListener {
         return "WatchListView";
     }
 
-    public void setwatchlistController(WatchlistController controller) {
-        this.watchlistController = controller;
-        controller.getWatchList();
+    public void setwatchlistController(WatchlistController watchlistController) {
+        this.watchlistController = watchlistController;
     }
 }
 

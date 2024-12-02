@@ -89,8 +89,7 @@ public class BuyView extends JPanel implements ActionListener, PropertyChangeLis
         cancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                viewManagerModel.setState("home view");
-                viewManagerModel.firePropertyChanged();
+                buyController.switchToStockView();
             }
         });
 

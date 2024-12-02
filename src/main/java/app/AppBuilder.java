@@ -160,7 +160,7 @@ public class AppBuilder {
      */
     public AppBuilder addWatchListView() {
         watchListViewModel = new WatchListViewModel();
-        watchListView = new WatchListView(watchListViewModel, viewManagerModel, dbUserDataAccessObject);
+        watchListView = new WatchListView(watchListViewModel, viewManagerModel);
         cardPanel.add(watchListView, watchListView.getViewName());
         return this;
     }
@@ -229,7 +229,7 @@ public class AppBuilder {
                 viewManagerModel,
                 stockViewModel,
                 watchListViewModel);
-        final WatchlistInputBoundary watchlistInteractor = new WatchlistInteractor(dbUserDataAccessObject, watchlistOutputBoundary);
+        final WatchlistInputBoundary watchlistInteractor = new WatchlistInteractor(dbUserDataAccessObject, watchlistOutputBoundary, dbUserDataAccessObject);
 
         final WatchlistController controller = new WatchlistController(watchlistInteractor);
         watchListView.setwatchlistController(controller);
@@ -320,7 +320,8 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addBuyUseCase() {
-        final BuyOutputBoundary buyOutputBoundary = new BuyPresenter(buyViewModel, portfolioViewModel, viewManagerModel, homeViewModel);
+        final BuyOutputBoundary buyOutputBoundary = new BuyPresenter(buyViewModel, portfolioViewModel,
+                viewManagerModel, homeViewModel, stockViewModel);
         final BuyInputBoundary buyInteractor = new BuyInteractor(
                 buyOutputBoundary, fileUserDataAccessObject);
 

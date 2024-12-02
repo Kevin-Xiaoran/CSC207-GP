@@ -3,6 +3,8 @@ package interface_adapter.stock_view;
 import entity.Stock;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * The state for the Stock View Model.
@@ -10,7 +12,7 @@ import java.util.ArrayList;
 public class WatchListViewState {
     private String symbol;
     private Stock stock;
-    private ArrayList<String> watchlist;
+    private ArrayList<Stock> watchlist;
 
     public String getSymbol() {
         return symbol;
@@ -20,7 +22,7 @@ public class WatchListViewState {
         return stock;
     }
 
-    public ArrayList<String> getWatchlist() {
+    public ArrayList<Stock> getWatchlist() {
         return watchlist;
     }
 
@@ -28,7 +30,7 @@ public class WatchListViewState {
         this.stock = newStock;
     }
 
-    public void setWatchlist(ArrayList<String> newWatchlist) {
+    public void setWatchlist(ArrayList<Stock> newWatchlist) {
         this.watchlist = newWatchlist;
     }
 
@@ -36,29 +38,47 @@ public class WatchListViewState {
         this.symbol = symbol;
     }
 
-    public void add(String ticker) {
-        if (this.watchlist != null) {
-            this.watchlist.add(ticker);
+    public void add(Stock stock) {
+        if (this.watchlist == null) {
+            this.watchlist = new ArrayList<>();
         }
-    }
-
-    public void remove(String ticker) {
-        if (this.watchlist != null) {
-            this.watchlist.remove(ticker);
-        }
-    }
-
-    public void resetWatchlist() {
-        if (this.watchlist != null) {
-            final ArrayList<String> temp = new ArrayList<>();
-            for (String ticker : this.watchlist) {
-                if (ticker.equals("AAPL") || ticker.equals("COST") || ticker.equals("NVDA")) {
-                    temp.add(ticker);
-                }
+        this.watchlist.add(stock);
+        Collections.sort(this.watchlist, new Comparator<Stock>() {
+            public int compare(Stock o1, Stock o2) {
+                return o1.getSymbol().compareTo(o2.getSymbol());
             }
+        });
+        System.out.println(watchlist.size());
+    }
 
-            this.watchlist.clear();
-            this.watchlist.addAll(temp);
+    public void remove(Stock stock) {
+        if (this.watchlist == null) {
+            return;
+        }
+        int i = 0;
+        for (Stock s : watchlist) {
+            if (s.getSymbol().equals(stock.getSymbol())) {
+                break;
+            }
+            i++;
+        }
+        if (i < watchlist.size()) {
+            this.watchlist.remove(i);
+            System.out.println(watchlist.size());
         }
     }
+
+    public void resetWatchList() {
+        if (this.watchlist == null) {
+            return;
+        }
+        final ArrayList<Stock> temp = new ArrayList<>();
+        for (Stock s : watchlist) {
+            if (s.getSymbol().equals("AAPL") || s.getSymbol().equals("COST") || s.getSymbol().equals("NVDA")) {
+                temp.add(s);
+            }
+        }
+        this.watchlist.clear();
+        this.watchlist.addAll(temp);
+        }
 }

@@ -73,10 +73,10 @@ public class HomePresenter implements HomeOutputBoundary {
     }
 
     @Override
-    public void switchToWatchList(ArrayList<String> watchListSymbols) {
+    public void switchToWatchList(ArrayList<Stock> watchListStocks) {
         // Pass watchList symbols to watchList view
         final WatchListViewState watchListViewState = new WatchListViewState();
-        watchListViewState.setWatchlist(watchListSymbols);
+        watchListViewState.setWatchlist(watchListStocks);
         watchListViewModel.setState(watchListViewState);
         watchListViewModel.firePropertyChanged("watchList");
 
@@ -111,7 +111,7 @@ public class HomePresenter implements HomeOutputBoundary {
         homeViewModel.firePropertyChanged("getWatchList");
 
         final WatchListViewState watchListViewState = this.watchListViewModel.getState();
-        watchListViewState.resetWatchlist();
+        watchListViewState.resetWatchList();
         watchListViewModel.setState(watchListViewState);
         watchListViewModel.firePropertyChanged("watchList");
     }

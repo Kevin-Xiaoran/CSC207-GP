@@ -15,4 +15,9 @@ public interface BuyOutputBoundary {
      * Switches to the Home View.
      */
     void switchToHomeView();
+
+    /**
+     * Switches to the Stock View.
+     */
+    void switchToStockView();
 }

@@ -1,5 +1,6 @@
 package interface_adapter.watchlist_view;
 
+import entity.Stock;
 import interface_adapter.ViewModel;
 import interface_adapter.stock_view.StockViewState;
 import interface_adapter.stock_view.WatchListViewState;
@@ -16,4 +17,11 @@ public class WatchListViewModel extends ViewModel<WatchListViewState> {
         super("watch list view");
         setState(new WatchListViewState());
     }
+
+    public void updateWatchlist(ArrayList<Stock> stocks) {
+        WatchListViewState newState = getState();
+        newState.setWatchlist(stocks);
+        setState(newState);
+    }
+
 }

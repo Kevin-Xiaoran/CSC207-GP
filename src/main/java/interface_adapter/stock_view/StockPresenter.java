@@ -57,7 +57,7 @@ public class StockPresenter implements StockOutputBoundary {
         homeViewModel.firePropertyChanged("getWatchList");
 
         // Pass new watchlist data to watchListView
-        watchListViewState.add(stock.getSymbol());
+        watchListViewState.add(stock);
         watchListViewModel.firePropertyChanged("getWatchList");
     }
 
@@ -71,7 +71,7 @@ public class StockPresenter implements StockOutputBoundary {
         homeViewModel.firePropertyChanged("getWatchList");
 
         // Pass new watchlist data to watchListView
-        watchListViewState.remove(stock.getSymbol());
+        watchListViewState.remove(stock);
         watchListViewModel.firePropertyChanged("watchList");
     }
 
