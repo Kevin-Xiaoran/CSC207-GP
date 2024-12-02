@@ -1,6 +1,7 @@
 package use_case.portfolio;
 
 import entity.CommonStockFactory;
+import entity.DebugMode;
 import entity.SimulatedHolding;
 import entity.Stock;
 import use_case.home_view.HomeDataAccessInterface;
@@ -25,25 +26,28 @@ public class PortfolioInteractor implements PortfolioInputBoundary{
         final ArrayList<SimulatedHolding> simulatedHoldings = portfolioDataAccessObject.getPortfolioList();
         final ArrayList<Stock> stockList = new ArrayList<>();
 
-//        // Using real data
-//        for (SimulatedHolding simulatedHolding : simulatedHoldings) {
-//            final Stock stock = homeDataAccessObject.getStock(simulatedHolding.getSymbol());
-//            stockList.add(stock);
-//        }
+        if (DebugMode.debugMode) {
+            // Using fake data
+            int i = 100;
+            final CommonStockFactory stockFactory = new CommonStockFactory();
+            for (SimulatedHolding simulatedHolding : simulatedHoldings) {
+                final Stock stock = stockFactory.create(simulatedHolding.getSymbol(),
+                        0,
+                        i + 50,
+                        10000000.2,
+                        0,
+                        0);
+                stockList.add(stock);
 
-        // Using fake data
-        int i = 100;
-        final CommonStockFactory stockFactory = new CommonStockFactory();
-        for (SimulatedHolding simulatedHolding : simulatedHoldings) {
-            final Stock stock = stockFactory.create(simulatedHolding.getSymbol(),
-                    0,
-                    i + 50,
-                    10000000.2,
-                    0,
-                    0);
-            stockList.add(stock);
-
-            i += 100;
+                i += 100;
+            }
+        }
+        else {
+            // Using real data
+            for (SimulatedHolding simulatedHolding : simulatedHoldings) {
+                final Stock stock = homeDataAccessObject.getStock(simulatedHolding.getSymbol());
+                stockList.add(stock);
+            }
         }
 
         portfolioPresenter.presentPortfolioListData(simulatedHoldings, stockList);
