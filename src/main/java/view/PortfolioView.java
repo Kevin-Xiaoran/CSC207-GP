@@ -187,6 +187,7 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
             final PortfolioState portfolioState = portfolioViewModel.getState();
             final ArrayList<SimulatedHolding> portfolioList = portfolioState.getSimulatedHoldings();
             final ArrayList<Stock> stockList = portfolioState.getStocks();
+            contentPanel.removeAll();
 
             double totalValue = 0;
             double totalDailyChange = 0;

@@ -25,7 +25,7 @@ public class PortfolioInteractor implements PortfolioInputBoundary{
         final ArrayList<SimulatedHolding> simulatedHoldings = portfolioDataAccessObject.getPortfolioList();
         final ArrayList<Stock> stockList = new ArrayList<>();
 
-//        // Get data from API
+//        // Using real data
 //        for (SimulatedHolding simulatedHolding : simulatedHoldings) {
 //            final Stock stock = homeDataAccessObject.getStock(simulatedHolding.getSymbol());
 //            stockList.add(stock);

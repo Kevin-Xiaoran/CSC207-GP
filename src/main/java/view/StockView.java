@@ -149,7 +149,7 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
         volumeLabel.setText("Volume: " + volumeText);
 
         // 星星按钮的可见性
-        updateFavoriteButtonVisibility(stock.getSymbol());
+//        updateFavoriteButtonVisibility(stock.getSymbol());
     }
 
     private void updateFavoriteButtonVisibility(String stockSymbol) {
@@ -200,6 +200,8 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
             // Toggle button text between filled and empty star
             favoriteButton.setText(stockViewState.getIsFavorite() ? "★" : "☆");
         }
+
+        // Update login state
         setButtonVisible(fileUserDataAccessObject.isUserLoggedIn());
     }
 
