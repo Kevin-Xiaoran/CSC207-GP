@@ -131,5 +131,6 @@ public class HomeInteractor implements HomeInputBoundary {
         portfolioDataAccessInterface.createPortfolioList();
 
         homePresenter.deleteLocalData();
+        this.getWatchListData();
     }
 }

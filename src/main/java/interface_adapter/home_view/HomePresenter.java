@@ -106,11 +106,6 @@ public class HomePresenter implements HomeOutputBoundary {
 
     @Override
     public void deleteLocalData() {
-        final HomeState homeState = this.homeViewModel.getState();
-        homeState.resetWatchList();
-        homeViewModel.setState(homeState);
-        homeViewModel.firePropertyChanged("getWatchList");
-
         final WatchListViewState watchListViewState = this.watchListViewModel.getState();
         watchListViewState.resetWatchList();
         watchListViewModel.setState(watchListViewState);
