@@ -2,6 +2,9 @@ package use_case.stock;
 
 import entity.Stock;
 
+/**
+ * Output Boundary for actions which are related to stock.
+ */
 public interface StockOutputBoundary {
     /**
      * Presents the Buy View when a user wants to buy a stock.

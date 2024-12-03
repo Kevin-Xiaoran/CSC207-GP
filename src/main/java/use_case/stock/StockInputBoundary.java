@@ -2,6 +2,9 @@ package use_case.stock;
 
 import entity.Stock;
 
+/**
+ * Input Boundary for actions which are related to Stock.
+ */
 public interface StockInputBoundary {
     /**
      * Handles the logic when a user wants to buy a stock.

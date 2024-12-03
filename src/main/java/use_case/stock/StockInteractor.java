@@ -1,11 +1,14 @@
 package use_case.stock;
 
+import java.util.ArrayList;
+
 import entity.Stock;
 import use_case.watchlist.WatchListDataAccessInterface;
 import use_case.watchlist.WatchListModifyDataAccessInterface;
 
-import java.util.ArrayList;
-
+/**
+ * The Stock Interactor.
+ */
 public class StockInteractor implements StockInputBoundary {
 
     private final StockOutputBoundary stockPresenter;
@@ -27,8 +30,6 @@ public class StockInteractor implements StockInputBoundary {
 
     @Override
     public void toggleWatchlist(Stock stock, Boolean shouldModifyData) {
-        // When user comes from HomeView or WatchlistView, we should only update favourite button UI based on watchlist Data.
-        // We update watchlist data iff when user clicked favourite button.
         final ArrayList<String> watchList = watchListDataAccessInterface.getWatchList();
         if (watchList.contains(stock.getSymbol())) {
             if (shouldModifyData) {
