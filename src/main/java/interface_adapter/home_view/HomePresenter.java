@@ -7,7 +7,7 @@ import interface_adapter.portfolio.PortfolioViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.stock_view.StockViewModel;
 import interface_adapter.stock_view.StockViewState;
-import interface_adapter.stock_view.WatchListViewState;
+import interface_adapter.watchlist_view.WatchListViewState;
 import interface_adapter.watchlist_view.WatchListViewModel;
 import use_case.home_view.HomeOutputBoundary;
 import use_case.home_view.SearchOutputData;

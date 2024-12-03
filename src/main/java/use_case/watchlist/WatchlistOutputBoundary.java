@@ -1,4 +1,4 @@
-package use_case.home_view;
+package use_case.watchlist;
 
 import entity.Stock;
 

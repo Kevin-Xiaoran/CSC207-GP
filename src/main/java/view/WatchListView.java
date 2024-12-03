@@ -5,8 +5,8 @@ import view.HomeViewComponents.ScrollablePanel;
 
 import data_access.DBUserDataAccessObject;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.home_view.WatchlistController;
-import interface_adapter.stock_view.WatchListViewState;
+import interface_adapter.watchlist_view.WatchlistController;
+import interface_adapter.watchlist_view.WatchListViewState;
 import interface_adapter.watchlist_view.WatchListViewModel;
 
 import javax.swing.*;

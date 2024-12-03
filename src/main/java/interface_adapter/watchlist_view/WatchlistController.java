@@ -1,9 +1,8 @@
-package interface_adapter.home_view;
+package interface_adapter.watchlist_view;
 
 import entity.Stock;
-import use_case.home_view.HomeInputBoundary;
 import use_case.home_view.SearchInputData;
-import use_case.home_view.WatchlistInputBoundary;
+import use_case.watchlist.WatchlistInputBoundary;
 
 import java.util.ArrayList;
 

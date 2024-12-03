@@ -1,4 +1,4 @@
-package interface_adapter.stock_view;
+package interface_adapter.watchlist_view;
 
 import entity.Stock;
 

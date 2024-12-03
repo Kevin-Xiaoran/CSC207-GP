@@ -1,20 +1,9 @@
-package interface_adapter.home_view;
+package interface_adapter.watchlist_view;
 
-import entity.Stock;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.login.LoginViewModel;
-import interface_adapter.portfolio.PortfolioViewModel;
-import interface_adapter.signup.SignupViewModel;
 import interface_adapter.stock_view.StockViewModel;
 import interface_adapter.stock_view.StockViewState;
-import interface_adapter.stock_view.WatchListViewState;
-import interface_adapter.watchlist_view.WatchListViewModel;
-import use_case.home_view.HomeOutputBoundary;
-import use_case.home_view.SearchOutputData;
-import use_case.home_view.WatchlistOutputBoundary;
-import view.WatchListView;
-
-import java.util.ArrayList;
+import use_case.watchlist.WatchlistOutputBoundary;
 
 /**
  * The Presenter for the Search Use Case.
@@ -35,7 +24,8 @@ public class WatchlistPresenter implements WatchlistOutputBoundary {
         this.watchListViewModel = watchListViewModel;
     }
 
-    public void prepareSuccessView(SearchOutputData searchOutputData) {
+    @Override
+    public void prepareSuccessView(use_case.watchlist.SearchOutputData searchOutputData) {
         // Show stock view
         final StockViewState stockViewState = new StockViewState();
         stockViewState.setStock(searchOutputData.getStock());
