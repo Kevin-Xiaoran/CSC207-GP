@@ -33,7 +33,7 @@ To run this project, follow these steps:
 
 1. Clone the repository to your local machine.
 2. Navigate to the `src/main/java/app` directory:
-3. Click the green arrow on the top right section in your IntelliJ.![image](https://github.com/user-attachments/assets/a31de5dc-624e-4e24-938c-1cc258b78c23)
+3. Click the green arrow on the top right section in your IntelliJ.<sub><sub><img src="https://github.com/user-attachments/assets/a31de5dc-624e-4e24-938c-1cc258b78c23" alt="image" width="30"></sub></sub>
 4. Due to API usage limitation, we are currently using mock data for our application. If you want to use real-time data, please go to `src/main/java/entity/DebugMode` and change debugMode to **false**
 
 ## Screenshots
