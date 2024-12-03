@@ -173,15 +173,21 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     public Stock getStock(String symbol) {
         final OkHttpClient client = new OkHttpClient().newBuilder().build();
         final Request request = new Request.Builder()
-                .url(String.format("https://api.marketstack.com/v1/eod?access_key=3847d86b56ca461a0da759024332c06a&symbols=%s", symbol))
+                .url(String.format("https://api.marketstack.com/v1/eod?access_key=80df30ae25f023eb0b512ceb8364720b&symbols=%s", symbol))
                 .get()
                 .build();
         try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) throw new RuntimeException("Request Failed: " + response);
-
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("API Error: " + response.code() + " " + response.message());
+            }
             final String responseBody = response.body().string();
             final JSONObject json = new JSONObject(responseBody);
             final JSONArray dataArray = json.getJSONArray("data");
+
+            if (dataArray.isEmpty()) {
+                throw new RuntimeException("Stock data not found for symbol: " + symbol);
+            }
+
             final JSONObject stockData = dataArray.getJSONObject(0);
 
             final double open = stockData.getDouble("open");
@@ -193,7 +199,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
             return stockFactory.create(symbol, open, close, volume, high, low);
         }
         catch (IOException | JSONException ex) {
-            throw new RuntimeException(ex);
+            throw new RuntimeException("Failed to fetch stock data for symbol: " + symbol, ex);
         }
     }
 
