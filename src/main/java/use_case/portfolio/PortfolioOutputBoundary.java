@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import entity.SimulatedHolding;
 import entity.Stock;
 
+/**
+ * The output boundary for the Portfolio Use Case.
+ */
 public interface PortfolioOutputBoundary {
     /**
      * Present portfolio list data for Portfolio View.

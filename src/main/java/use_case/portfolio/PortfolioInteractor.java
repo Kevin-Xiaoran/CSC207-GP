@@ -1,13 +1,14 @@
 package use_case.portfolio;
 
+import java.util.ArrayList;
+
 import entity.CommonStockFactory;
 import entity.SimulatedHolding;
 import entity.Stock;
 import use_case.home_view.HomeDataAccessInterface;
 
-import java.util.ArrayList;
+public class PortfolioInteractor implements PortfolioInputBoundary {
 
-public class PortfolioInteractor implements PortfolioInputBoundary{
     private final PortfolioDataAccessInterface portfolioDataAccessObject;
     private final HomeDataAccessInterface homeDataAccessObject;
     private final PortfolioOutputBoundary portfolioPresenter;
@@ -24,12 +25,6 @@ public class PortfolioInteractor implements PortfolioInputBoundary{
     public void getPortfolioListData() {
         final ArrayList<SimulatedHolding> simulatedHoldings = portfolioDataAccessObject.getPortfolioList();
         final ArrayList<Stock> stockList = new ArrayList<>();
-
-//        // Get data from API
-//        for (SimulatedHolding simulatedHolding : simulatedHoldings) {
-//            final Stock stock = homeDataAccessObject.getStock(simulatedHolding.getSymbol());
-//            stockList.add(stock);
-//        }
 
         // Using fake data
         int i = 100;

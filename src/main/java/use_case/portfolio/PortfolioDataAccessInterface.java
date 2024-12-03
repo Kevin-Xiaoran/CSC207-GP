@@ -1,19 +1,40 @@
 package use_case.portfolio;
 
+import java.util.ArrayList;
+
 import entity.SimulatedHolding;
 
-import java.util.ArrayList;
+/**
+ * DAO for the Portfolio use case.
+ */
 
 public interface PortfolioDataAccessInterface {
 
-    public ArrayList<SimulatedHolding> getPortfolioList();
+    /**
+     * An arraylist of current stock holdings.
+     */
+    ArrayList<SimulatedHolding> getPortfolioList();
 
-    public void savePortfolioList();
+    /**
+     * Saves the portfolio.
+     */
+    void savePortfolioList();
 
-    public void addToPortfolioList(SimulatedHolding simulatedHolding);
+    /**
+     * Adds stock to portfolio list.
+     * @param simulatedHolding the holding to be added.
+     */
+    void addToPortfolioList(SimulatedHolding simulatedHolding);
 
-    public void removeFromPortfolioList(SimulatedHolding simulatedHolding);
+    /**
+     * Removes stock from portfolio list.
+     * @param simulatedHolding the holding to be removed.
+     */
+    void removeFromPortfolioList(SimulatedHolding simulatedHolding);
 
-    public void createPortfolioList();
+    /**
+     * Creates a portfolio list.
+     */
+    void createPortfolioList();
 
 }
