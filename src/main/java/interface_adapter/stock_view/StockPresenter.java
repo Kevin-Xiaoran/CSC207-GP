@@ -6,13 +6,14 @@ import interface_adapter.buy_view.BuyState;
 import interface_adapter.buy_view.BuyViewModel;
 import interface_adapter.home_view.HomeState;
 import interface_adapter.home_view.HomeViewModel;
-import interface_adapter.watchlist_view.WatchListViewModel;
 import interface_adapter.stock_view.WatchListViewState;
+import interface_adapter.watchlist_view.WatchListViewModel;
 import use_case.stock.StockOutputBoundary;
 import view.StockView;
 
-import java.util.ArrayList;
-
+/**
+ * The Presenter for the stockview Use Case.
+ */
 public class StockPresenter implements StockOutputBoundary {
 
     private final StockViewModel stockViewModel;
