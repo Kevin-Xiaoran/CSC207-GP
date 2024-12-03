@@ -13,11 +13,15 @@ public class StockViewState {
         return stock;
     }
 
-    public Boolean getIsFavorite() { return isFavorite; }
+    public Boolean getIsFavorite() {
+        return isFavorite;
+    }
 
     public void setStock(Stock newStock) {
         this.stock = newStock;
     }
 
-    public void setIsFavorite(Boolean isFavorite) { this.isFavorite = isFavorite; }
+    public void setIsFavorite(Boolean isFavorite) {
+        this.isFavorite = isFavorite;
+    }
 }

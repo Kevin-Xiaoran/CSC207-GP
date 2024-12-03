@@ -15,7 +15,9 @@ public class BuyInputData {
         this.quantity = quantity;
     }
 
-    public String getSymbol() { return symbol; }
+    public String getSymbol() {
+        return symbol;
+    }
 
     public double getPrice() {
         return price;

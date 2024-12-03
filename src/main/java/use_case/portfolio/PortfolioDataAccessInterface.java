@@ -1,19 +1,42 @@
 package use_case.portfolio;
 
-import entity.SimulatedHolding;
-
 import java.util.ArrayList;
 
+import entity.SimulatedHolding;
+
+/**
+ * Interface for managing portfolio data.
+ */
 public interface PortfolioDataAccessInterface {
 
-    public ArrayList<SimulatedHolding> getPortfolioList();
+    /**
+     * Get the portfolio list.
+     *
+     * @return the portfolio list
+     */
+    ArrayList<SimulatedHolding> getPortfolioList();
 
-    public void savePortfolioList();
+    /**
+     * Save the portfolio list.
+     */
+    void savePortfolioList();
 
-    public void addToPortfolioList(SimulatedHolding simulatedHolding);
+    /**
+     * Add a holding to the portfolio list.
+     *
+     * @param simulatedHolding the holding to add
+     */
+    void addToPortfolioList(SimulatedHolding simulatedHolding);
 
-    public void removeFromPortfolioList(SimulatedHolding simulatedHolding);
+    /**
+     * Remove a holding from the portfolio list.
+     *
+     * @param simulatedHolding the holding to remove
+     */
+    void removeFromPortfolioList(SimulatedHolding simulatedHolding);
 
-    public void createPortfolioList();
-
+    /**
+     * Create a new portfolio list.
+     */
+    void createPortfolioList();
 }

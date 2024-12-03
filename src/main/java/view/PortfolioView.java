@@ -1,5 +1,22 @@
 package view;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.Border;
+
 import entity.SimulatedHolding;
 import entity.Stock;
 import interface_adapter.ViewManagerModel;
@@ -7,16 +24,18 @@ import interface_adapter.portfolio.PortfolioController;
 import interface_adapter.portfolio.PortfolioState;
 import interface_adapter.portfolio.PortfolioViewModel;
 
-import javax.swing.*;
-import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-
-import javax.swing.border.Border;
-import javax.swing.BorderFactory;
-
+/**
+ * The view for displaying portfolio details.
+ */
 public class PortfolioView extends JPanel implements PropertyChangeListener {
+
+    private static final int PADDING_SMALL = 10;
+    private static final int PADDING_LARGE = 20;
+    private static final int FONT_SIZE_TITLE = 24;
+    private static final int FONT_SIZE_SUBTITLE = 18;
+    private static final int FONT_SIZE_LABEL = 16;
+    private static final int SCROLL_WIDTH = 400;
+    private static final int SCROLL_HEIGHT = 300;
 
     private final PortfolioViewModel portfolioViewModel;
     private final ViewManagerModel viewManagerModel;
@@ -33,18 +52,15 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        // panel setup
         final JPanel statisticsPanel = new JPanel();
         statisticsPanel.setLayout(new BoxLayout(statisticsPanel, BoxLayout.Y_AXIS));
-        statisticsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
+        statisticsPanel.setBorder(BorderFactory.createEmptyBorder(PADDING_SMALL, PADDING_SMALL, PADDING_LARGE, PADDING_SMALL));
         statisticsPanel.setBackground(Color.WHITE);
 
-        // Container for return button and current amount
         final JPanel topRowPanel = new JPanel();
         topRowPanel.setLayout(new BoxLayout(topRowPanel, BoxLayout.Y_AXIS));
         topRowPanel.setBackground(Color.WHITE);
 
-        // Return button
         final JButton backButton = new JButton("\u2190");
         backButton.setFont(new Font("SansSerif", Font.PLAIN, 20));
         backButton.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -124,8 +140,8 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
         double currentValue = closePrice * amount;
         double dailyChange = (closePrice - openPrice) * amount;
         double allTimeChange = (closePrice - purchasePrice) * amount;
-        double dailyPercentage = openPrice != 0 ? ((closePrice - openPrice) / openPrice) * 100 : 0;
-        double allTimePercentage = purchasePrice != 0 ? ((closePrice - purchasePrice) / purchasePrice) * 100 : 0;
+        double dailyPercentage = openPrice != 0 ? ((closePrice - openPrice) / openPrice) * 100 : 100;
+        double allTimePercentage = purchasePrice != 0 ? ((closePrice - purchasePrice) / purchasePrice) * 100 : 100;
 
         // Left part: Stock code and price
         final JPanel leftPanel = new JPanel();
@@ -187,6 +203,7 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
             final PortfolioState portfolioState = portfolioViewModel.getState();
             final ArrayList<SimulatedHolding> portfolioList = portfolioState.getSimulatedHoldings();
             final ArrayList<Stock> stockList = portfolioState.getStocks();
+            contentPanel.removeAll();
 
             double totalValue = 0;
             double totalDailyChange = 0;
@@ -208,6 +225,9 @@ public class PortfolioView extends JPanel implements PropertyChangeListener {
 
             contentPanel.revalidate();
             contentPanel.repaint();
+        }
+        else if (evt.getPropertyName().equals("addNewStock")) {
+            portfolioController.getPortfolioList();
         }
     }
 }

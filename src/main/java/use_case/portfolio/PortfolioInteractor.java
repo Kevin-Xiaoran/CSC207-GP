@@ -1,13 +1,22 @@
 package use_case.portfolio;
 
+import java.util.ArrayList;
+
 import entity.CommonStockFactory;
+import entity.DebugMode;
 import entity.SimulatedHolding;
 import entity.Stock;
 import use_case.home_view.HomeDataAccessInterface;
 
-import java.util.ArrayList;
+/**
+ * The Portfolio Interactor.
+ */
+public class PortfolioInteractor implements PortfolioInputBoundary {
+    private static final int INITIAL_STOCK_PRICE = 100;
+    private static final int STOCK_PRICE_INCREMENT = 100;
+    private static final int ADDITIONAL_PRICE = 50;
+    private static final double FAKE_VOLUME = 10000000.2;
 
-public class PortfolioInteractor implements PortfolioInputBoundary{
     private final PortfolioDataAccessInterface portfolioDataAccessObject;
     private final HomeDataAccessInterface homeDataAccessObject;
     private final PortfolioOutputBoundary portfolioPresenter;
@@ -25,27 +34,30 @@ public class PortfolioInteractor implements PortfolioInputBoundary{
         final ArrayList<SimulatedHolding> simulatedHoldings = portfolioDataAccessObject.getPortfolioList();
         final ArrayList<Stock> stockList = new ArrayList<>();
 
-//        // Get data from API
-//        for (SimulatedHolding simulatedHolding : simulatedHoldings) {
-//            final Stock stock = homeDataAccessObject.getStock(simulatedHolding.getSymbol());
-//            stockList.add(stock);
-//        }
+        if (DebugMode.debugMode) {
+            // Using fake data
+            int stockPrice = INITIAL_STOCK_PRICE;
+            final CommonStockFactory stockFactory = new CommonStockFactory();
+            for (SimulatedHolding simulatedHolding : simulatedHoldings) {
+                final Stock stock = stockFactory.create(
+                        simulatedHolding.getSymbol(),
+                        0,
+                        stockPrice + ADDITIONAL_PRICE,
+                        FAKE_VOLUME,
+                        0,
+                        0
+                );
+                stockList.add(stock);
 
-        // Using fake data
-        int i = 100;
-        final CommonStockFactory stockFactory = new CommonStockFactory();
-        for (SimulatedHolding simulatedHolding : simulatedHoldings) {
-            final Stock stock = stockFactory.create(simulatedHolding.getSymbol(),
-                    0,
-                    i + 50,
-                    10000000.2,
-                    0,
-                    0);
-            stockList.add(stock);
-
-            i += 100;
+                stockPrice += STOCK_PRICE_INCREMENT;
+            }
         }
-
-        portfolioPresenter.presentPortfolioListData(simulatedHoldings, stockList);
+        else {
+            // Using real data
+            for (SimulatedHolding simulatedHolding : simulatedHoldings) {
+                final Stock stock = homeDataAccessObject.getStock(simulatedHolding.getSymbol());
+                stockList.add(stock);
+            }
+        }
     }
 }

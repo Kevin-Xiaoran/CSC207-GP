@@ -1,24 +1,38 @@
 package view;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import data_access.FileUserDataAccessObject;
 import entity.Stock;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.stock_view.StockViewModel;
 import interface_adapter.stock_view.StockController;
+import interface_adapter.stock_view.StockViewModel;
 import interface_adapter.stock_view.StockViewState;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 /**
  * The View for displaying detailed information about a single stock.
  */
 public class StockView extends AbstractViewWithBackButton implements PropertyChangeListener {
-    private final String viewName = "StockView";
+    private static final String VIEW_NAME = "StockView";
+    private static final String FONT_FAMILY = "SansSerif";
+    private static final int FONT_SIZE_TITLE = 24;
+    private static final int FONT_SIZE_SUBTITLE = 18;
+    private static final int FONT_SIZE_LABEL = 16;
+    private static final int PADDING_LARGE = 20;
+    private static final int PADDING_SMALL = 10;
+    private static final int MILLION = 1_000_000;
+    private static final int THOUSAND = 1_000;
 
     private final ViewManagerModel viewManagerModel;
     private final StockViewModel stockViewModel;
@@ -35,7 +49,7 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
     private JButton buyButton;
     private String previousView;
 
-    private FileUserDataAccessObject fileUserDataAccessObject = new FileUserDataAccessObject();
+    private final FileUserDataAccessObject fileUserDataAccessObject = new FileUserDataAccessObject();
 
     public StockView(StockViewModel stockViewModel, ViewManagerModel viewManagerModel) {
         fileUserDataAccessObject.isUserLoggedIn();
@@ -57,7 +71,7 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
 
         add(Box.createVerticalGlue());
         add(contentPanel);
-        add(Box.createRigidArea(new Dimension(0, 20)));
+        add(Box.createRigidArea(new Dimension(0, PADDING_LARGE)));
         add(createActionButtonsPanel());
         add(Box.createVerticalGlue());
     }
@@ -67,8 +81,8 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
     }
 
     private void initializeComponents(JPanel contentPanel) {
-        stockSymbolLabel = createLabel("", 24, Font.BOLD);
-        stockPriceLabel = createLabel("", 18, Font.PLAIN);
+        stockSymbolLabel = createLabel(FONT_SIZE_TITLE, Font.BOLD);
+        stockPriceLabel = createLabel(FONT_SIZE_SUBTITLE, Font.PLAIN);
 
         final JPanel stockInfoPanel = new JPanel();
         stockInfoPanel.setLayout(new BoxLayout(stockInfoPanel, BoxLayout.Y_AXIS));
@@ -76,14 +90,14 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
         stockInfoPanel.add(stockSymbolLabel);
         stockInfoPanel.add(stockPriceLabel);
 
-        openPriceLabel = createLabel("", 16, Font.PLAIN);
-        closePriceLabel = createLabel("", 16, Font.PLAIN);
-        lowPriceLabel = createLabel("", 16, Font.PLAIN);
-        highPriceLabel = createLabel("", 16, Font.PLAIN);
-        volumeLabel = createLabel("", 16, Font.PLAIN);
+        openPriceLabel = createLabel(FONT_SIZE_LABEL, Font.PLAIN);
+        closePriceLabel = createLabel(FONT_SIZE_LABEL, Font.PLAIN);
+        lowPriceLabel = createLabel(FONT_SIZE_LABEL, Font.PLAIN);
+        highPriceLabel = createLabel(FONT_SIZE_LABEL, Font.PLAIN);
+        volumeLabel = createLabel(FONT_SIZE_LABEL, Font.PLAIN);
 
         contentPanel.add(stockInfoPanel);
-        contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        contentPanel.add(Box.createRigidArea(new Dimension(0, PADDING_SMALL)));
         contentPanel.add(openPriceLabel);
         contentPanel.add(closePriceLabel);
         contentPanel.add(lowPriceLabel);
@@ -95,46 +109,46 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
     }
 
     private JPanel createActionButtonsPanel() {
-        JPanel actionPanel = new JPanel();
+        final JPanel actionPanel = new JPanel();
         actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.X_AXIS));
         actionPanel.setBackground(Color.WHITE);
         actionPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         buyButton = new JButton("BUY");
-        buyButton.setFont(new Font("SansSerif", Font.BOLD, 18));
+        buyButton.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_SUBTITLE));
         buyButton.setFocusPainted(false);
-
-        // Buy Button Action: Invoke the controller to buy stock
-        buyButton.addActionListener(e -> {
-            Stock currentStock = stockViewModel.getState().getStock();
+        buyButton.addActionListener(event -> {
+            final Stock currentStock = stockViewModel.getState().getStock();
             if (currentStock != null && stockController != null) {
                 stockController.buyStock(currentStock);
             }
         });
 
         // Star button for favorite
-        favoriteButton = new JButton("☆");
-        favoriteButton.setFont(new Font("SansSerif", Font.BOLD, 18));
+        favoriteButton = new JButton("\u2606");
+        favoriteButton.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_SUBTITLE));
         favoriteButton.setFocusPainted(false);
-
-        // Favorite Button Action: Add or remove stock from watchlist
-        favoriteButton.addActionListener(e -> {
-            Stock currentStock = stockViewModel.getState().getStock();
+        favoriteButton.addActionListener(event -> {
+            final Stock currentStock = stockViewModel.getState().getStock();
             if (currentStock != null && stockController != null) {
-                boolean isFavorite = "★".equals(favoriteButton.getText());
+                final boolean isFavorite = "\u2605".equals(favoriteButton.getText());
                 stockController.toggleWatchlist(currentStock, true);
             }
         });
 
         actionPanel.add(Box.createHorizontalGlue());
         actionPanel.add(buyButton);
-        actionPanel.add(Box.createRigidArea(new Dimension(20, 0)));
+        actionPanel.add(Box.createRigidArea(new Dimension(PADDING_LARGE, 0)));
         actionPanel.add(favoriteButton);
         actionPanel.add(Box.createHorizontalGlue());
 
         return actionPanel;
     }
 
+    /**
+     * The update data part .
+     * @param stock as the stock that should be shown
+     */
     public void updateStockData(Stock stock) {
         stockSymbolLabel.setText(stock.getSymbol());
         stockPriceLabel.setText("Current Price: $" + stock.getClosePrice());
@@ -143,23 +157,25 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
         lowPriceLabel.setText("Low: $" + stock.getLow());
         highPriceLabel.setText("High: $" + stock.getHigh());
 
-        double volume = stock.getVolume();
-        String volumeText = (volume >= 1_000_000) ? (volume / 1_000_000) + " M" :
-                (volume >= 1_000) ? (volume / 1_000) + " K" : String.valueOf(volume);
-        volumeLabel.setText("Volume: " + volumeText);
+        final double volume = stock.getVolume();
+        final String volumeText;
 
-        // 星星按钮的可见性
-        updateFavoriteButtonVisibility(stock.getSymbol());
+        if (volume >= MILLION) {
+            volumeText = (volume / MILLION) + " M";
+        }
+        else if (volume >= THOUSAND) {
+            volumeText = (volume / THOUSAND) + " K";
+        }
+        else {
+            volumeText = String.valueOf(volume);
+        }
+
+        volumeLabel.setText("Volume: " + volumeText);
     }
 
     private void updateFavoriteButtonVisibility(String stockSymbol) {
-        // 隐藏 AAPL, COST, NVDA 的星星按钮
-        if ("AAPL".equals(stockSymbol) || "COST".equals(stockSymbol) || "NVDA".equals(stockSymbol)) {
-            favoriteButton.setVisible(false);
-        }
-        else {
-            favoriteButton.setVisible(true);
-        }
+        favoriteButton.setVisible(!"AAPL".equals(stockSymbol) && !"COST".equals(stockSymbol)
+                && !"NVDA".equals(stockSymbol));
     }
 
     private void setButtonVisible(boolean visible) {
@@ -167,15 +183,15 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
         buyButton.setVisible(visible);
     }
 
-    private JLabel createLabel(String text, int fontSize, int fontStyle) {
-        final JLabel label = new JLabel(text);
-        label.setFont(new Font("SansSerif", fontStyle, fontSize));
+    private JLabel createLabel(int fontSize, int fontStyle) {
+        final JLabel label = new JLabel("");
+        label.setFont(new Font(FONT_FAMILY, fontStyle, fontSize));
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
     }
 
     public String getViewName() {
-        return viewName;
+        return VIEW_NAME;
     }
 
     @Override
@@ -198,8 +214,15 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
         }
         else if ("updateFavouriteButton".equals(evt.getPropertyName())) {
             // Toggle button text between filled and empty star
-            favoriteButton.setText(stockViewState.getIsFavorite() ? "★" : "☆");
+            if (stockViewState.getIsFavorite()) {
+                favoriteButton.setText("\u2605");
+            }
+            else {
+                favoriteButton.setText("\u2606");
+            }
         }
+
+        // Update login state
         setButtonVisible(fileUserDataAccessObject.isUserLoggedIn());
     }
 
@@ -207,3 +230,4 @@ public class StockView extends AbstractViewWithBackButton implements PropertyCha
         this.previousView = viewName;
     }
 }
+

@@ -9,7 +9,12 @@ import javax.swing.WindowConstants;
 
 import data_access.DBUserDataAccessObject;
 import data_access.FileUserDataAccessObject;
-import entity.*;
+import entity.CommonSimulatedHoldingFactory;
+import entity.CommonStockFactory;
+import entity.CommonUserFactory;
+import entity.SimulatedHoldingFactory;
+import entity.StockFactory;
+import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.buy_view.BuyController;
 import interface_adapter.buy_view.BuyPresenter;
@@ -66,7 +71,15 @@ import use_case.signup.SignupOutputBoundary;
 import use_case.stock.StockInputBoundary;
 import use_case.stock.StockInteractor;
 import use_case.stock.StockOutputBoundary;
-import view.*;
+import view.BuyView;
+import view.HomeView;
+import view.LoggedInView;
+import view.LoginView;
+import view.PortfolioView;
+import view.SignupView;
+import view.StockView;
+import view.ViewManager;
+import view.WatchListView;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -91,7 +104,8 @@ public class AppBuilder {
 
     // thought question: is the hard dependency below a problem?
     private final DBUserDataAccessObject dbUserDataAccessObject = new DBUserDataAccessObject(userFactory, stockFactory);
-    private final FileUserDataAccessObject fileUserDataAccessObject = new FileUserDataAccessObject(simulatedHoldingFactory);
+    private final FileUserDataAccessObject fileUserDataAccessObject =
+            new FileUserDataAccessObject(simulatedHoldingFactory);
 
     private HomeView homeView;
     private HomeViewModel homeViewModel;
@@ -133,7 +147,7 @@ public class AppBuilder {
      */
     public AppBuilder addSignupView() {
         signupViewModel = new SignupViewModel();
-        signupView = new SignupView(signupViewModel,viewManagerModel);
+        signupView = new SignupView(signupViewModel, viewManagerModel);
         cardPanel.add(signupView, signupView.getViewName());
         return this;
     }
@@ -154,7 +168,7 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addLoggedInView() {
-        loggedInViewModel =  new LoggedInViewModel();
+        loggedInViewModel = new LoggedInViewModel();
         loggedInView = new LoggedInView(loggedInViewModel);
         cardPanel.add(loggedInView, loggedInView.getViewName());
         return this;
@@ -304,6 +318,7 @@ public class AppBuilder {
         loggedInView.setLogoutController(logoutController);
         return this;
     }
+
     /**
      * Adds the Stock Use Case to the application.
      * @return this builder
@@ -314,7 +329,8 @@ public class AppBuilder {
                                                                       homeViewModel,
                                                                       watchListViewModel,
                                                                       viewManagerModel);
-        final StockInputBoundary stockInteractor = new StockInteractor(stockPresenter, fileUserDataAccessObject, fileUserDataAccessObject);
+        final StockInputBoundary stockInteractor =
+                new StockInteractor(stockPresenter, fileUserDataAccessObject, fileUserDataAccessObject);
         final StockController stockController = new StockController(stockInteractor);
         stockView.setStockController(stockController);
 
@@ -336,9 +352,14 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the Portfolio Use Case to the application.
+     * @return this builder
+     */
     public AppBuilder addPortfolioUseCase() {
         final PortfolioOutputBoundary portfolioPresenter = new PortfolioPresenter(portfolioViewModel);
-        final PortfolioInputBoundary portfolioInteractor = new PortfolioInteractor(fileUserDataAccessObject, dbUserDataAccessObject ,portfolioPresenter);
+        final PortfolioInputBoundary portfolioInteractor =
+                new PortfolioInteractor(fileUserDataAccessObject, dbUserDataAccessObject, portfolioPresenter);
         final PortfolioController portfolioController = new PortfolioController(portfolioInteractor);
         portfolioView.setController(portfolioController);
 

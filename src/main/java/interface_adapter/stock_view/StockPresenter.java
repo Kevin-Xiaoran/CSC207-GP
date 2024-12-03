@@ -11,8 +11,9 @@ import interface_adapter.watchlist_view.WatchListViewState;
 import use_case.stock.StockOutputBoundary;
 import view.StockView;
 
-import java.util.ArrayList;
-
+/**
+ * The Presenter for the stockview Use Case.
+ */
 public class StockPresenter implements StockOutputBoundary {
 
     private final StockViewModel stockViewModel;

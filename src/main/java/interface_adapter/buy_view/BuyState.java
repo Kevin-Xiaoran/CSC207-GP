@@ -12,17 +12,23 @@ public class BuyState {
         return price;
     }
 
-    public String getQunatity() {
+    public String getQuantity() {
         return quantity;
     }
 
-    public String getSymbol() { return symbol; }
+    public String getSymbol() {
+        return symbol;
+    }
 
     public void setPrice(String price) {
         this.price = price;
     }
 
-    public void setQuantity(String qunatity) { this.quantity = qunatity; }
+    public void setQuantity(String qunatity) {
+        this.quantity = qunatity;
+    }
 
-    public void setSymbol(String symbol) { this.symbol = symbol; }
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
 }
