@@ -31,4 +31,9 @@ public class PortfolioState {
     public void addToPortfolioList(SimulatedHolding simulatedHolding) {
         simulatedHoldings.add(simulatedHolding);
     }
+
+    public void resetData() {
+        stocks.clear();
+        simulatedHoldings.clear();
+    }
 }

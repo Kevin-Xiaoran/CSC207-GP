@@ -3,6 +3,7 @@ package interface_adapter.home_view;
 import entity.Stock;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.portfolio.PortfolioState;
 import interface_adapter.portfolio.PortfolioViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.stock_view.StockViewModel;
@@ -105,15 +106,15 @@ public class HomePresenter implements HomeOutputBoundary {
 
     @Override
     public void deleteLocalData() {
-        final HomeState homeState = this.homeViewModel.getState();
-        homeState.resetWatchList();
-        homeViewModel.setState(homeState);
-        homeViewModel.firePropertyChanged("getWatchList");
-
         final WatchListViewState watchListViewState = this.watchListViewModel.getState();
         watchListViewState.resetWatchList();
         watchListViewModel.setState(watchListViewState);
         watchListViewModel.firePropertyChanged("watchList");
+
+        final PortfolioState portfolioState = this.portfolioViewModel.getState();
+        portfolioState.resetData();
+        portfolioViewModel.setState(portfolioState);
+        portfolioViewModel.firePropertyChanged("getPortfolioList");
     }
 
     // Helper function

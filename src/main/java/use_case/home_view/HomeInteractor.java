@@ -78,7 +78,7 @@ public class HomeInteractor implements HomeInputBoundary {
         for (String symbol : watchListData) {
             if (DebugMode.debugMode) {
                 // Using fake data
-                final Stock stock = stockFactory.create(symbol, 0.0, 0.0, 0, 0.0, 0.0);
+                final Stock stock = stockFactory.create(symbol, 128.2, 322.1, 100002322, 500.1, 100.23);
                 watchList.add(stock);
             }
             else {
@@ -86,7 +86,6 @@ public class HomeInteractor implements HomeInputBoundary {
                 final Stock stock = homeDataAccessInterface.getStock(symbol);
                 watchList.add(stock);
             }
-
         }
 
         homePresenter.switchToWatchList(watchList);
@@ -111,7 +110,7 @@ public class HomeInteractor implements HomeInputBoundary {
             // Using fake data
             final StockFactory stockFactory = new CommonStockFactory();
             for (String symbol : watchListData) {
-                final Stock stock = stockFactory.create(symbol, 0, 0, 100002322, 500.1, 100.23);
+                final Stock stock = stockFactory.create(symbol,  128.2, 322.1, 100002322, 500.1, 100.23);
                 watchList.add(stock);
             }
         }
@@ -132,5 +131,6 @@ public class HomeInteractor implements HomeInputBoundary {
         portfolioDataAccessInterface.createPortfolioList();
 
         homePresenter.deleteLocalData();
+        this.getWatchListData();
     }
 }

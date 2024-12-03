@@ -59,5 +59,7 @@ public class PortfolioInteractor implements PortfolioInputBoundary {
                 stockList.add(stock);
             }
         }
+
+        portfolioPresenter.presentPortfolioListData(simulatedHoldings, stockList);
     }
 }
