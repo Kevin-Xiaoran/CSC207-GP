@@ -2,10 +2,6 @@ package interface_adapter.watchlist_view;
 
 import entity.Stock;
 import interface_adapter.ViewModel;
-import interface_adapter.stock_view.StockViewState;
-import interface_adapter.stock_view.WatchListViewState;
-
-import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 
 /**
@@ -19,7 +15,7 @@ public class WatchListViewModel extends ViewModel<WatchListViewState> {
     }
 
     public void updateWatchlist(ArrayList<Stock> stocks) {
-        WatchListViewState newState = getState();
+        final WatchListViewState newState = getState();
         newState.setWatchlist(stocks);
         setState(newState);
     }

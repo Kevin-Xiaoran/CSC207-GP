@@ -1,6 +1,7 @@
-package use_case.home_view;
+package use_case.watchlist;
 
 import entity.Stock;
+import use_case.home_view.SearchInputData;
 
 import java.util.ArrayList;
 

@@ -7,7 +7,7 @@ import interface_adapter.buy_view.BuyViewModel;
 import interface_adapter.home_view.HomeState;
 import interface_adapter.home_view.HomeViewModel;
 import interface_adapter.watchlist_view.WatchListViewModel;
-import interface_adapter.stock_view.WatchListViewState;
+import interface_adapter.watchlist_view.WatchListViewState;
 import use_case.stock.StockOutputBoundary;
 import view.StockView;
 

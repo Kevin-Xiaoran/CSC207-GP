@@ -1,19 +1,13 @@
-package use_case.home_view;
+package use_case.watchlist;
 
 import data_access.DBUserDataAccessObject;
-import entity.CommonStockFactory;
 import entity.Stock;
-import entity.StockFactory;
-import interface_adapter.home_view.WatchlistPresenter;
-import use_case.home_view.WatchlistOutputBoundary;
-import use_case.home_view.WatchlistInputBoundary;
-import use_case.watchlist.WatchListDataAccessInterface;
+import use_case.home_view.SearchInputData;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * The Home View Interactor.
+ * The  Interactor.
  */
 public class WatchlistInteractor implements WatchlistInputBoundary {
 
@@ -49,14 +43,9 @@ public class WatchlistInteractor implements WatchlistInputBoundary {
             throw new IllegalArgumentException("Stock symbol cannot be null or empty");
         }
 
-        try {
-            final Stock stock = dbUserDataAccessObject.getStock(stockSymbol);
-            final SearchOutputData searchOutputData = new SearchOutputData(stock, false);
-            watchlistPresenter.prepareSuccessView(searchOutputData);
-        }
-        catch (RuntimeException ex) {
-            throw new RuntimeException("Error during search: " + ex.getMessage(), ex);
-        }
+        final Stock stock = dbUserDataAccessObject.getStock(stockSymbol);
+        final SearchOutputData searchOutputData = new SearchOutputData(stock, false);
+        watchlistPresenter.prepareSuccessView(searchOutputData);
     }
 
     @Override
