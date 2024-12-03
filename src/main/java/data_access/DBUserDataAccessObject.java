@@ -173,7 +173,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     public Stock getStock(String symbol) {
         final OkHttpClient client = new OkHttpClient().newBuilder().build();
         final Request request = new Request.Builder()
-                .url(String.format("https://api.marketstack.com/v1/eod?access_key=80df30ae25f023eb0b512ceb8364720b&symbols=%s", symbol))
+                .url(String.format("https://api.marketstack.com/v1/eod?access_key=711b3da92e8fd203103789c483e34ca1&symbols=%s", symbol))
                 .get()
                 .build();
         try (Response response = client.newCall(request).execute()) {

@@ -1,7 +1,10 @@
 package use_case.watchlist;
 
 import data_access.DBUserDataAccessObject;
+import entity.CommonStockFactory;
+import entity.DebugMode;
 import entity.Stock;
+import entity.StockFactory;
 import use_case.home_view.SearchInputData;
 
 import java.util.ArrayList;
@@ -43,14 +46,31 @@ public class WatchlistInteractor implements WatchlistInputBoundary {
             throw new IllegalArgumentException("Stock symbol cannot be null or empty");
         }
 
-        final Stock stock = dbUserDataAccessObject.getStock(stockSymbol);
-        final SearchOutputData searchOutputData = new SearchOutputData(stock, false);
-        watchlistPresenter.prepareSuccessView(searchOutputData);
+        if (DebugMode.debugMode) {
+            // Using fake data to search stock data based on symbol
+            final StockFactory stockFactory = new CommonStockFactory();
+            final Stock stock = stockFactory.create(searchInputData.getStockSymbol(), 128.2, 322.1, 100002322, 500.1, 100.23);
+            final SearchOutputData searchOutputData = new SearchOutputData(stock, false);
+            watchlistPresenter.prepareSuccessView(searchOutputData);
+        }
+        else {
+            final Stock stock = dbUserDataAccessObject.getStock(stockSymbol);
+            final SearchOutputData searchOutputData = new SearchOutputData(stock, false);
+            watchlistPresenter.prepareSuccessView(searchOutputData);
+        }
     }
 
     @Override
     public Stock getStockData(String stockCode) {
-        return dbUserDataAccessObject.getStock(stockCode);
+        if (DebugMode.debugMode) {
+            // Using fake data to search stock data based on symbol
+            final StockFactory stockFactory = new CommonStockFactory();
+            final Stock stock = stockFactory.create(stockCode, 128.2, 322.1, 100002322, 500.1, 100.23);
+            return stock;
+        }
+        else {
+            return dbUserDataAccessObject.getStock(stockCode);
+        }
     }
 
     @Override

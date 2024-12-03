@@ -211,8 +211,11 @@ public class HomeView extends JPanel implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         final HomeState state = (HomeState) evt.getNewValue();
         if (evt.getPropertyName().equals("getWatchList")) {
-            // Display watchlist data
-            final ArrayList<Stock> watchList = state.getWatchList();
+            // Display top 3 watchlist data
+            ArrayList<Stock> watchList = state.getWatchList();
+            if (watchList.size() > 3) {
+                watchList = new ArrayList<Stock>(watchList.subList(0, 3));
+            }
 
             watchListContentPanel.removeAll();
             updateWatchListComponents(watchList);
@@ -221,9 +224,6 @@ public class HomeView extends JPanel implements PropertyChangeListener {
         }
         else if (evt.getPropertyName().equals("error")) {
             searchErrorMessageLabel.setText(state.getErrorMessage());
-        }
-        else if (evt.getPropertyName().equals("error")) {
-            changeLoginButtonText();
         }
     }
 
