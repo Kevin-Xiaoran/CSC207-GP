@@ -9,6 +9,7 @@ import use_case.home_view.WatchlistOutputBoundary;
 import use_case.home_view.WatchlistInputBoundary;
 import use_case.watchlist.WatchListDataAccessInterface;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -27,22 +28,35 @@ public class WatchlistInteractor implements WatchlistInputBoundary {
         this.dbUserDataAccessObject = dbUserDataAccessObject;
     }
 
+    /**
+     * Searches for a stock by its symbol.
+     *
+     * <p>This method retrieves stock data from the data access object using the provided stock symbol.
+     * It validates the input and handles cases where the stock symbol is invalid or the stock data
+     * cannot be found.</p>
+     *
+     * @param searchInputData the input data containing the stock symbol to search.
+     *                        Must not be null or empty.
+     * @throws IllegalArgumentException if the stock symbol in {@code searchInputData} is null, empty,
+     *                                  or contains only whitespace.
+     * @throws RuntimeException if the stock symbol does not correspond to any stock data,
+     *                          or if an error occurs during the data retrieval process.
+     */
+    @SuppressWarnings({"checkstyle:IllegalCatch", "checkstyle:SuppressWarnings"})
     public void search(SearchInputData searchInputData) {
-//        final String stockSymbol = searchInputData.getStockSymbol();
-//        try {
-//            final Stock stock = homeDataAccessInterface.getStock(stockSymbol);
-//            final SearchOutputData searchOutputData = new SearchOutputData(stock, false);
-//            homePresenter.prepareSuccessView(searchOutputData);
-//        }
-//        catch (Exception err) {
-//            err.printStackTrace();
-//            homePresenter.prepareFailView("Failed to fetch stock data");
-//        }
-        final StockFactory stockFactory = new CommonStockFactory();
-        final Stock stock = stockFactory.create(searchInputData.getStockSymbol(), 128.2, 322.1, 100002322, 500.1, 100.23);
+        final String stockSymbol = searchInputData.getStockSymbol();
+        if (stockSymbol == null || stockSymbol.trim().isEmpty()) {
+            throw new IllegalArgumentException("Stock symbol cannot be null or empty");
+        }
 
-        final SearchOutputData searchOutputData = new SearchOutputData(stock, false);
-        watchlistPresenter.prepareSuccessView(searchOutputData);
+        try {
+            final Stock stock = dbUserDataAccessObject.getStock(stockSymbol);
+            final SearchOutputData searchOutputData = new SearchOutputData(stock, false);
+            watchlistPresenter.prepareSuccessView(searchOutputData);
+        }
+        catch (RuntimeException ex) {
+            throw new RuntimeException("Error during search: " + ex.getMessage(), ex);
+        }
     }
 
     @Override
